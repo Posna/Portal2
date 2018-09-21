@@ -1,23 +1,23 @@
-# ¿Quiénes somos?
+### ¿Quiénes somos?
 
 Somos Yellow Point un pequeño estudio indie de desarrolladores formado por Jose Martín Serrano y Marcos Llinares Montes.
 
-# ¿Cuál es nuestro juego?
+### ¿Cuál es nuestro juego?
 
 Una version en 2 dimensiones retro de Portal 2.
 
-# ¿De qué va nuestro juego?
+### ¿De qué va nuestro juego?
 
 Estamos en los laboratorios de Aperture Science, una IA llamada Glados ha tomado el control de las instalaciones y te está obligando a hacer un montón de pruebas. Tu misión: Escapar de este lugar.
 Portal 2 es un juego de plataformas en scroll lateral cuya mecánica principal es la creación de portales para la resolución de los distintos puzzles que construyen el videojuego.
 
 A lo largo del videojuego se podrá interactuar con distintos objetos como cajas, botones, plataformas, torretas, pelotas que rebotan, trampolines, muros destructores y pasarelas para ir resolviendo cada puzle que se le vaya proponiendo al jugador. 
 
-# Mecánicas principales
+### Mecánicas principales
 
 El jugador controlará un personaje que tendrá la capacidad de moverse, saltar, coger objetos y apuntar con el ratón para disparar las pistola de portales y crear diversos portales en paredes, suelos y techos blancos. 
 
-# ¡Es un juego de puzzles!
+### ¡Es un juego de puzzles!
 
 Nuestro personaje debe ir completando los diferentes puzzles para pasar al siguiente nivel.
 Los portales podrán ser atravesados por el jugador y por cualquier cosa que sujete su personajes. Los portales también mantienen la inercia que llevaba el jugador antes de atravesar una de ellos.
