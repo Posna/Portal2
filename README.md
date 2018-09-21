@@ -4,6 +4,7 @@ Somos Yellow Point un pequeño estudio indie de desarrolladores formado por Jose
 
 ### ¿Cuál es nuestro juego?
 ![alt text](https://github.com/Posna/Portal2D_PVLI/blob/master/Portal2%20titulo.png)
+
 Una version en 2 dimensiones retro de Portal 2.
 
 ### ¿De qué va nuestro juego?
