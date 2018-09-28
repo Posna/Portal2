@@ -1,11 +1,39 @@
+### About us?
+
+We are Yellow Point, a small indie developer studio formed by Jose Martín Serrano and Marcos Llinares Montes.
+
+### What is our game?
+! [alt text] (https://github.com/Posna/Portal2D_PVLI/blob/master/Portal2%20titulo.png)
+
+A retro 2-dimensional version of Portal 2.
+
+### What is our game about?
+
+We are in the laboratories of Aperture Science, an AI called Glados has taken control of the facilities and is forcing you to do a lot of tests. Your mission: Escape from this place.
+Portal 2 is a platform game in side scrolling whose main mechanics is the creation of portals for the resolution of the different puzzles that build the game.
+
+Throughout the game you can interact with different objects such as boxes, buttons, platforms, turrets, balls that bounce, trampolines, destroyer walls and gateways to solve each puzzle that is proposed to the player.
+
+### Main mechanics
+
+The player will control a character and will be able to move, jump, pick up objects and aim with the mouse to shoot the portal gun and create various portals on walls, floors and white roofs.
+
+### It's a puzzle game!
+
+Our character must complete the different puzzles to go to the next level.
+The portals can be traversed by the player and by anything that holds his characters. The portals also maintain the inertia that the player had before crossing one of them.
+
+The cubes will be used to activate buttons that activate platforms to reach the end of the puzzle. There will also be another type of cubes (cubes company).
+
+Throughout the game there will be puzzles that must be resolved by taking a ball that bounces on each wall to a specific place.
+
+Both the trampolines and the catwalks will give the player mobility on the map. The trampolines will give the player an impetus to reach high or distant places while the catwalks can be redirected with portals.
+
+During the resolution of the levels you will be able to find turrets that will impede your passage. You can finish them by taking them or overturning them.
+
 ### ¿Quiénes somos?
 
 Somos Yellow Point un pequeño estudio indie de desarrolladores formado por Jose Martín Serrano y Marcos Llinares Montes.
-
-### ¿Cuál es nuestro juego?
-![alt text](https://github.com/Posna/Portal2D_PVLI/blob/master/Portal2%20titulo.png)
-
-Una version en 2 dimensiones retro de Portal 2.
 
 ### ¿De qué va nuestro juego?
 
