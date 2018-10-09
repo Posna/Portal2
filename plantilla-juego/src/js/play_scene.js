@@ -1,4 +1,5 @@
 'use strict';
+var Player = require ('./Player.js');
 
   var PlayScene = {
   create: function () {
