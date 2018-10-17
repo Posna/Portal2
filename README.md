@@ -3,7 +3,7 @@
 We are Yellow Point, a small indie developer studio formed by Jose Martín Serrano and Marcos Llinares Montes.
 
 ### What is our game?
-! [alt text] (https://github.com/Posna/Portal2D_PVLI/blob/master/Portal2%20titulo.png)
+![alt text](https://github.com/Posna/Portal2D_PVLI/blob/master/Portal2%20titulo.png)
 
 A retro 2-dimensional version of Portal 2.
 
