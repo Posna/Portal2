@@ -22,7 +22,10 @@ var PreloaderScene = {
     this.load.setPreloadSprite(this.loadingBar);
 
     // TODO: load here the assets for the game
-    this.game.load.image('logo', 'images/phaser.png');
+    this.game.load.image('backgr', 'images/Sprites_y_apartado_grafico/bridge_portal_2.jpg');
+    this.game.load.spritesheet('Luisa', '/images/Sprites_y_apartado_grafico/playerSprite.png',49 ,49,-1,1,1);
+    //cargo el tilemap
+    //this.game.load.tilemap('map', '/mapas/EastPalace1.json',null, Phaser.Tilemap.TILED_JSON);
   },
 
   create: function () {
