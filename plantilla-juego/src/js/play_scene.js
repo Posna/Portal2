@@ -5,28 +5,39 @@ var Player = require ('./Player.js');
 var MAPSCALE = 1;
 var NUMLEVELS = 1;
 
+
   var PlayScene = {
   create: function () {
-    var bckg;
-    bckg = this.game.add.image(0,0,'backgr');
+    
+    var bckg = this.game.add.image(0,0,'backgr');
     //bckg.scale.set(0.5);
     bckg.smoothed = false;
    
     //añadir los grupos
     //this.game.activeEnemies = this.game.add.group();
-
+   
     //ejecutar aqui funciones de inicio juego
     //this.loadMap
     this.allReadyGO();
 
-    //funcion pause
+     /////
 
+    //  this.plataformas = this.game.add.group();
+    //  var plat = this.game.add.image(50,400,'platAzul');
+    //  plat.scale.set(0.5);
+    //  this.game.add.existing(plat);
+    //  this.game.physics.enable(plat,Phaser.Physics.ARCADE);
+    //  this.plataformas.add(plat);s       
+     
+     /////
+    
+    //funcion pause
+    
     //crear una instancia del HUD
   },
-  update: function(){    
+  update: function(){
     //reviso colisiones
-    //this.game.physics.arcade.collide(this.game.activeEnemies,this.Colisiones);
-    //this.game.physics.arcade.overlap(,,,,);
+    this.collisionControl();    
 
     //funcion pause
   },
@@ -56,14 +67,20 @@ var NUMLEVELS = 1;
     return layer;
   },
   loadMap:function(){
-    //cargo el tilemap
+    //añado el tilemap
     //this.map = this.game.add.tilemap('mimapa');
 
     //this.map.addTilesetImage();
 
     //to get the tileset ID (number):
     //this.tilesetID = this.map.getTilesetIndex("Objects");
+  },
+  collisionControl:function(){
+    this.game.physics.arcade.collide(luisa, this.plataformas);
+    //this.game.physics.arcade.collide(this.game.activeEnemies,this.Colisiones);
+    //this.game.physics.arcade.overlap(,,,,);
   }
+
 };
 
 module.exports = PlayScene;

@@ -2,7 +2,6 @@
 
 function Character(game, x,y, name){
     //this.playScene = playScene;
-   // this.keyboard = this.game.input.keyboard;    
     Phaser.Sprite.call(this, game, x, y, name);
     this.canJump = true;
     this.carryingObj = false;    
