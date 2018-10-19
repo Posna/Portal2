@@ -1,5 +1,6 @@
 'use strict';
 var luisa;
+var plat;
 var Player = require ('./Player.js');
 
 var MAPSCALE = 1;
@@ -21,13 +22,16 @@ var NUMLEVELS = 1;
     this.allReadyGO();
 
      /////
+    
+     this.plataformas = this.game.add.group();
+     plat = this.game.add.sprite(50,400,'platAzul');
+     plat.scale.set(0.5);
+     this.game.add.existing(plat);
+     this.game.physics.enable(plat,Phaser.Physics.ARCADE);
+     plat.body.enable = true;
+     plat.body.immovable = true;
 
-    //  this.plataformas = this.game.add.group();
-    //  var plat = this.game.add.image(50,400,'platAzul');
-    //  plat.scale.set(0.5);
-    //  this.game.add.existing(plat);
-    //  this.game.physics.enable(plat,Phaser.Physics.ARCADE);
-    //  this.plataformas.add(plat);s       
+     this.plataformas.add(plat);     
      
      /////
     
@@ -76,7 +80,7 @@ var NUMLEVELS = 1;
     //this.tilesetID = this.map.getTilesetIndex("Objects");
   },
   collisionControl:function(){
-    this.game.physics.arcade.collide(luisa, this.plataformas);
+    this.game.physics.arcade.collide(luisa, plat);
     //this.game.physics.arcade.collide(this.game.activeEnemies,this.Colisiones);
     //this.game.physics.arcade.overlap(,,,,);
   }

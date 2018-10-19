@@ -7,7 +7,7 @@ function Player(game,x,y,name){
     this.game = game;
     this.cursors = this.game.input.keyboard.createCursorKeys();
     Character.call(this, game, x, y, name);//Hace lo mismo que apply
-    this.canJump = true;
+    this.canJump = false;
     this.carryingObj = false;
     this.canTeleport = false;
     this.dead = false;
@@ -17,7 +17,7 @@ function Player(game,x,y,name){
     //Portal gun
     this.gun = this.game.make.sprite(0,0, 'gun');
     this.gun.scale.set(0.3);
-    this.gun.anchor.setTo(0.5,0.5);//si comento esto rota con un efecto un poco distinto
+    //this.gun.anchor.setTo(0.5,0.5);//si comento esto rota con un efecto un poco distinto
     this.portalGun = this.addChild(this.gun);
     console.log("creadoPlayer");
 }
@@ -30,6 +30,7 @@ Player.prototype.constructor = Player;
 Player.prototype.create = function(){
     this.game.add.existing(this);//!
     this.game.physics.enable(this,Phaser.Physics.ARCADE);
+    this.body.gravity.y = 300;
     this.body.collideWorldBounds = true;
     this.scale.set(1.5);
     this.animations.add('walkRight',[7,8,9,10],10,true);
@@ -40,17 +41,25 @@ Player.prototype.create = function(){
 Player.prototype.update = function (){
     this.move();
     this.gunAngle();
-    //this.game.debug.bodyInfo(this, 32, 32);
+    this.game.debug.bodyInfo(this, 32, 32);
 }
 
 Player.prototype.move = function (){
-    //this.y++;
+    this.body.velocity.x = 0;
+    this.animations.stop('walkRight');
     if (this.cursors.left.isDown){
-
+        this.body.velocity.x = -100;
     }
     else if (this.cursors.right.isDown){
         this.body.velocity.x = 100;
         this.animations.play('walkRight');
+    }
+    if(this.cursors.up.isDown && this.canJump){
+        this.body.velocity.y = -200;
+        this.canJump = false;
+    }
+    if(this.body.onFloor()){
+        this.canJump = true;
     }
 }
 Player.prototype.gunAngle = function (){
