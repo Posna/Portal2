@@ -10,7 +10,7 @@ function Player(game,x,y,name){
     this.canJump = false;
     this.carryingObj = false;
     this.canTeleport = false;
-    this.dead = false;
+    this.faceRight = true;
     this.anchor.setTo(0.5, 0.5);//aqui no?
     this.x = x;
     this.y = y;
@@ -32,7 +32,7 @@ Player.prototype.create = function(){
     this.game.physics.enable(this,Phaser.Physics.ARCADE);
     this.body.gravity.y = 300;
     this.body.collideWorldBounds = true;
-    this.scale.set(1.5);
+    //this.scale.set(1.5);
     this.animations.add('walkRight',[7,8,9,10],10,true);
     console.log("existe");
 
@@ -46,13 +46,23 @@ Player.prototype.update = function (){
 
 Player.prototype.move = function (){
     this.body.velocity.x = 0;
-    this.animations.stop('walkRight');
     if (this.cursors.left.isDown){
         this.body.velocity.x = -100;
+        this.faceRight = false;        
+        this.animations.play('walkRight');
+        console.log(this.faceRight);
+         
     }
     else if (this.cursors.right.isDown){
         this.body.velocity.x = 100;
+        this.faceRight = true;
         this.animations.play('walkRight');
+        console.log(this.faceRight);
+        
+    }
+    else{
+        this.animations.stop('walkRight');
+
     }
     if(this.cursors.up.isDown && this.canJump){
         this.body.velocity.y = -200;
@@ -61,9 +71,19 @@ Player.prototype.move = function (){
     if(this.body.onFloor()){
         this.canJump = true;
     }
+    this.flip();
 }
 Player.prototype.gunAngle = function (){
     this.portalGun.rotation = this.game.physics.arcade.angleToPointer(this);
+}
+
+Player.prototype.flip = function (){    
+    if(this.faceRight){
+        this.scale.setTo(1,1);       
+    }
+    else{
+        this.scale.setTo(-1,1);
+    }
 }
 
 //Aqui funciones propias del player
