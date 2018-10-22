@@ -3,14 +3,12 @@
 function Character(game, x,y, name){
     //this.playScene = playScene;
     Phaser.Sprite.call(this, game, x, y, name);
-    this.canJump = true;
-    this.carryingObj = false;    
     this.canTeleport = false;
     this.dead = false;
     this.anchor.setTo(0.5, 0.5);
     this.x = x;
-    console.log("creadoCharacter");
-
+    this.y = y;
+    console.log("creado: " + name);
 }
 
 Character.prototype = Object.create (Phaser.Sprite.prototype);

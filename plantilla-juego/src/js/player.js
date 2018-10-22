@@ -7,13 +7,15 @@ function Player(game,x,y,name){
     this.game = game;
     this.cursors = this.game.input.keyboard.createCursorKeys();
     Character.call(this, game, x, y, name);//Hace lo mismo que apply
-    this.canJump = false;
+    this.jumping = true;
+    this.jumpTimer = 0;
+    this.speed = 100;
     this.carryingObj = false;
     this.canTeleport = false;
     this.faceRight = true;
-    this.anchor.setTo(0.5, 0.5);//aqui no?
     this.x = x;
     this.y = y;
+    this.anchor.setTo(0.5, 0.5);//aqui no?
     //Portal gun
     this.gun = this.game.make.sprite(0,0, 'gun');
     this.gun.scale.set(0.3);
@@ -33,7 +35,8 @@ Player.prototype.create = function(){
     this.body.gravity.y = 300;
     this.body.collideWorldBounds = true;
     //this.scale.set(1.5);
-    this.animations.add('walkRight',[7,8,9,10],10,true);
+    this.animations.add('walk',[7,8,9,10],10,true);
+    this.animations.add('jump',[19,20,21,22],10,false);
     console.log("existe");
 
 }
@@ -46,30 +49,33 @@ Player.prototype.update = function (){
 
 Player.prototype.move = function (){
     this.body.velocity.x = 0;
-    if (this.cursors.left.isDown){
-        this.body.velocity.x = -100;
-        this.faceRight = false;        
-        this.animations.play('walkRight');
-        console.log(this.faceRight);
-         
+    if((this.body.onFloor() || this.body.touching.down)){
+        this.jumping = false;
     }
-    else if (this.cursors.right.isDown){
-        this.body.velocity.x = 100;
-        this.faceRight = true;
-        this.animations.play('walkRight');
-        console.log(this.faceRight);
+    //salto
+    if(this.cursors.up.isDown && (this.body.onFloor() ||this.body.touching.down) ){
+        this.jumping = true;
+        this.animations.play('jump');
+        this.body.velocity.y = -200;
         
     }
-    else{
-        this.animations.stop('walkRight');
-
+    if (this.cursors.left.isDown){
+        this.body.velocity.x -=  this.speed;
+        this.faceRight = false;        
+        if(!this.jumping)
+            this.animations.play('walk');
     }
-    if(this.cursors.up.isDown && this.canJump){
-        this.body.velocity.y = -200;
-        this.canJump = false;
+    else if (this.cursors.right.isDown){
+        this.body.velocity.x +=  this.speed;
+        this.faceRight = true;
+        if(!this.jumping){
+            this.animations.play('walk');
+        }
     }
-    if(this.body.onFloor()){
-        this.canJump = true;
+    else {//si entra por aqui significa que no esta pulsadndo  izq ni derecha
+        this.animations.stop('walk');
+        if(!this.jumping)
+            this.frame = 6;
     }
     this.flip();
 }
@@ -77,12 +83,14 @@ Player.prototype.gunAngle = function (){
     this.portalGun.rotation = this.game.physics.arcade.angleToPointer(this);
 }
 
-Player.prototype.flip = function (){    
+Player.prototype.flip = function (){
     if(this.faceRight){
-        this.scale.setTo(1,1);       
+        this.scale.setTo(1,1);
+        //recalibrar angulo de la pistola        
     }
     else{
         this.scale.setTo(-1,1);
+        //aqui tmb        
     }
 }
 
