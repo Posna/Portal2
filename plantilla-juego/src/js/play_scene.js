@@ -10,10 +10,11 @@ var NUMLEVELS = 1;
   var PlayScene = {
   create: function () {
     
-    var bckg = this.game.add.image(0,0,'backgr');
-    //bckg.scale.set(0.5);
-    bckg.smoothed = false;
-   
+    // var bckg = this.game.add.image(0,0,'backgr');
+    // //bckg.scale.set(0.5);
+    // bckg.smoothed = false;
+
+    this.game.stage.backgroundColor = 'rgb(68, 136, 170)';
     //añadir los grupos
     //this.game.activeEnemies = this.game.add.group();
    
