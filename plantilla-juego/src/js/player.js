@@ -1,5 +1,10 @@
 'use strict';
 var Character = require ('./Character.js');
+var Disparo = require ('./disparo.js');
+var bullets;
+
+var fireRate = 100;
+var nextFire = 0;
 
 function Player(game,x,y,name){
     //this.playScene = playScene;
@@ -21,6 +26,14 @@ function Player(game,x,y,name){
     this.gun.scale.set(0.3);
     //this.gun.anchor.setTo(0.5,0.5);//si comento esto rota con un efecto un poco distinto
     this.portalGun = this.addChild(this.gun);
+
+    bullets = game.add.group();
+    bullets.enableBody = true;
+    bullets.physicsBodyType = Phaser.Physics.ARCADE;
+
+    bullets.createMultiple(50, 'bullet');
+    bullets.setAll('checkWorldBounds', true);
+    bullets.setAll('outOfBoundsKill', true);
     console.log("creadoPlayer");
 }
 
@@ -44,6 +57,7 @@ Player.prototype.create = function(){
 Player.prototype.update = function (){
     this.move();
     this.gunAngle();
+    this.shoot();
     this.game.debug.bodyInfo(this, 32, 32);
 }
 
@@ -95,6 +109,17 @@ Player.prototype.flip = function (){
 }
 
 //Aqui funciones propias del player
+Player.prototype.shoot = function(){
+    if(this.game.input.activePointer.isDown){
+        if (this.game.time.now > nextFire && bullets.countDead() > 0){
+        nextFire = this.game.time.now + fireRate;
+        var bullet = bullets.getFirstDead();
+        bullet.reset(this.x - 8, this.y - 8);
+        this.game.physics.arcade.moveToPointer(bullet, 300);
+        }
+    }
+  // Disparo.call(this, this.game);
 
+}
 //Exportamos Player
 module.exports = Player;
