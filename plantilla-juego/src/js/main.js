@@ -26,7 +26,11 @@ var PreloaderScene = {
     this.game.load.spritesheet('Luisa', '/images/Sprites_y_apartado_grafico/playerSprite.png',49 ,49,-1,1,1);
     this.game.load.image('platAzul','images/Sprites_y_apartado_grafico/plataformaAzul.png');
     this.game.load.image('gun','images/Sprites_y_apartado_grafico/portal gun.png');
-    this.game.load.image('bullet', 'images/Sprites_y_apartado_grafico/plataformaAzul.png');
+    this.game.load.image('bulletBlue', 'images/Sprites_y_apartado_grafico/shootBlue.png');
+    this.game.load.image('bulletOrange', 'images/Sprites_y_apartado_grafico/shootOrange.png');
+    this.game.load.image('PortalBlue', 'images/Sprites_y_apartado_grafico/PBlue.png');
+    this.game.load.image('PortalOrange', 'images/Sprites_y_apartado_grafico/POrange.png');
+
     //cargo el tilemap
     //this.game.load.tilemap('mimapa', '/mapas/EastPalace1.json',null, Phaser.Tilemap.TILED_JSON);
   },

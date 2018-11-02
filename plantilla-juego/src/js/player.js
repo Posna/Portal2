@@ -1,9 +1,10 @@
 'use strict';
 var Character = require ('./Character.js');
-var Disparo = require ('./disparo.js');
+var Portal = require ('./portal.js');
 var bullets;
 
-var fireRate = 100;
+
+var fireRate = 200;
 var nextFire = 0;
 
 function Player(game,x,y,name){
@@ -27,13 +28,15 @@ function Player(game,x,y,name){
     //this.gun.anchor.setTo(0.5,0.5);//si comento esto rota con un efecto un poco distinto
     this.portalGun = this.addChild(this.gun);
 
-    bullets = game.add.group();
-    bullets.enableBody = true;
-    bullets.physicsBodyType = Phaser.Physics.ARCADE;
+    // bullets = game.add.group();
+    // bullets.enableBody = true;
+    // bullets.physicsBodyType = Phaser.Physics.ARCADE;
 
-    bullets.createMultiple(50, 'bullet');
-    bullets.setAll('checkWorldBounds', true);
-    bullets.setAll('outOfBoundsKill', true);
+    // bullets.createMultiple(50, 'bullet');
+    // bullets.setAll('checkWorldBounds', true);
+    // bullets.setAll('outOfBoundsKill', true);
+
+
     console.log("creadoPlayer");
 }
 
@@ -50,6 +53,8 @@ Player.prototype.create = function(){
     //this.scale.set(1.5);
     this.animations.add('walk',[7,8,9,10],10,true);
     this.animations.add('jump',[19,20,21,22],10,false);
+
+
     console.log("existe");
 
 }
@@ -110,15 +115,11 @@ Player.prototype.flip = function (){
 
 //Aqui funciones propias del player
 Player.prototype.shoot = function(){
-    if(this.game.input.activePointer.isDown){
-        if (this.game.time.now > nextFire && bullets.countDead() > 0){
+    if(this.game.time.now > nextFire&& this.game.input.activePointer.isDown){
         nextFire = this.game.time.now + fireRate;
-        var bullet = bullets.getFirstDead();
-        bullet.reset(this.x - 8, this.y - 8);
-        this.game.physics.arcade.moveToPointer(bullet, 300);
-        }
+        var disparo = new Portal(this.game, this.x , this.y, 'bulletBlue');
+        
     }
-  // Disparo.call(this, this.game);
 
 }
 //Exportamos Player
