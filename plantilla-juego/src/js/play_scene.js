@@ -1,8 +1,10 @@
 'use strict';
 var luisa;
 var plat;
+var cuboAzul;
+var cuboCompania;
 var Player = require ('./Player.js');
-
+var Cubo = require ('./Cubo.js');
 var MAPSCALE = 1;
 var NUMLEVELS = 1;
 
@@ -64,6 +66,11 @@ var NUMLEVELS = 1;
 
     //creamos el HUD
 
+    //cubos
+    cuboAzul = new Cubo (this.game, 100 , 100, 'cuboAzul');
+    cuboAzul.scale.set(0.30);
+    cuboCompania = new Cubo (this.game, 200 , 100, 'cuboCompania');
+    cuboCompania.scale.set(0.3);
   },
   createLayer: function(){
     var layer = this.map.createLayer(name);
@@ -82,6 +89,8 @@ var NUMLEVELS = 1;
   },
   collisionControl:function(){
     this.game.physics.arcade.collide(luisa, plat);
+    this.game.physics.arcade.collide(luisa, cuboAzul);
+    this.game.physics.arcade.collide(luisa, cuboCompania);
     //this.game.physics.arcade.collide(this.game.activeEnemies,this.Colisiones);
     //this.game.physics.arcade.overlap(,,,,);
   }
