@@ -99,7 +99,17 @@ Player.prototype.move = function (){
     this.flip();
 }
 Player.prototype.gunAngle = function (){
-    this.portalGun.rotation = this.game.physics.arcade.angleToPointer(this);
+    
+    if(this.faceRight){
+        if(this.game.physics.arcade.angleToPointer(this) < -1,5708){
+            console.log(this.game.physics.arcade.angleToPointer(this));
+            this.portalGun.rotation = this.game.physics.arcade.angleToPointer(this);                
+        }
+        
+    }
+    else{
+        this.portalGun.rotation = -this.game.physics.arcade.angleToPointer(this) - 3,1416;
+    }
 }
 
 Player.prototype.flip = function (){
@@ -109,7 +119,7 @@ Player.prototype.flip = function (){
     }
     else{
         this.scale.setTo(-1,1);
-        //aqui tmb        
+        //aqui tmb
     }
 }
 

@@ -6,8 +6,8 @@ function Character(game, x,y, name){
     this.canTeleport = false;
     this.dead = false;
     this.anchor.setTo(0.5, 0.5);
-    this.x = x;
-    this.y = y;
+    // this.x = x;
+    // this.y = y;
     console.log("creado: " + name);
 }
 
