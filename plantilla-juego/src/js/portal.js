@@ -3,7 +3,7 @@ var Character = require ('./Character.js');
 
 
 function Portal(game,x,y,name){
-    this.game = game;
+    // this.game = game;
     this.stillBullet = true;
     Character.call(this, game, x, y, name);//Hace lo mismo que apply
     this.anchor.setTo(0.5, 0.5);
