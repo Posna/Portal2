@@ -34,7 +34,7 @@ Portal.prototype = Object.create (Phaser.Sprite.prototype);
 Portal.prototype.constructor = Portal;
 
 Portal.prototype.update = function (){
-    this.collisionControl()
+    this.collisionControl();
 }
 
 Portal.prototype.fire = function () {
@@ -52,8 +52,10 @@ Portal.prototype.deploy = function(x,y){
 
 Portal.prototype.collisionControl = function (){
     //this.game.physics.arcade.collide(this, 'checkWorldBounds');
-    if(this.bullets.checkWorldBounds){
-        this.portalBlue = this.game.add.sprite(50,400,'PortalBlue');
+    if(this.bullets.collideWorldBounds){
+        console.log("hey");
+        //this.portalBlue = this.game.add.sprite(50,400,'PortalBlue');
+        //this.sprite = this.game.add.sprite(50,400,'PortalBlue');
     }
 }
 
