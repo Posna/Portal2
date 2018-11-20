@@ -101,10 +101,15 @@ Player.prototype.move = function (){
 Player.prototype.gunAngle = function (){
     
     if(this.faceRight){
-        if(this.game.physics.arcade.angleToPointer(this) < -1,5708){
-            console.log(this.game.physics.arcade.angleToPointer(this));
+        var angStop = 1.5708;
+        var ang = this.game.physics.arcade.angleToPointer(this);
+        if(ang > -angStop && ang < angStop){
+            //console.log(ang);
             this.portalGun.rotation = this.game.physics.arcade.angleToPointer(this);                
-        }
+        }else if (ang > angStop){
+            this.portalGun.rotation = angStop;
+        }else
+            this.portalGun.rotation = -angStop;
         
     }
     else{
