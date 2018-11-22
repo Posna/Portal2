@@ -52,7 +52,7 @@ Portal.prototype.deploy = function(x,y){
 
 Portal.prototype.collisionControl = function (){
     //this.game.physics.arcade.collide(this, 'checkWorldBounds');
-    if(this.bullets.collideWorldBounds){
+    if(this.collideWorldBounds){
         console.log("hey");
         //this.portalBlue = this.game.add.sprite(50,400,'PortalBlue');
         //this.sprite = this.game.add.sprite(50,400,'PortalBlue');

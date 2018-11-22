@@ -52,6 +52,7 @@ Player.prototype.create = function(){
     this.body.collideWorldBounds = true;
     //this.scale.set(1.5);
     this.animations.add('walk',[7,8,9,10],10,true);
+    this.animations.add('walkBack',[10,9,8,7],10,true);
     this.animations.add('jump',[19,20,21,22],10,false);
 
 
@@ -62,11 +63,25 @@ Player.prototype.create = function(){
 Player.prototype.update = function (){
     this.move();
     this.gunAngle();
+    this.flipwithmouse();
     this.shoot();
     this.game.debug.bodyInfo(this, 32, 32);
 }
 
+Player.prototype.flipwithmouse = function(){
+    var angStop = Math.PI /2;
+    var ang = this.game.physics.arcade.angleToPointer(this);
+    if(ang > -angStop && ang < angStop){
+        this.faceRight = true;
+    }else{
+        this.faceRight = false;
+    }
+}
+
 Player.prototype.move = function (){
+    var angStop = Math.PI / 2;
+    var ang = this.game.physics.arcade.angleToPointer(this);
+    var mousedrch = ang > -angStop && ang < angStop;
     this.body.velocity.x = 0;
     if((this.body.onFloor() || this.body.touching.down)){
         this.jumping = false;
@@ -80,15 +95,24 @@ Player.prototype.move = function (){
     }
     if (this.cursors.left.isDown){
         this.body.velocity.x -=  this.speed;
-        this.faceRight = false;        
-        if(!this.jumping)
-            this.animations.play('walk');
+        //this.faceRight = false;        
+        if(!this.jumping){
+            if(mousedrch){
+                this.animations.play('walkBack')
+            }else{
+                this.animations.play('walk');
+            }
+        }
     }
     else if (this.cursors.right.isDown){
         this.body.velocity.x +=  this.speed;
-        this.faceRight = true;
+        //this.faceRight = true;
         if(!this.jumping){
-            this.animations.play('walk');
+            if(mousedrch){
+                this.animations.play('walk');
+            }else{
+                this.animations.play('walkBack');
+            }
         }
     }
     else {//si entra por aqui significa que no esta pulsadndo  izq ni derecha
@@ -101,19 +125,19 @@ Player.prototype.move = function (){
 Player.prototype.gunAngle = function (){
     
     if(this.faceRight){
-        var angStop = 1.5708;
-        var ang = this.game.physics.arcade.angleToPointer(this);
-        if(ang > -angStop && ang < angStop){
+        // var angStop = 1.5708;
+        // var ang = this.game.physics.arcade.angleToPointer(this);
+        // if(ang > -angStop && ang < angStop){
             //console.log(ang);
             this.portalGun.rotation = this.game.physics.arcade.angleToPointer(this);                
-        }else if (ang > angStop){
-            this.portalGun.rotation = angStop;
-        }else
-            this.portalGun.rotation = -angStop;
+        // }else if (ang > angStop){
+        //     this.portalGun.rotation = angStop;
+        // }else
+        //     this.portalGun.rotation = -angStop;
         
     }
     else{
-        this.portalGun.rotation = -this.game.physics.arcade.angleToPointer(this) - 3,1416;
+        this.portalGun.rotation = -this.game.physics.arcade.angleToPointer(this) - Math.PI;
     }
 }
 
