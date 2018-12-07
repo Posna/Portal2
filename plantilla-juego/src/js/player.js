@@ -1,7 +1,7 @@
 'use strict';
 var Character = require ('./Character.js');
 var Portal = require ('./portal.js');
-var bullets;
+//var bullets;
 
 
 var fireRate = 200;
@@ -154,9 +154,15 @@ Player.prototype.flip = function (){
 
 //Aqui funciones propias del player
 Player.prototype.shoot = function(){
-    if(this.game.time.now > nextFire&& this.game.input.activePointer.isDown){
-        nextFire = this.game.time.now + fireRate;
-        var disparo = new Portal(this.game, this.x , this.y, 'bulletBlue');
+    if(this.game.time.now > nextFire){
+        if(this.game.input.activePointer.leftButton.isDown){
+            nextFire = this.game.time.now + fireRate;
+            var disparo = new Portal(this.game, this.x , this.y, 'bulletBlue');
+        }
+        else if(this.game.input.activePointer.rightButton.isDown){
+            nextFire = this.game.time.now + fireRate;
+            var disparo = new Portal(this.game, this.x , this.y, 'bulletOrange');
+        }
         
     }
 

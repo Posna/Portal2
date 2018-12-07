@@ -10,6 +10,7 @@ var BootScene = {
   },
 
   create: function () {
+    this.game.canvas.oncontextmenu = function (e) { e.preventDefault(); }
     this.game.state.start('preloader');
   }
 };
