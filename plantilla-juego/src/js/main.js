@@ -33,7 +33,12 @@ var PreloaderScene = {
     this.game.load.image('PortalOrange', 'images/Sprites_y_apartado_grafico/POrange.png');
 
     //cargo el tilemap
+    this.game.load.tilemap('tilemap', 'tiles/pruebaTilePortal.csv');
     //this.game.load.tilemap('mimapa', '/mapas/EastPalace1.json',null, Phaser.Tilemap.TILED_JSON);
+
+    //patrones
+    this.game.load.image('patronesTilemapBB', 'tiles/spriteBloquesBlancos.png');
+    this.game.load.image('patronesTilemapBN', 'tiles/spriteBloquesNegros.png');
   },
 
   create: function () {

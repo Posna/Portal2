@@ -35,7 +35,7 @@ Portal.prototype.constructor = Portal;
 
 Portal.prototype.update = function (){
     this.collisionControl();
-    this.bullets.body.onWorldBounds.add(collisionControl, this);
+    //this.bullets.body.onWorldBounds.add(collisionControl, this);
 }
 
 Portal.prototype.fire = function () {
@@ -55,7 +55,7 @@ Portal.prototype.collisionControl = function (){
     //this.game.physics.arcade.collide(this, 'checkWorldBounds');
     if(this.body.collideWorldBounds){
         console.log("hey");
-        this.destroy();
+        //this.destroy();
         //this.portalBlue = this.game.add.sprite(50,400,'PortalBlue');
         //this.sprite = this.game.add.sprite(50,400,'PortalBlue');
     }

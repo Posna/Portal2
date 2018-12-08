@@ -14,12 +14,15 @@ var NUMLEVELS = 1;
     // //bckg.scale.set(0.5);
     // bckg.smoothed = false;
     this.game.stage.backgroundColor = 'rgb(68, 136, 170)';
+  
     //añadir los grupos
     //this.game.activeEnemies = this.game.add.group();
    
     //ejecutar aqui funciones de inicio juego
     //this.loadMap
+   
     this.allReadyGO();
+    this.loadMap();
 
      /////
     
@@ -65,10 +68,10 @@ var NUMLEVELS = 1;
 
   },
   createLayer: function(){
-    var layer = this.map.createLayer(name);
-    layer.smoothed = false;
-    layer.setScale(MAPSCALE);
-    return layer;
+    // var layer = this.map.createLayer(name);
+    // layer.smoothed = false;
+    // layer.setScale(MAPSCALE);
+    // return layer;
   },
   loadMap:function(){
     //añado el tilemap
@@ -78,6 +81,18 @@ var NUMLEVELS = 1;
 
     //to get the tileset ID (number):
     //this.tilesetID = this.map.getTilesetIndex("Objects");
+    this.map = this.game.add.tilemap('tilemap');
+
+    this.map.addTilesetImage('patronesTilemapBB');
+    this.map.addTilesetImage('patronesTilemapBN');
+    
+    this.bloquesblancos = this.map.createLayer("BloquesBlancos");
+    this.bloquesnegros = this.map.createLayer("BloquesNegros");
+
+    //this.bloquesblancos.resizeWorld();
+    //this.bloquesnegros.resizeWorld();
+    console.log("CreadorTile");
+    
   },
   collisionControl:function(){
     this.game.physics.arcade.collide(luisa, plat);
