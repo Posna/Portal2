@@ -2,6 +2,8 @@
 var luisa;
 var plat;
 var Player = require ('./Player.js');
+// var map;
+// var layer;
 
 var MAPSCALE = 1;
 var NUMLEVELS = 1;
@@ -21,8 +23,8 @@ var NUMLEVELS = 1;
     //ejecutar aqui funciones de inicio juego
     //this.loadMap
    
-    this.allReadyGO();
     this.loadMap();
+    this.allReadyGO();
 
      /////
     
@@ -44,7 +46,8 @@ var NUMLEVELS = 1;
   },
   update: function(){
     //reviso colisiones
-    this.collisionControl();    
+    this.collisionControl();   
+    //game.debug.cameraInfo(game.camera, 32, 32);
 
     //funcion pause
   },
@@ -73,7 +76,7 @@ var NUMLEVELS = 1;
     // layer.setScale(MAPSCALE);
     // return layer;
   },
-  loadMap:function(){
+  loadMap: function(){
     //añado el tilemap
     //this.map = this.game.add.tilemap('mimapa');
 
@@ -81,21 +84,20 @@ var NUMLEVELS = 1;
 
     //to get the tileset ID (number):
     //this.tilesetID = this.map.getTilesetIndex("Objects");
-    this.map = this.game.add.tilemap('tilemap');
+    this.map = this.game.add.tilemap('mapa');
+    this.map.addTilesetImage('tiles', 'Bloques');
 
-    this.map.addTilesetImage('patronesTilemapBB');
-    this.map.addTilesetImage('patronesTilemapBN');
-    
-    this.bloquesblancos = this.map.createLayer("BloquesBlancos");
-    this.bloquesnegros = this.map.createLayer("BloquesNegros");
-
-    //this.bloquesblancos.resizeWorld();
-    //this.bloquesnegros.resizeWorld();
-    console.log("CreadorTile");
+    this.layer = this.map.createLayer('BloquesNegros');
+    //this.map.setCollisionBetween(0, 4);
+    //this.layer.scale.set(0.5);
+    //this.layer.resizeWorld();
+    console.log("CreadoTile");
     
   },
   collisionControl:function(){
     this.game.physics.arcade.collide(luisa, plat);
+    //this.game.physics.arcade.collide(this.luisa, this.layer);
+    //this.physics.arcade.collide(this.jugador,this.layer);
     // if(this.game.physics.arcade.collide(luisa.disparo, plat);){
     // }
     //this.game.physics.arcade.collide(this.game.activeEnemies,this.Colisiones);

@@ -10,7 +10,9 @@ var BootScene = {
   },
 
   create: function () {
+    //elimina las opciones que salen cuando le das al click derecho
     this.game.canvas.oncontextmenu = function (e) { e.preventDefault(); }
+    //this.camera = new Camera();
     this.game.state.start('preloader');
   }
 };
@@ -31,17 +33,22 @@ var PreloaderScene = {
     this.game.load.image('bulletOrange', 'images/Sprites_y_apartado_grafico/shootOrange.png');
     this.game.load.image('PortalBlue', 'images/Sprites_y_apartado_grafico/PBlue.png');
     this.game.load.image('PortalOrange', 'images/Sprites_y_apartado_grafico/POrange.png');
+    this.game.load.image('Bloques', 'tiles/Bloques.png');
 
     //cargo el tilemap
-    this.game.load.tilemap('tilemap', 'tiles/pruebaTilePortal.csv');
+    this.game.load.tilemap('mapa', 'tiles/level1.json', null, Phaser.Tilemap.TILED_JSON);
+    //this.game.load.tilemap('map', 'tiles/pruebaTilePortal_BloquesNegros.csv');
+    //this.game.load.tilemap('map', 'tiles/pruebaTilePortal_BloquesBlancos.csv');
+    //this.game.load.tilemap('mapa', 'tiles/level1.json', null, Phaser.Tilemap.TILED_JSON);
     //this.game.load.tilemap('mimapa', '/mapas/EastPalace1.json',null, Phaser.Tilemap.TILED_JSON);
-
-    //patrones
-    this.game.load.image('patronesTilemapBB', 'tiles/spriteBloquesBlancos.png');
-    this.game.load.image('patronesTilemapBN', 'tiles/spriteBloquesNegros.png');
   },
 
   create: function () {
+    // this.map = this.game.add.tilemap('map');
+    // this.map.addTilesetImage('Bloques');
+    // this.layer = this.map.createLayer('BloquesNegros');
+    // this.layer.resizeWorld();
+
     this.game.state.start('play');
   }
 };

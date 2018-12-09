@@ -66,6 +66,7 @@ Player.prototype.update = function (){
     this.flipwithmouse();
     this.shoot();
     this.game.debug.bodyInfo(this, 32, 32);
+    
 }
 
 Player.prototype.flipwithmouse = function(){
