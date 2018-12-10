@@ -1,5 +1,5 @@
 'use strict';
-var luisa;
+//var luisa;
 var plat;
 var Player = require ('./Player.js');
 // var map;
@@ -15,7 +15,7 @@ var NUMLEVELS = 1;
     // var bckg = this.game.add.image(0,0,'backgr');
     // //bckg.scale.set(0.5);
     // bckg.smoothed = false;
-    this.game.stage.backgroundColor = 'rgb(68, 136, 170)';
+    this.game.stage.backgroundColor = 'rgb(128,128,128)';
   
     //añadir los grupos
     //this.game.activeEnemies = this.game.add.group();
@@ -47,7 +47,7 @@ var NUMLEVELS = 1;
   update: function(){
     //reviso colisiones
     this.collisionControl();   
-    //game.debug.cameraInfo(game.camera, 32, 32);
+    this.game.debug.cameraInfo(this.game.camera, 32, 32);
 
     //funcion pause
   },
@@ -56,9 +56,9 @@ var NUMLEVELS = 1;
   allReadyGO: function(){
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     
-    luisa = new Player(this.game,200, 200,'Luisa');
+    this.luisa = new Player(this.game,200, 200,'Luisa');
     //this.game.add.existing(luisa);
-    luisa.create();
+    this.luisa.create();
     
     this.game.camera.follow(this.luisa);
     //crear los layers
@@ -84,19 +84,22 @@ var NUMLEVELS = 1;
 
     //to get the tileset ID (number):
     //this.tilesetID = this.map.getTilesetIndex("Objects");
-    this.map = this.game.add.tilemap('mapa');
+    this.map = this.game.add.tilemap('mapaBN', 128, 128);
+    this.map1 = this.game.add.tilemap('mapaBB', 128, 128);
     this.map.addTilesetImage('tiles', 'Bloques');
-
-    this.layer = this.map.createLayer('BloquesNegros');
+    this.map1.addTilesetImage('tiles', 'Bloques');
+    this.map.setCollisionBetween(0, 1000);
+    this.layer = this.map.createLayer(0);
+    this.layer1 = this.map1.createLayer(0);
     //this.map.setCollisionBetween(0, 4);
-    //this.layer.scale.set(0.5);
-    //this.layer.resizeWorld();
+    //this.layer.scale.set(0.5, 0.5);
+    this.layer.resizeWorld();
     console.log("CreadoTile");
     
   },
   collisionControl:function(){
-    this.game.physics.arcade.collide(luisa, plat);
-    //this.game.physics.arcade.collide(this.luisa, this.layer);
+    this.game.physics.arcade.collide(this.luisa, plat);
+    this.game.physics.arcade.collide(this.luisa, this.layer);
     //this.physics.arcade.collide(this.jugador,this.layer);
     // if(this.game.physics.arcade.collide(luisa.disparo, plat);){
     // }

@@ -53,6 +53,7 @@ Portal.prototype.deploy = function(x,y){
 
 Portal.prototype.collisionControl = function (){
     //this.game.physics.arcade.collide(this, 'checkWorldBounds');
+    this.game.physics.arcade.collide(this.bullets, this.layer);
     if(this.body.collideWorldBounds){
         console.log("hey");
         //this.destroy();

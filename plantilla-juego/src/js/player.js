@@ -27,6 +27,8 @@ function Player(game,x,y,name){
     this.gun.scale.set(0.3);
     //this.gun.anchor.setTo(0.5,0.5);//si comento esto rota con un efecto un poco distinto
     this.portalGun = this.addChild(this.gun);
+    
+    
 
     // bullets = game.add.group();
     // bullets.enableBody = true;
@@ -50,11 +52,12 @@ Player.prototype.create = function(){
     this.game.physics.enable(this,Phaser.Physics.ARCADE);
     this.body.gravity.y = 300;
     this.body.collideWorldBounds = true;
-    //this.scale.set(1.5);
+    this.scale.set(1.5, 1.5);
     this.animations.add('walk',[7,8,9,10],10,true);
     this.animations.add('walkBack',[10,9,8,7],10,true);
     this.animations.add('jump',[19,20,21,22],10,false);
 
+    //this.game.camera.follow(this);
 
     console.log("existe");
 
@@ -65,7 +68,7 @@ Player.prototype.update = function (){
     this.gunAngle();
     this.flipwithmouse();
     this.shoot();
-    this.game.debug.bodyInfo(this, 32, 32);
+   // this.game.debug.bodyInfo(this, 32, 32);
     
 }
 

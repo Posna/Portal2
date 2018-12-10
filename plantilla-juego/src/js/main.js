@@ -36,7 +36,8 @@ var PreloaderScene = {
     this.game.load.image('Bloques', 'tiles/Bloques.png');
 
     //cargo el tilemap
-    this.game.load.tilemap('mapa', 'tiles/level1.json', null, Phaser.Tilemap.TILED_JSON);
+    this.game.load.tilemap('mapaBN', 'tiles/level1_BloquesNegros.csv', null, Phaser.Tilemap.CSV);
+    this.game.load.tilemap('mapaBB', 'tiles/level1_BloquesBlancos.csv', null, Phaser.Tilemap.CSV);
     //this.game.load.tilemap('map', 'tiles/pruebaTilePortal_BloquesNegros.csv');
     //this.game.load.tilemap('map', 'tiles/pruebaTilePortal_BloquesBlancos.csv');
     //this.game.load.tilemap('mapa', 'tiles/level1.json', null, Phaser.Tilemap.TILED_JSON);
