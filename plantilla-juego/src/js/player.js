@@ -7,7 +7,8 @@ var Portal = require ('./portal.js');
 var fireRate = 200;
 var nextFire = 0;
 
-function Player(game,x,y,name){
+
+function Player(game,x,y,name, l1, l2){
     //this.playScene = playScene;
     this.name = name;
     this.game = game;
@@ -27,6 +28,8 @@ function Player(game,x,y,name){
     this.gun.scale.set(0.3);
     //this.gun.anchor.setTo(0.5,0.5);//si comento esto rota con un efecto un poco distinto
     this.portalGun = this.addChild(this.gun);
+    this.layer1 = l1;
+    this.layer2 = l2;
     
     
 
@@ -68,9 +71,10 @@ Player.prototype.update = function (){
     this.gunAngle();
     this.flipwithmouse();
     this.shoot();
-   // this.game.debug.bodyInfo(this, 32, 32);
+    this.game.debug.bodyInfo(this, 32, 32);
     
 }
+
 
 Player.prototype.flipwithmouse = function(){
     var angStop = Math.PI /2;
@@ -161,11 +165,11 @@ Player.prototype.shoot = function(){
     if(this.game.time.now > nextFire){
         if(this.game.input.activePointer.leftButton.isDown){
             nextFire = this.game.time.now + fireRate;
-            var disparo = new Portal(this.game, this.x , this.y, 'bulletBlue');
+            this.disparo = new Portal(this.game, this.x , this.y, 'bulletBlue', this.layer1, this.layer2);
         }
         else if(this.game.input.activePointer.rightButton.isDown){
             nextFire = this.game.time.now + fireRate;
-            var disparo = new Portal(this.game, this.x , this.y, 'bulletOrange');
+            this.disparo = new Portal(this.game, this.x , this.y, 'bulletOrange', this.layer1, this.layer2);
         }
         
     }

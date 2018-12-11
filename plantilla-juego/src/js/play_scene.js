@@ -22,6 +22,7 @@ var NUMLEVELS = 1;
    
     //ejecutar aqui funciones de inicio juego
     //this.loadMap
+
    
     this.loadMap();
     this.allReadyGO();
@@ -47,8 +48,6 @@ var NUMLEVELS = 1;
   update: function(){
     //reviso colisiones
     this.collisionControl();   
-    this.game.debug.cameraInfo(this.game.camera, 32, 32);
-
     //funcion pause
   },
 
@@ -56,7 +55,7 @@ var NUMLEVELS = 1;
   allReadyGO: function(){
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     
-    this.luisa = new Player(this.game,200, 200,'Luisa');
+    this.luisa = new Player(this.game,200, 200,'Luisa', this.layer, this.layer1);
     //this.game.add.existing(luisa);
     this.luisa.create();
     
@@ -84,22 +83,25 @@ var NUMLEVELS = 1;
 
     //to get the tileset ID (number):
     //this.tilesetID = this.map.getTilesetIndex("Objects");
-    this.map = this.game.add.tilemap('mapaBN', 128, 128);
-    this.map1 = this.game.add.tilemap('mapaBB', 128, 128);
+    this.map = this.game.add.tilemap('mapaBN', 32, 32);
+    this.map1 = this.game.add.tilemap('mapaBB', 32, 32);
     this.map.addTilesetImage('tiles', 'Bloques');
     this.map1.addTilesetImage('tiles', 'Bloques');
     this.map.setCollisionBetween(0, 1000);
+    this.map1.setCollisionBetween(0, 1000);
     this.layer = this.map.createLayer(0);
     this.layer1 = this.map1.createLayer(0);
     //this.map.setCollisionBetween(0, 4);
     //this.layer.scale.set(0.5, 0.5);
     this.layer.resizeWorld();
+    this.layer1.resizeWorld();
     console.log("CreadoTile");
     
   },
   collisionControl:function(){
     this.game.physics.arcade.collide(this.luisa, plat);
     this.game.physics.arcade.collide(this.luisa, this.layer);
+    this.game.physics.arcade.collide(this.luisa, this.layer1);
     //this.physics.arcade.collide(this.jugador,this.layer);
     // if(this.game.physics.arcade.collide(luisa.disparo, plat);){
     // }

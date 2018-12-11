@@ -1,8 +1,8 @@
 'use strict';
 var Character = require ('./Character.js');
+var PortalLogica = require ('./portalLogica.js');
 
-
-function Portal(game,x,y,name){
+function Portal(game,x,y,name, l1, l2){
     // this.game = game;
     this.stillBullet = true;
     Character.call(this, game, x, y, name);//Hace lo mismo que apply
@@ -23,14 +23,15 @@ function Portal(game,x,y,name){
     this.bullets.setAll('outOfBoundsKill', true);
 
     //portales
-    
+    this.blancos = l2;
+    this.negros = l1;
     this.portalBlue;
     this.fire();
     // this.bullets.animations.add ('shootBlue',[0],1,false);
     // this.bullets.animations.add ('shootOrange',[1],1,false);
 }
 
-Portal.prototype = Object.create (Phaser.Sprite.prototype);
+Portal.prototype = Object.create (Character.prototype);
 Portal.prototype.constructor = Portal;
 
 Portal.prototype.update = function (){
@@ -40,7 +41,7 @@ Portal.prototype.update = function (){
 
 Portal.prototype.fire = function () {
     if ( this.bullets.countDead() > 0){     
-        var bullet = this.bullets.getFirstDead();
+       // var bullet = this.bullets.getFirstDead();
         //bullet.reset(x - 8, y - 8);
         this.rotation = this.game.physics.arcade.angleToPointer(this);
         this.game.physics.arcade.moveToPointer(this, 300);
@@ -52,17 +53,17 @@ Portal.prototype.deploy = function(x,y){
 }
 
 Portal.prototype.collisionControl = function (){
-    //this.game.physics.arcade.collide(this, 'checkWorldBounds');
-    this.game.physics.arcade.collide(this.bullets, this.layer);
-    if(this.body.collideWorldBounds){
-        console.log("hey");
-        //this.destroy();
-        //this.portalBlue = this.game.add.sprite(50,400,'PortalBlue');
-        //this.sprite = this.game.add.sprite(50,400,'PortalBlue');
+    if(this.game.physics.arcade.collide(this, this.negros)){
+        //segun el lado con el que se de el portal saldra de un forma u  otra
+        if(this.body.blocked.up){
+            //var portal = new PortalLogica();
+            this.kill();
+        }
+    }
+    if(this.game.physics.arcade.collide(this, this.blancos)){
+        this.kill();
     }
 }
-
-
 
 
 //exportamos Portal

@@ -31,13 +31,13 @@ var PreloaderScene = {
     this.game.load.image('gun','images/Sprites_y_apartado_grafico/portal gun.png');
     this.game.load.image('bulletBlue', 'images/Sprites_y_apartado_grafico/shootBlue.png');
     this.game.load.image('bulletOrange', 'images/Sprites_y_apartado_grafico/shootOrange.png');
-    this.game.load.image('PortalBlue', 'images/Sprites_y_apartado_grafico/PBlue.png');
-    this.game.load.image('PortalOrange', 'images/Sprites_y_apartado_grafico/POrange.png');
-    this.game.load.image('Bloques', 'tiles/Bloques.png');
+    this.game.load.image('PortalBlue', 'images/Sprites_y_apartado_grafico/portalSpriteAzul.png');
+    this.game.load.image('PortalOrange', 'images/Sprites_y_apartado_grafico/portalSpriteNaranja.png');
+    this.game.load.image('Bloques', 'tiles/BloquesPeque.png');
 
     //cargo el tilemap
-    this.game.load.tilemap('mapaBN', 'tiles/level1_BloquesNegros.csv', null, Phaser.Tilemap.CSV);
-    this.game.load.tilemap('mapaBB', 'tiles/level1_BloquesBlancos.csv', null, Phaser.Tilemap.CSV);
+    this.game.load.tilemap('mapaBN', 'tiles/nivel1_BloquesNegros.csv', null, Phaser.Tilemap.CSV);
+    this.game.load.tilemap('mapaBB', 'tiles/nivel1_BloquesBlancos.csv', null, Phaser.Tilemap.CSV);
     //this.game.load.tilemap('map', 'tiles/pruebaTilePortal_BloquesNegros.csv');
     //this.game.load.tilemap('map', 'tiles/pruebaTilePortal_BloquesBlancos.csv');
     //this.game.load.tilemap('mapa', 'tiles/level1.json', null, Phaser.Tilemap.TILED_JSON);
