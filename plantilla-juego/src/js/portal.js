@@ -54,13 +54,13 @@ Portal.prototype.deploy = function(x,y){
 
 Portal.prototype.collisionControl = function (){
     if(this.game.physics.arcade.collide(this, this.negros)){
-        //segun el lado con el que se de el portal saldra de un forma u  otra
-        if(this.body.blocked.up){
-            //var portal = new PortalLogica();
-            this.kill();
-        }
+        this.kill();
     }
     if(this.game.physics.arcade.collide(this, this.blancos)){
+        //segun el lado con el que se de el portal saldra de un forma u  otra
+        if(this.body.blocked.up){this.portal = new PortalLogica(this.game, this.x, this.y, this.name, 'abajo');}
+        else if(this.body.blocked.left){ this.portal = new PortalLogica(this.game, this.x, this.y, this.name, 'derecha');}
+        else if(this.body.blocked.down){}
         this.kill();
     }
 }

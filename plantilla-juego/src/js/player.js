@@ -71,7 +71,7 @@ Player.prototype.update = function (){
     this.gunAngle();
     this.flipwithmouse();
     this.shoot();
-    this.game.debug.bodyInfo(this, 32, 32);
+    //this.game.debug.bodyInfo(this, 32, 32);
     
 }
 

@@ -2,26 +2,36 @@
 var Character = require ('./Character.js');
 
 function PortalLogica(game, x, y, name, pos){
-    Character.call(game, x, y, name);
-
+    if(name == 'bulletOrange'){
+        Character.call(this, game, x, y, 'PortalOrange');
+    }else{
+        Character.call(this, game, x, y, 'PortalBlue');
+    }
+    this.game.add.existing(this);//!
     //donde enfoca el portal
     this.pos = pos;
+    this.scale.set(2);
     this.anchor.setTo(0.5, 0.5);
     this.orientacion();
 }
 
 
-Portal.prototype = Object.create (Character.prototype);
-Portal.prototype.constructor = Portal;
+PortalLogica.prototype = Object.create (Character.prototype);
+PortalLogica.prototype.constructor = PortalLogica;
 
-Portal.prototype.orientacion = function(){
+PortalLogica.prototype.orientacion = function(){
     if(this.pos == 'arriba'){
-        this.sprite.angle = Math.PI/2;
+        this.angle = 270;
     }else if(this.pos == 'abajo'){
-        this.sprite.angle = -(Math.PI/2);
+        this.angle = 90;
     }else if(this.pos == 'derecha'){
-        this.sprite.angle = Math.PI;
+        this.angle = 180;
     }
+
+}
+
+PortalLogica.prototype.update = function(){
+   // this.game.debug.bodyInfo(this, 32, 32);
 
 }
 
