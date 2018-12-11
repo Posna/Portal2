@@ -5,6 +5,7 @@ var PortalLogica = require ('./portalLogica.js');
 function Portal(game,x,y,name, l1, l2){
     // this.game = game;
     this.stillBullet = true;
+    this.name = name;
     Character.call(this, game, x, y, name);//Hace lo mismo que apply
     this.anchor.setTo(0.5, 0.5);
     this.scale.set(-0.3);
@@ -57,10 +58,15 @@ Portal.prototype.collisionControl = function (){
         this.kill();
     }
     if(this.game.physics.arcade.collide(this, this.blancos)){
+        if(this.portal != undefined){
+            this.portal.kill();
+        }
         //segun el lado con el que se de el portal saldra de un forma u  otra
         if(this.body.blocked.up){this.portal = new PortalLogica(this.game, this.x, this.y, this.name, 'abajo');}
         else if(this.body.blocked.left){ this.portal = new PortalLogica(this.game, this.x, this.y, this.name, 'derecha');}
-        else if(this.body.blocked.down){}
+        else if(this.body.blocked.down){this.portal = new PortalLogica(this.game, this.x, this.y, this.name, 'arriba');}
+        else if(this.body.blocked.right){this.portal = new PortalLogica(this.game, this.x, this.y, this.name, 'izquierda');}
+        //this.portal.kill();
         this.kill();
     }
 }

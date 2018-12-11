@@ -29,15 +29,15 @@ var NUMLEVELS = 1;
 
      /////
     
-     this.plataformas = this.game.add.group();
-     plat = this.game.add.sprite(50,400,'platAzul');
-     plat.scale.set(0.5);
-     this.game.add.existing(plat);
-     this.game.physics.enable(plat,Phaser.Physics.ARCADE);
-     plat.body.enable = true;
-     plat.body.immovable = true;
+    //  this.plataformas = this.game.add.group();
+    //  plat = this.game.add.sprite(50,400,'platAzul');
+    //  plat.scale.set(0.5);
+    //  this.game.add.existing(plat);
+    //  this.game.physics.enable(plat,Phaser.Physics.ARCADE);
+    //  plat.body.enable = true;
+    //  plat.body.immovable = true;
 
-     this.plataformas.add(plat);     
+    //  this.plataformas.add(plat);     
      
      /////
     
