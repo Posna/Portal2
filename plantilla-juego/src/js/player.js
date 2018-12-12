@@ -30,7 +30,7 @@ function Player(game,x,y,name, l1, l2){
     this.portalGun = this.addChild(this.gun);
     this.layer1 = l1;
     this.layer2 = l2;
-    
+    this.cogido = false;
     
 
     // bullets = game.add.group();
@@ -62,6 +62,12 @@ Player.prototype.create = function(){
 
     //this.game.camera.follow(this);
 
+    //keys
+    this.game.input.keyboard.addKey(Phaser.Keyboard.A);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.W);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.D);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.E);
+
     console.log("existe");
 
 }
@@ -86,6 +92,21 @@ Player.prototype.flipwithmouse = function(){
     }
 }
 
+Player.prototype.pickup = function(cubo){
+    if(this.game.input.keyboard.isDown(Phaser.Keyboard.E)){
+        cubo.coger(this.x, this.y);
+        this.cogido = true;
+        cubo.body.gravity.y = 0;
+    }
+    // if(cubo != undefined){
+    //     cubo.body.gravity.y = 300;
+    // }
+    else{cubo.body.gravity.y = 300;}
+    // if(this.game.input.keyboard.isUp(Phaser.Keyboard.E)){
+    //     this.cogido = false;
+    // }
+}
+
 Player.prototype.move = function (){
     var angStop = Math.PI / 2;
     var ang = this.game.physics.arcade.angleToPointer(this);
@@ -95,13 +116,13 @@ Player.prototype.move = function (){
         this.jumping = false;
     }
     //salto
-    if(this.cursors.up.isDown && (this.body.onFloor() ||this.body.touching.down) ){
+    if(this.game.input.keyboard.isDown(Phaser.Keyboard.W) && (this.body.onFloor() ||this.body.touching.down) ){
         this.jumping = true;
         this.animations.play('jump');
         this.body.velocity.y = -200;
         
     }
-    if (this.cursors.left.isDown){
+    if (this.game.input.keyboard.isDown(Phaser.Keyboard.A)){
         this.body.velocity.x -=  this.speed;
         //this.faceRight = false;        
         if(!this.jumping){
@@ -112,7 +133,7 @@ Player.prototype.move = function (){
             }
         }
     }
-    else if (this.cursors.right.isDown){
+    else if (this.game.input.keyboard.isDown(Phaser.Keyboard.D)){
         this.body.velocity.x +=  this.speed;
         //this.faceRight = true;
         if(!this.jumping){

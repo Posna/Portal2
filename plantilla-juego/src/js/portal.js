@@ -62,10 +62,10 @@ Portal.prototype.collisionControl = function (){
             this.portal.kill();
         }
         //segun el lado con el que se de el portal saldra de un forma u  otra
-        if(this.body.blocked.up){this.portal = new PortalLogica(this.game, this.x, this.y, this.name, 'abajo');}
+        if(this.body.blocked.up){this.portal = new PortalLogica(this.game, this.x, this.y-4, this.name, 'abajo');}
         else if(this.body.blocked.left){ this.portal = new PortalLogica(this.game, this.x, this.y, this.name, 'derecha');}
         else if(this.body.blocked.down){this.portal = new PortalLogica(this.game, this.x, this.y, this.name, 'arriba');}
-        else if(this.body.blocked.right){this.portal = new PortalLogica(this.game, this.x, this.y, this.name, 'izquierda');}
+        else if(this.body.blocked.right){this.portal = new PortalLogica(this.game, this.x +25, this.y, this.name, 'izquierda');}
         //this.portal.kill();
         this.kill();
     }

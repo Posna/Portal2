@@ -61,6 +61,8 @@ var NUMLEVELS = 1;
     this.luisa.create();
     
     this.game.camera.follow(this.luisa);
+    
+    this.game.input.keyboard.addKey(Phaser.Keyboard.E);
     //crear los layers
 
     //activar colisiones
@@ -71,9 +73,9 @@ var NUMLEVELS = 1;
 
     //cubos
     cuboAzul = new Cubo (this.game, 100 , 100, 'cuboAzul');
-    cuboAzul.scale.set(0.30);
+    cuboAzul.scale.set(0.16);
     cuboCompania = new Cubo (this.game, 200 , 100, 'cuboCompania');
-    cuboCompania.scale.set(0.3);
+    cuboCompania.scale.set(0.2);
   },
   createLayer: function(){
     // var layer = this.map.createLayer(name);
@@ -97,8 +99,6 @@ var NUMLEVELS = 1;
     this.map1.setCollisionBetween(0, 1000);
     this.layer = this.map.createLayer(0);
     this.layer1 = this.map1.createLayer(0);
-    //this.map.setCollisionBetween(0, 4);
-    //this.layer.scale.set(0.5, 0.5);
     this.layer.resizeWorld();
     this.layer1.resizeWorld();
     console.log("CreadoTile");
@@ -108,8 +108,12 @@ var NUMLEVELS = 1;
     this.game.physics.arcade.collide(this.luisa, plat);
     this.game.physics.arcade.collide(this.luisa, this.layer);
     this.game.physics.arcade.collide(this.luisa, this.layer1);
-    this.game.physics.arcade.collide(luisa, cuboAzul);
-    this.game.physics.arcade.collide(luisa, cuboCompania);
+    this.game.physics.arcade.collide(this.layer, cuboAzul);
+    this.game.physics.arcade.collide(this.layer1, cuboAzul);
+    this.game.physics.arcade.collide(this.layer, cuboCompania);
+    this.game.physics.arcade.collide(this.layer1, cuboCompania);
+    this.luisa.pickup(cuboAzul);
+    this.luisa.pickup(cuboCompania);
     //this.game.physics.arcade.collide(this.game.activeEnemies,this.Colisiones);
     //this.game.physics.arcade.overlap(,,,,);
   }

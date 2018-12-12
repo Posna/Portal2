@@ -34,7 +34,7 @@ PortalLogica.prototype.orientacion = function(){
 }
 
 PortalLogica.prototype.update = function(){
-   // this.game.debug.bodyInfo(this, 32, 32);
+    //this.game.debug.bodyInfo(this, 32, 32);
 
 }
 
