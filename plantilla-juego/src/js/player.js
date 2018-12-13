@@ -1,6 +1,7 @@
 'use strict';
 var Character = require ('./Character.js');
 var Portal = require ('./portal.js');
+var PortalLogica = require('./portalLogica.js');
 //var bullets;
 
 
@@ -8,7 +9,7 @@ var fireRate = 200;
 var nextFire = 0;
 
 
-function Player(game,x,y,name, l1, l2){
+function Player(game,x,y,name, l1, l2, portalN, portalB){
     //this.playScene = playScene;
     this.name = name;
     this.game = game;
@@ -22,6 +23,8 @@ function Player(game,x,y,name, l1, l2){
     this.faceRight = true;
     this.x = x;
     this.y = y;
+    this.portalB;
+    this.portalN;
     this.anchor.setTo(0.5, 0.5);//aqui no?
     //Portal gun
     this.gun = this.game.make.sprite(0,0, 'gun');
@@ -31,8 +34,12 @@ function Player(game,x,y,name, l1, l2){
     this.layer1 = l1;
     this.layer2 = l2;
     this.cogido = false;
+    this.tp = false;
+    this.MAX_VELOCITY = 700;
     
-
+    //this.body.drag = 50;
+    this.portalN = portalN;
+    this.portalB = portalB; 
     // bullets = game.add.group();
     // bullets.enableBody = true;
     // bullets.physicsBodyType = Phaser.Physics.ARCADE;
@@ -77,7 +84,12 @@ Player.prototype.update = function (){
     this.gunAngle();
     this.flipwithmouse();
     this.shoot();
-    //this.game.debug.bodyInfo(this, 32, 32);
+    if(this.body.velocity.y > this.MAX_VELOCITY)
+        this.body.velocity.y = this.MAX_VELOCITY;
+    if(this.body.velocity.x > this.MAX_VELOCITY)
+        this.body.velocity.x = this.MAX_VELOCITY;
+    
+    this.game.debug.bodyInfo(this, 32, 32);
     
 }
 
@@ -111,46 +123,63 @@ Player.prototype.move = function (){
     var angStop = Math.PI / 2;
     var ang = this.game.physics.arcade.angleToPointer(this);
     var mousedrch = ang > -angStop && ang < angStop;
-    this.body.velocity.x = 0;
-    if((this.body.onFloor() || this.body.touching.down)){
+    if((this.body.onFloor()) && this.jumping){
         this.jumping = false;
     }
+    if(this.body.onFloor()){
+        this.tp = false;
+    }
     //salto
-    if(this.game.input.keyboard.isDown(Phaser.Keyboard.W) && (this.body.onFloor() ||this.body.touching.down) ){
+    
+    if(this.game.input.keyboard.isDown(Phaser.Keyboard.W) && (this.body.onFloor()) ){
         this.jumping = true;
         this.animations.play('jump');
         this.body.velocity.y = -200;
         
     }
-    if (this.game.input.keyboard.isDown(Phaser.Keyboard.A)){
-        this.body.velocity.x -=  this.speed;
-        //this.faceRight = false;        
-        if(!this.jumping){
-            if(mousedrch){
-                this.animations.play('walkBack')
-            }else{
-                this.animations.play('walk');
+    if(!this.tp){
+        if (this.game.input.keyboard.isDown(Phaser.Keyboard.A)){
+            this.body.velocity.x = -this.speed;
+            //this.faceRight = false;        
+            if(!this.jumping){
+                if(mousedrch){
+                    this.animations.play('walkBack');
+                }else{
+                    this.animations.play('walk');
+                }
             }
         }
-    }
-    else if (this.game.input.keyboard.isDown(Phaser.Keyboard.D)){
-        this.body.velocity.x +=  this.speed;
-        //this.faceRight = true;
-        if(!this.jumping){
-            if(mousedrch){
-                this.animations.play('walk');
-            }else{
-                this.animations.play('walkBack');
+        else if (this.game.input.keyboard.isDown(Phaser.Keyboard.D)){
+            this.body.velocity.x = +this.speed;
+            //this.faceRight = true;
+            if(!this.jumping){
+                if(mousedrch){
+                    this.animations.play('walk');
+                }else{
+                    this.animations.play('walkBack');
+                }
             }
         }
-    }
-    else {//si entra por aqui significa que no esta pulsadndo  izq ni derecha
+        else {//si entra por aqui significa que no esta pulsadndo  izq ni derecha
+            this.animations.stop('walk');
+            if(!this.jumping){
+                this.frame = 6;
+            }
+            this.body.velocity.x = 0;
+        }
+    }else {//si entra por aqui significa que no esta pulsadndo  izq ni derecha
         this.animations.stop('walk');
-        if(!this.jumping)
+        if(!this.jumping){
             this.frame = 6;
+        }
     }
     this.flip();
 }
+
+Player.prototype.sehatepeado = function(){
+    this.tp = true;
+}
+
 Player.prototype.gunAngle = function (){
     
     if(this.faceRight){
@@ -183,15 +212,21 @@ Player.prototype.flip = function (){
 
 //Aqui funciones propias del player
 Player.prototype.shoot = function(){
+    // if(this.portalN == undefined && this.portalB == undefined){
+        
+    // }else{
+    //     console.log(this.portalB.x);
+    // }
     if(this.game.time.now > nextFire){
         if(this.game.input.activePointer.leftButton.isDown){
             nextFire = this.game.time.now + fireRate;
-            this.disparo = new Portal(this.game, this.x , this.y, 'bulletBlue', this.layer1, this.layer2);
+            this.disparo = new Portal(this.game, this.x , this.y, 'bulletBlue', this.layer1, this.layer2, this.portalB);
         }
         else if(this.game.input.activePointer.rightButton.isDown){
             nextFire = this.game.time.now + fireRate;
-            this.disparo = new Portal(this.game, this.x , this.y, 'bulletOrange', this.layer1, this.layer2);
+            this.disparo = new Portal(this.game, this.x , this.y, 'bulletOrange', this.layer1, this.layer2, this.portalN);
         }
+        
         
     }
 

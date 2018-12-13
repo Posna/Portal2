@@ -2,14 +2,14 @@
 var Character = require ('./Character.js');
 var PortalLogica = require ('./portalLogica.js');
 
-function Portal(game,x,y,name, l1, l2){
+function Portal(game,x,y,name, l1, l2, portal){
     // this.game = game;
     this.stillBullet = true;
     this.name = name;
     Character.call(this, game, x, y, name);//Hace lo mismo que apply
     this.anchor.setTo(0.5, 0.5);
     this.scale.set(-0.3);
-
+    this.portal = portal;
     //bullets
     this.bullets = game.add.group();
     this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
@@ -26,7 +26,6 @@ function Portal(game,x,y,name, l1, l2){
     //portales
     this.blancos = l2;
     this.negros = l1;
-    this.portalBlue;
     this.fire();
     // this.bullets.animations.add ('shootBlue',[0],1,false);
     // this.bullets.animations.add ('shootOrange',[1],1,false);
@@ -45,7 +44,7 @@ Portal.prototype.fire = function () {
        // var bullet = this.bullets.getFirstDead();
         //bullet.reset(x - 8, y - 8);
         this.rotation = this.game.physics.arcade.angleToPointer(this);
-        this.game.physics.arcade.moveToPointer(this, 300);
+        this.game.physics.arcade.moveToPointer(this, 400);
     }    
 }
 
@@ -58,14 +57,27 @@ Portal.prototype.collisionControl = function (){
         this.kill();
     }
     if(this.game.physics.arcade.collide(this, this.blancos)){
-        if(this.portal != undefined){
-            this.portal.kill();
-        }
         //segun el lado con el que se de el portal saldra de un forma u  otra
-        if(this.body.blocked.up){this.portal = new PortalLogica(this.game, this.x, this.y-4, this.name, 'abajo');}
-        else if(this.body.blocked.left){ this.portal = new PortalLogica(this.game, this.x, this.y, this.name, 'derecha');}
-        else if(this.body.blocked.down){this.portal = new PortalLogica(this.game, this.x, this.y, this.name, 'arriba');}
-        else if(this.body.blocked.right){this.portal = new PortalLogica(this.game, this.x +25, this.y, this.name, 'izquierda');}
+        if(this.body.blocked.up){
+            //this.portal = new PortalLogica(this.game, this.x, this.y-4, this.name, 'abajo');
+            this.portal.moverportal(this.x, this.y - 4);
+            this.portal.orientacion('abajo');
+        }
+        else if(this.body.blocked.left){ 
+            //this.portal = new PortalLogica(this.game, this.x + 25, this.y, this.name, 'derecha');
+            this.portal.moverportal(this.x -25, this.y);
+            this.portal.orientacion('derecha');
+        }
+        else if(this.body.blocked.down){
+            //this.portal = new PortalLogica(this.game, this.x, this.y-4, this.name, 'arriba');
+            this.portal.moverportal(this.x, this.y+4);
+            this.portal.orientacion('arriba');
+        }
+        else if(this.body.blocked.right){
+            //this.portal = new PortalLogica(this.game, this.x +25, this.y, this.name, 'izquierda');
+            this.portal.moverportal(this.x + 25, this.y);
+            this.portal.orientacion('izquierda');
+        }
         //this.portal.kill();
         this.kill();
     }

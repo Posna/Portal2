@@ -5,6 +5,7 @@ var cuboAzul;
 var cuboCompania;
 var Player = require ('./Player.js');
 var Cubo = require ('./Cubo.js');
+var PortalLogica = require ('./portalLogica.js');
 
 var MAPSCALE = 1;
 var NUMLEVELS = 1;
@@ -16,6 +17,9 @@ var NUMLEVELS = 1;
     // var bckg = this.game.add.image(0,0,'backgr');
     // //bckg.scale.set(0.5);
     // bckg.smoothed = false;
+    this.overlapControlB = false;
+    this.overlapControlN = false;
+
     this.game.stage.backgroundColor = 'rgb(128,128,128)';
   
     //añadir los grupos
@@ -54,9 +58,13 @@ var NUMLEVELS = 1;
 
   //aqui los preparativos para el nivel
   allReadyGO: function(){
+    //portales
+    this.portalN = new PortalLogica(this.game, -50, -50, 'bulletOrange', 'arriba');
+    this.portalB = new PortalLogica(this.game, -50, -50, 'bulletBlue', 'arriba');
+    
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     
-    this.luisa = new Player(this.game,200, 200,'Luisa', this.layer, this.layer1);
+    this.luisa = new Player(this.game,200, 200,'Luisa', this.layer, this.layer1, this.portalN, this.portalB);
     //this.game.add.existing(luisa);
     this.luisa.create();
     
@@ -67,7 +75,6 @@ var NUMLEVELS = 1;
 
     //activar colisiones
 
-    //spawn luisa
 
     //creamos el HUD
 
@@ -114,6 +121,39 @@ var NUMLEVELS = 1;
     this.game.physics.arcade.collide(this.layer1, cuboCompania);
     this.luisa.pickup(cuboAzul);
     this.luisa.pickup(cuboCompania);
+    if(!this.game.physics.arcade.overlap(this.luisa, this.portalN)){
+      this.overlapControlN = false;
+    }
+    if(!this.game.physics.arcade.overlap(this.luisa, this.portalB)){
+      this.overlapControlB = false;
+    }
+    if(this.game.physics.arcade.overlap(this.luisa, this.portalN) && !this.overlapControlN){
+      this.portalN.movetoportal(this.portalB, this.luisa);
+      //this.luisa.sehatepeado();
+      this.overlapControlB = true;
+    }
+    if(this.game.physics.arcade.overlap(this.luisa, this.portalB) && !this.overlapControlB){
+      this.portalB.movetoportal(this.portalN, this.luisa);
+      //this.luisa.sehatepeado();
+      this.overlapControlN = true;
+    }
+    // if(!this.game.physics.arcade.overlap(this.cuboCompania, this.portalN)){
+    //   this.overlapControlN = false;
+    // }
+    // if(!this.game.physics.arcade.overlap(this.cuboCompania, this.portalB)){
+    //   this.overlapControlB = false;
+    // }
+    // if(this.game.physics.arcade.overlap(this.cuboCompania, this.portalN) && !this.overlapControlN){
+    //   this.portalN.movetoportal(this.portalB, this.cuboCompania);
+    //   this.overlapControlB = true;
+    // }
+    // if(this.game.physics.arcade.overlap(this.cuboCompania, this.portalB) && !this.overlapControlB){
+    //   this.portalB.movetoportal(this.portalN, this.cuboCompania);
+    //   this.overlapControlN = true;
+    // }
+    
+
+    
     //this.game.physics.arcade.collide(this.game.activeEnemies,this.Colisiones);
     //this.game.physics.arcade.overlap(,,,,);
   }
