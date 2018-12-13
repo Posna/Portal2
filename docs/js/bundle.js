@@ -56,6 +56,7 @@ module.exports = Cubo;
 'use strict';
 var Character = require ('./Character.js');
 var Portal = require ('./portal.js');
+var PortalLogica = require('./portalLogica.js');
 //var bullets;
 
 
@@ -63,7 +64,7 @@ var fireRate = 200;
 var nextFire = 0;
 
 
-function Player(game,x,y,name, l1, l2){
+function Player(game,x,y,name, l1, l2, portalN, portalB){
     //this.playScene = playScene;
     this.name = name;
     this.game = game;
@@ -77,6 +78,8 @@ function Player(game,x,y,name, l1, l2){
     this.faceRight = true;
     this.x = x;
     this.y = y;
+    this.portalB;
+    this.portalN;
     this.anchor.setTo(0.5, 0.5);//aqui no?
     //Portal gun
     this.gun = this.game.make.sprite(0,0, 'gun');
@@ -86,8 +89,12 @@ function Player(game,x,y,name, l1, l2){
     this.layer1 = l1;
     this.layer2 = l2;
     this.cogido = false;
+    this.tp = false;
+    this.MAX_VELOCITY = 700;
     
-
+    //this.body.drag = 50;
+    this.portalN = portalN;
+    this.portalB = portalB; 
     // bullets = game.add.group();
     // bullets.enableBody = true;
     // bullets.physicsBodyType = Phaser.Physics.ARCADE;
@@ -132,7 +139,12 @@ Player.prototype.update = function (){
     this.gunAngle();
     this.flipwithmouse();
     this.shoot();
-    //this.game.debug.bodyInfo(this, 32, 32);
+    if(this.body.velocity.y > this.MAX_VELOCITY)
+        this.body.velocity.y = this.MAX_VELOCITY;
+    if(this.body.velocity.x > this.MAX_VELOCITY)
+        this.body.velocity.x = this.MAX_VELOCITY;
+    
+    this.game.debug.bodyInfo(this, 32, 32);
     
 }
 
@@ -166,46 +178,63 @@ Player.prototype.move = function (){
     var angStop = Math.PI / 2;
     var ang = this.game.physics.arcade.angleToPointer(this);
     var mousedrch = ang > -angStop && ang < angStop;
-    this.body.velocity.x = 0;
-    if((this.body.onFloor() || this.body.touching.down)){
+    if((this.body.onFloor()) && this.jumping){
         this.jumping = false;
     }
+    if(this.body.onFloor()){
+        this.tp = false;
+    }
     //salto
-    if(this.game.input.keyboard.isDown(Phaser.Keyboard.W) && (this.body.onFloor() ||this.body.touching.down) ){
+    
+    if(this.game.input.keyboard.isDown(Phaser.Keyboard.W) && (this.body.onFloor()) ){
         this.jumping = true;
         this.animations.play('jump');
         this.body.velocity.y = -200;
         
     }
-    if (this.game.input.keyboard.isDown(Phaser.Keyboard.A)){
-        this.body.velocity.x -=  this.speed;
-        //this.faceRight = false;        
-        if(!this.jumping){
-            if(mousedrch){
-                this.animations.play('walkBack')
-            }else{
-                this.animations.play('walk');
+    if(!this.tp){
+        if (this.game.input.keyboard.isDown(Phaser.Keyboard.A)){
+            this.body.velocity.x = -this.speed;
+            //this.faceRight = false;        
+            if(!this.jumping){
+                if(mousedrch){
+                    this.animations.play('walkBack');
+                }else{
+                    this.animations.play('walk');
+                }
             }
         }
-    }
-    else if (this.game.input.keyboard.isDown(Phaser.Keyboard.D)){
-        this.body.velocity.x +=  this.speed;
-        //this.faceRight = true;
-        if(!this.jumping){
-            if(mousedrch){
-                this.animations.play('walk');
-            }else{
-                this.animations.play('walkBack');
+        else if (this.game.input.keyboard.isDown(Phaser.Keyboard.D)){
+            this.body.velocity.x = +this.speed;
+            //this.faceRight = true;
+            if(!this.jumping){
+                if(mousedrch){
+                    this.animations.play('walk');
+                }else{
+                    this.animations.play('walkBack');
+                }
             }
         }
-    }
-    else {//si entra por aqui significa que no esta pulsadndo  izq ni derecha
+        else {//si entra por aqui significa que no esta pulsadndo  izq ni derecha
+            this.animations.stop('walk');
+            if(!this.jumping){
+                this.frame = 6;
+            }
+            this.body.velocity.x = 0;
+        }
+    }else {//si entra por aqui significa que no esta pulsadndo  izq ni derecha
         this.animations.stop('walk');
-        if(!this.jumping)
+        if(!this.jumping){
             this.frame = 6;
+        }
     }
     this.flip();
 }
+
+Player.prototype.sehatepeado = function(){
+    this.tp = true;
+}
+
 Player.prototype.gunAngle = function (){
     
     if(this.faceRight){
@@ -238,22 +267,28 @@ Player.prototype.flip = function (){
 
 //Aqui funciones propias del player
 Player.prototype.shoot = function(){
+    // if(this.portalN == undefined && this.portalB == undefined){
+        
+    // }else{
+    //     console.log(this.portalB.x);
+    // }
     if(this.game.time.now > nextFire){
         if(this.game.input.activePointer.leftButton.isDown){
             nextFire = this.game.time.now + fireRate;
-            this.disparo = new Portal(this.game, this.x , this.y, 'bulletBlue', this.layer1, this.layer2);
+            this.disparo = new Portal(this.game, this.x , this.y, 'bulletBlue', this.layer1, this.layer2, this.portalB);
         }
         else if(this.game.input.activePointer.rightButton.isDown){
             nextFire = this.game.time.now + fireRate;
-            this.disparo = new Portal(this.game, this.x , this.y, 'bulletOrange', this.layer1, this.layer2);
+            this.disparo = new Portal(this.game, this.x , this.y, 'bulletOrange', this.layer1, this.layer2, this.portalN);
         }
+        
         
     }
 
 }
 //Exportamos Player
 module.exports = Player;
-},{"./Character.js":1,"./portal.js":6}],4:[function(require,module,exports){
+},{"./Character.js":1,"./portal.js":6,"./portalLogica.js":7}],4:[function(require,module,exports){
 'use strict';
 
 var PlayScene = require('./play_scene.js');
@@ -331,6 +366,7 @@ var cuboAzul;
 var cuboCompania;
 var Player = require ('./Player.js');
 var Cubo = require ('./Cubo.js');
+var PortalLogica = require ('./portalLogica.js');
 
 var MAPSCALE = 1;
 var NUMLEVELS = 1;
@@ -342,6 +378,9 @@ var NUMLEVELS = 1;
     // var bckg = this.game.add.image(0,0,'backgr');
     // //bckg.scale.set(0.5);
     // bckg.smoothed = false;
+    this.overlapControlB = false;
+    this.overlapControlN = false;
+
     this.game.stage.backgroundColor = 'rgb(128,128,128)';
   
     //añadir los grupos
@@ -380,9 +419,13 @@ var NUMLEVELS = 1;
 
   //aqui los preparativos para el nivel
   allReadyGO: function(){
+    //portales
+    this.portalN = new PortalLogica(this.game, -50, -50, 'bulletOrange', 'arriba');
+    this.portalB = new PortalLogica(this.game, -50, -50, 'bulletBlue', 'arriba');
+    
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     
-    this.luisa = new Player(this.game,200, 200,'Luisa', this.layer, this.layer1);
+    this.luisa = new Player(this.game,200, 200,'Luisa', this.layer, this.layer1, this.portalN, this.portalB);
     //this.game.add.existing(luisa);
     this.luisa.create();
     
@@ -393,7 +436,6 @@ var NUMLEVELS = 1;
 
     //activar colisiones
 
-    //spawn luisa
 
     //creamos el HUD
 
@@ -440,6 +482,39 @@ var NUMLEVELS = 1;
     this.game.physics.arcade.collide(this.layer1, cuboCompania);
     this.luisa.pickup(cuboAzul);
     this.luisa.pickup(cuboCompania);
+    if(!this.game.physics.arcade.overlap(this.luisa, this.portalN)){
+      this.overlapControlN = false;
+    }
+    if(!this.game.physics.arcade.overlap(this.luisa, this.portalB)){
+      this.overlapControlB = false;
+    }
+    if(this.game.physics.arcade.overlap(this.luisa, this.portalN) && !this.overlapControlN){
+      this.portalN.movetoportal(this.portalB, this.luisa);
+      //this.luisa.sehatepeado();
+      this.overlapControlB = true;
+    }
+    if(this.game.physics.arcade.overlap(this.luisa, this.portalB) && !this.overlapControlB){
+      this.portalB.movetoportal(this.portalN, this.luisa);
+      //this.luisa.sehatepeado();
+      this.overlapControlN = true;
+    }
+    // if(!this.game.physics.arcade.overlap(this.cuboCompania, this.portalN)){
+    //   this.overlapControlN = false;
+    // }
+    // if(!this.game.physics.arcade.overlap(this.cuboCompania, this.portalB)){
+    //   this.overlapControlB = false;
+    // }
+    // if(this.game.physics.arcade.overlap(this.cuboCompania, this.portalN) && !this.overlapControlN){
+    //   this.portalN.movetoportal(this.portalB, this.cuboCompania);
+    //   this.overlapControlB = true;
+    // }
+    // if(this.game.physics.arcade.overlap(this.cuboCompania, this.portalB) && !this.overlapControlB){
+    //   this.portalB.movetoportal(this.portalN, this.cuboCompania);
+    //   this.overlapControlN = true;
+    // }
+    
+
+    
     //this.game.physics.arcade.collide(this.game.activeEnemies,this.Colisiones);
     //this.game.physics.arcade.overlap(,,,,);
   }
@@ -448,19 +523,19 @@ var NUMLEVELS = 1;
 
 module.exports = PlayScene;
 
-},{"./Cubo.js":2,"./Player.js":3}],6:[function(require,module,exports){
+},{"./Cubo.js":2,"./Player.js":3,"./portalLogica.js":7}],6:[function(require,module,exports){
 'use strict';
 var Character = require ('./Character.js');
 var PortalLogica = require ('./portalLogica.js');
 
-function Portal(game,x,y,name, l1, l2){
+function Portal(game,x,y,name, l1, l2, portal){
     // this.game = game;
     this.stillBullet = true;
     this.name = name;
     Character.call(this, game, x, y, name);//Hace lo mismo que apply
     this.anchor.setTo(0.5, 0.5);
     this.scale.set(-0.3);
-
+    this.portal = portal;
     //bullets
     this.bullets = game.add.group();
     this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
@@ -477,7 +552,6 @@ function Portal(game,x,y,name, l1, l2){
     //portales
     this.blancos = l2;
     this.negros = l1;
-    this.portalBlue;
     this.fire();
     // this.bullets.animations.add ('shootBlue',[0],1,false);
     // this.bullets.animations.add ('shootOrange',[1],1,false);
@@ -496,7 +570,7 @@ Portal.prototype.fire = function () {
        // var bullet = this.bullets.getFirstDead();
         //bullet.reset(x - 8, y - 8);
         this.rotation = this.game.physics.arcade.angleToPointer(this);
-        this.game.physics.arcade.moveToPointer(this, 300);
+        this.game.physics.arcade.moveToPointer(this, 400);
     }    
 }
 
@@ -509,14 +583,27 @@ Portal.prototype.collisionControl = function (){
         this.kill();
     }
     if(this.game.physics.arcade.collide(this, this.blancos)){
-        if(this.portal != undefined){
-            this.portal.kill();
-        }
         //segun el lado con el que se de el portal saldra de un forma u  otra
-        if(this.body.blocked.up){this.portal = new PortalLogica(this.game, this.x, this.y-4, this.name, 'abajo');}
-        else if(this.body.blocked.left){ this.portal = new PortalLogica(this.game, this.x, this.y, this.name, 'derecha');}
-        else if(this.body.blocked.down){this.portal = new PortalLogica(this.game, this.x, this.y, this.name, 'arriba');}
-        else if(this.body.blocked.right){this.portal = new PortalLogica(this.game, this.x +25, this.y, this.name, 'izquierda');}
+        if(this.body.blocked.up){
+            //this.portal = new PortalLogica(this.game, this.x, this.y-4, this.name, 'abajo');
+            this.portal.moverportal(this.x, this.y - 4);
+            this.portal.orientacion('abajo');
+        }
+        else if(this.body.blocked.left){ 
+            //this.portal = new PortalLogica(this.game, this.x + 25, this.y, this.name, 'derecha');
+            this.portal.moverportal(this.x -25, this.y);
+            this.portal.orientacion('derecha');
+        }
+        else if(this.body.blocked.down){
+            //this.portal = new PortalLogica(this.game, this.x, this.y-4, this.name, 'arriba');
+            this.portal.moverportal(this.x, this.y+4);
+            this.portal.orientacion('arriba');
+        }
+        else if(this.body.blocked.right){
+            //this.portal = new PortalLogica(this.game, this.x +25, this.y, this.name, 'izquierda');
+            this.portal.moverportal(this.x + 25, this.y);
+            this.portal.orientacion('izquierda');
+        }
         //this.portal.kill();
         this.kill();
     }
@@ -537,10 +624,11 @@ function PortalLogica(game, x, y, name, pos){
     }
     this.game.add.existing(this);//!
     //donde enfoca el portal
+    this.game.physics.enable(this,Phaser.Physics.ARCADE);
     this.pos = pos;
     this.scale.set(2);
     this.anchor.setTo(0.5, 0.5);
-    this.orientacion();
+    this.orientacion(pos);
     console.log('holi');
     //this.kill();
 }
@@ -549,21 +637,67 @@ function PortalLogica(game, x, y, name, pos){
 PortalLogica.prototype = Object.create (Character.prototype);
 PortalLogica.prototype.constructor = PortalLogica;
 
-PortalLogica.prototype.orientacion = function(){
-    if(this.pos == 'arriba'){
+PortalLogica.prototype.orientacion = function(pos){
+    if(pos == 'arriba'){
         this.angle = 90;
-    }else if(this.pos == 'abajo'){
+    }else if(pos == 'abajo'){
         this.angle = 270;
-    }else if(this.pos == 'derecha'){
+    }else if(pos == 'derecha'){
         this.angle = 180;
-    }else
+    }else{
         this.angle = 0;
+    }
+    this.pos = pos;
+}
 
+PortalLogica.prototype.moverportal = function(x, y){
+    this.x = x;
+    this.y = y;
+}
+
+PortalLogica.prototype.movetoportal = function(portal, col){
+    if(portal.x > 0){
+        if(portal.pos == 'arriba'){
+            col.x = portal.x;
+            col.y = portal.y - (col.height/2) - 1;
+            col.body.velocity.y = -col.body.speed;//this.velocPortal(col);
+            col.body.velocity.x = 0;
+        }else if(portal.pos == 'abajo'){
+            col.x = portal.x;
+            col.y = portal.y + (col.height/2) + 1;
+            col.body.velocity.y = col.body.speed;//this.velocPortal(col);
+            col.body.velocity.x = 0;
+        }else if(portal.pos == 'derecha'){
+            col.x = portal.x + Math.abs(col.width/2) + 1;
+            col.y = portal.y;
+            col.body.velocity.y = 0;
+            col.body.velocity.x = col.body.speed;//this.velocPortal(col);
+            col.sehatepeado();
+        }else{
+            col.x = portal.x  - Math.abs(col.width/2) - 1;
+            col.y = portal.y;
+            col.body.velocity.y = 0;
+            col.body.velocity.x = -col.body.speed;//this.velocPortal(col);
+            col.sehatepeado();
+        }
+    }
+    //ddcol.body.velocity.x = 1001;
+}
+
+PortalLogica.prototype.velocPortal = function(col){
+    if(this.pos == 'arriba'){
+        return Math.abs(col.body.velocity.y);
+    }else if(this.pos == 'abajo'){
+        return Math.abs(col.body.gravity.y);
+    }else if(this.pos == 'derecha'){
+        return Math.abs(col.body.velocity.x);
+    }else{
+        return Math.abs(col.body.velocity.x);
+    }
 }
 
 PortalLogica.prototype.update = function(){
     //this.game.debug.bodyInfo(this, 32, 32);
-
 }
 
 
