@@ -1,6 +1,6 @@
 'use strict';
 var Character = require ('./Character.js');
-var Portal = require ('./portal.js');
+var Disparo = require ('./disparo.js');
 var PortalLogica = require('./portalLogica.js');
 //var bullets;
 
@@ -73,7 +73,7 @@ Player.prototype.create = function(){
     this.game.input.keyboard.addKey(Phaser.Keyboard.A);
     this.game.input.keyboard.addKey(Phaser.Keyboard.W);
     this.game.input.keyboard.addKey(Phaser.Keyboard.D);
-    this.game.input.keyboard.addKey(Phaser.Keyboard.E);
+    this.e = this.game.input.keyboard.addKey(Phaser.KeyCode.E);
 
     console.log("existe");
 
@@ -105,9 +105,13 @@ Player.prototype.flipwithmouse = function(){
 }
 
 Player.prototype.pickup = function(cubo){
-    if(this.game.input.keyboard.isDown(Phaser.Keyboard.E)){
-        cubo.coger(this.x, this.y);
-        this.cogido = true;
+    if(this.e.justDown){
+        this.cogido = !this.cogido;
+        console.log("eyyy");
+    }
+
+    if(this.cogido){
+        cubo.coger(this.x, this.y, this.cogido);
         cubo.body.gravity.y = 0;
     }
     // if(cubo != undefined){
@@ -220,11 +224,11 @@ Player.prototype.shoot = function(){
     if(this.game.time.now > nextFire){
         if(this.game.input.activePointer.leftButton.isDown){
             nextFire = this.game.time.now + fireRate;
-            this.disparo = new Portal(this.game, this.x , this.y, 'bulletBlue', this.layer1, this.layer2, this.portalB);
+            this.disparo = new Disparo(this.game, this.x , this.y, 'bulletBlue', this.layer1, this.layer2, this.portalB);
         }
         else if(this.game.input.activePointer.rightButton.isDown){
             nextFire = this.game.time.now + fireRate;
-            this.disparo = new Portal(this.game, this.x , this.y, 'bulletOrange', this.layer1, this.layer2, this.portalN);
+            this.disparo = new Disparo(this.game, this.x , this.y, 'bulletOrange', this.layer1, this.layer2, this.portalN);
         }
         
         

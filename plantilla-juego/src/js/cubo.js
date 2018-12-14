@@ -20,8 +20,8 @@ function Cubo (game,x,y,name){
 Cubo.prototype = Object.create (Character.prototype);
 Cubo.prototype.constructor = Cubo;
 
-Cubo.prototype.coger = function(posX, posY){
-    if((posX+50 >= this.x) && posX-50 <= this.x && posY+50 >= this.y && posY-50 <= this.y)
+Cubo.prototype.coger = function(posX, posY, coger){
+    if(((posX+50 >= this.x) && posX-50 <= this.x && posY+50 >= this.y && posY-50 <= this.y) || coger)
     {
         this.x = posX +20;
         this.y = posY;

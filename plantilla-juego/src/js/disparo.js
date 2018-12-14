@@ -2,14 +2,14 @@
 var Character = require ('./Character.js');
 var PortalLogica = require ('./portalLogica.js');
 
-function Portal(game,x,y,name, l1, l2, portal){
+function Disparo(game,x,y,name, l1, l2, disparo){
     // this.game = game;
     this.stillBullet = true;
     this.name = name;
     Character.call(this, game, x, y, name);//Hace lo mismo que apply
     this.anchor.setTo(0.5, 0.5);
     this.scale.set(-0.3);
-    this.portal = portal;
+    this.disparo = disparo;
     //bullets
     this.bullets = game.add.group();
     this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
@@ -23,7 +23,7 @@ function Portal(game,x,y,name, l1, l2, portal){
     this.bullets.setAll('checkWorldBounds', true);
     this.bullets.setAll('outOfBoundsKill', true);
 
-    //portales
+    //disparoes
     this.blancos = l2;
     this.negros = l1;
     this.fire();
@@ -31,15 +31,15 @@ function Portal(game,x,y,name, l1, l2, portal){
     // this.bullets.animations.add ('shootOrange',[1],1,false);
 }
 
-Portal.prototype = Object.create (Character.prototype);
-Portal.prototype.constructor = Portal;
+Disparo.prototype = Object.create (Character.prototype);
+Disparo.prototype.constructor = Disparo;
 
-Portal.prototype.update = function (){
+Disparo.prototype.update = function (){
     this.collisionControl();
     //this.bullets.body.onWorldBounds.add(collisionControl, this);
 }
 
-Portal.prototype.fire = function () {
+Disparo.prototype.fire = function () {
     if ( this.bullets.countDead() > 0){     
        // var bullet = this.bullets.getFirstDead();
         //bullet.reset(x - 8, y - 8);
@@ -48,41 +48,41 @@ Portal.prototype.fire = function () {
     }    
 }
 
-Portal.prototype.deploy = function(x,y){
+Disparo.prototype.deploy = function(x,y){
 
 }
 
-Portal.prototype.collisionControl = function (){
+Disparo.prototype.collisionControl = function (){
     if(this.game.physics.arcade.collide(this, this.negros)){
         this.kill();
     }
     if(this.game.physics.arcade.collide(this, this.blancos)){
-        //segun el lado con el que se de el portal saldra de un forma u  otra
+        //segun el lado con el que se de el disparo saldra de un forma u  otra
         if(this.body.blocked.up){
-            //this.portal = new PortalLogica(this.game, this.x, this.y-4, this.name, 'abajo');
-            this.portal.moverportal(this.x, this.y - 4);
-            this.portal.orientacion('abajo');
+            //this.disparo = new disparoLogica(this.game, this.x, this.y-4, this.name, 'abajo');
+            this.disparo.moverportal(this.x, this.y - 4);
+            this.disparo.orientacion('abajo');
         }
         else if(this.body.blocked.left){ 
-            //this.portal = new PortalLogica(this.game, this.x + 25, this.y, this.name, 'derecha');
-            this.portal.moverportal(this.x -25, this.y);
-            this.portal.orientacion('derecha');
+            //this.disparo = new disparoLogica(this.game, this.x + 25, this.y, this.name, 'derecha');
+            this.disparo.moverportal(this.x -25, this.y);
+            this.disparo.orientacion('derecha');
         }
         else if(this.body.blocked.down){
-            //this.portal = new PortalLogica(this.game, this.x, this.y-4, this.name, 'arriba');
-            this.portal.moverportal(this.x, this.y+4);
-            this.portal.orientacion('arriba');
+            //this.disparo = new disparoLogica(this.game, this.x, this.y-4, this.name, 'arriba');
+            this.disparo.moverportal(this.x, this.y+4);
+            this.disparo.orientacion('arriba');
         }
         else if(this.body.blocked.right){
-            //this.portal = new PortalLogica(this.game, this.x +25, this.y, this.name, 'izquierda');
-            this.portal.moverportal(this.x + 25, this.y);
-            this.portal.orientacion('izquierda');
+            //this.disparo = new disparoLogica(this.game, this.x +25, this.y, this.name, 'izquierda');
+            this.disparo.moverportal(this.x + 25, this.y);
+            this.disparo.orientacion('izquierda');
         }
-        //this.portal.kill();
+        //this.disparo.kill();
         this.kill();
     }
 }
 
 
-//exportamos Portal
-module.exports = Portal;
+//exportamos disparo
+module.exports = Disparo;
