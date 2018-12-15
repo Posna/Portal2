@@ -22,7 +22,7 @@ module.exports = Character;
 
 var Character = require ('./Character.js');
 
-function Cubo (game,x,y,name){
+function Cubo (game,x,y,name, portalO, portalB){
     Character.call(this, game, x, y, name);//Hace lo mismo que apply
 
     this.name = name;
@@ -30,32 +30,108 @@ function Cubo (game,x,y,name){
     this.anchor.setTo(0.5, 0.5);
     //this.scale.set(0.20);
 
+    this.cogido = false;
+
     this.game.add.existing(this);//!
     this.game.physics.enable(this,Phaser.Physics.ARCADE);
     this.body.enable = true;
     this.body.gravity.y = 300;
     this.body.collideWorldBounds = true;
+    this.portalB = portalB;
+    this.portalN = portalO;
+    this.MAX_VELOCITY = 700;
+
+    this.e = this.game.input.keyboard.addKey(Phaser.KeyCode.E);
 }
 
 //Encadenamos el prototype
 Cubo.prototype = Object.create (Character.prototype);
 Cubo.prototype.constructor = Cubo;
 
-Cubo.prototype.coger = function(posX, posY){
-    if((posX+50 >= this.x) && posX-50 <= this.x && posY+50 >= this.y && posY-50 <= this.y)
-    {
-        this.x = posX +20;
-        this.y = posY;
+Cubo.prototype.coger = function(player){
+    if(this.e.justDown && this.game.physics.arcade.overlap(this, player)){
+        //cubo.coger(this.x, this.y, this.game.physics.arcade.overlap(this, cubo));
+        this.cogido = !this.cogido;
+        console.log("eyyy");
     }
+
+    if(this.cogido){
+        this.x = player.x  + Math.cos(this.game.physics.arcade.angleToPointer(this)) * 20;
+        this.y = player.y + Math.sin(this.game.physics.arcade.angleToPointer(this)) * 20;
+        this.body.gravity.y = 0;
+    }
+    else{this.body.gravity.y = 300;}
+    
+}
+
+Cubo.prototype.update = function(){
+    if(this.body.velocity.y > this.MAX_VELOCITY)
+        this.body.velocity.y = this.MAX_VELOCITY;
+    if(this.body.velocity.x > this.MAX_VELOCITY)
+        this.body.velocity.x = this.MAX_VELOCITY;
+    if(this.body.onFloor()){
+        this.body.velocity.x = 0;
+    }
+    this.portalcol();
+}
+
+Cubo.prototype.portalcol = function(){
+    if(!this.game.physics.arcade.overlap(this, this.portalN)){
+        this.overlapControlN = false;
+    }
+    if(!this.game.physics.arcade.overlap(this, this.portalB)){
+        this.overlapControlB = false;
+    }
+    if(this.game.physics.arcade.overlap(this, this.portalN) && !this.overlapControlN){
+        this.portalN.movetoportal(this.portalB, this);
+        this.overlapControlB = true;
+    }
+    if(this.game.physics.arcade.overlap(this, this.portalB) && !this.overlapControlB){
+        this.portalB.movetoportal(this.portalN, this);
+        this.overlapControlN = true;
+    }
+}
+
+Cubo.prototype.sehatepeado = function(){
+
 }
 
 module.exports = Cubo;
 
 
 },{"./Character.js":1}],3:[function(require,module,exports){
+var MainMenu = {
+    create: function(){
+        var titlescreen = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'menu');
+        titlescreen.anchor.setTo(0.5, 0.5);
+
+        this.createButton(this.game.world.centerX/2, this.game.world.centerY, 200, 67, function(){
+            this.state.start('play');
+        })
+    },
+
+  
+    update: function(){
+  
+    },
+  
+    createButton: function(x, y, w, h, callback){
+      var button1 = this.game.add.button(x, y, 'Button', callback, this, 2,1,0);
+      //button1.onInputOver.add(function(){}, this);
+        
+      button1.anchor.setTo(0.5, 0.5);
+      button1.width = w;
+      button1.height = h;
+    }
+
+};
+
+module.exports = MainMenu;
+
+},{}],4:[function(require,module,exports){
 'use strict';
 var Character = require ('./Character.js');
-var Portal = require ('./portal.js');
+var Disparo = require ('./disparo.js');
 var PortalLogica = require('./portalLogica.js');
 //var bullets;
 
@@ -89,6 +165,7 @@ function Player(game,x,y,name, l1, l2, portalN, portalB){
     this.layer1 = l1;
     this.layer2 = l2;
     this.cogido = false;
+    this.sujetando = false;
     this.tp = false;
     this.MAX_VELOCITY = 700;
     
@@ -128,7 +205,7 @@ Player.prototype.create = function(){
     this.game.input.keyboard.addKey(Phaser.Keyboard.A);
     this.game.input.keyboard.addKey(Phaser.Keyboard.W);
     this.game.input.keyboard.addKey(Phaser.Keyboard.D);
-    this.game.input.keyboard.addKey(Phaser.Keyboard.E);
+    this.e = this.game.input.keyboard.addKey(Phaser.KeyCode.E);
 
     console.log("existe");
 
@@ -139,13 +216,31 @@ Player.prototype.update = function (){
     this.gunAngle();
     this.flipwithmouse();
     this.shoot();
+    this.portalCol();
     if(this.body.velocity.y > this.MAX_VELOCITY)
         this.body.velocity.y = this.MAX_VELOCITY;
     if(this.body.velocity.x > this.MAX_VELOCITY)
         this.body.velocity.x = this.MAX_VELOCITY;
     
-    this.game.debug.bodyInfo(this, 32, 32);
+    //this.game.debug.bodyInfo(this, 32, 32);
     
+}
+
+Player.prototype.portalCol = function(){
+    if(!this.game.physics.arcade.overlap(this, this.portalN)){
+        this.overlapControlN = false;
+    }
+    if(!this.game.physics.arcade.overlap(this, this.portalB)){
+        this.overlapControlB = false;
+    }
+    if(this.game.physics.arcade.overlap(this, this.portalN) && !this.overlapControlN){
+        this.portalN.movetoportal(this.portalB, this);
+        this.overlapControlB = true;
+    }
+    if(this.game.physics.arcade.overlap(this, this.portalB) && !this.overlapControlB){
+        this.portalB.movetoportal(this.portalN, this);
+        this.overlapControlN = true;
+    }
 }
 
 
@@ -160,18 +255,26 @@ Player.prototype.flipwithmouse = function(){
 }
 
 Player.prototype.pickup = function(cubo){
-    if(this.game.input.keyboard.isDown(Phaser.Keyboard.E)){
-        cubo.coger(this.x, this.y);
-        this.cogido = true;
+    var cogido = true;
+    if(this.game.physics.arcade.overlap(this, cubo)){
+        if(this.e.justDown){
+            //cubo.coger(this.x, this.y, this.game.physics.arcade.overlap(this, cubo));
+            this.cogido = !this.cogido;
+            console.log("eyyy");
+        }
+    }
+
+    if(this.cogido && this.game.physics.arcade.overlap(this, cubo)){
+        cubo.coger(this);
+        this.sujetando = true;
         cubo.body.gravity.y = 0;
     }
-    // if(cubo != undefined){
-    //     cubo.body.gravity.y = 300;
-    // }
     else{cubo.body.gravity.y = 300;}
-    // if(this.game.input.keyboard.isUp(Phaser.Keyboard.E)){
-    //     this.cogido = false;
+    // if(this.e.justDown){
+    //     this.cogido = !this.cogido;
     // }
+    // if(this.cogido && !this.sujetando)
+    //     cubo.coger(this);
 }
 
 Player.prototype.move = function (){
@@ -275,11 +378,11 @@ Player.prototype.shoot = function(){
     if(this.game.time.now > nextFire){
         if(this.game.input.activePointer.leftButton.isDown){
             nextFire = this.game.time.now + fireRate;
-            this.disparo = new Portal(this.game, this.x , this.y, 'bulletBlue', this.layer1, this.layer2, this.portalB);
+            this.disparo = new Disparo(this.game, this.x , this.y, 'bulletBlue', this.layer1, this.layer2, this.portalB);
         }
         else if(this.game.input.activePointer.rightButton.isDown){
             nextFire = this.game.time.now + fireRate;
-            this.disparo = new Portal(this.game, this.x , this.y, 'bulletOrange', this.layer1, this.layer2, this.portalN);
+            this.disparo = new Disparo(this.game, this.x , this.y, 'bulletOrange', this.layer1, this.layer2, this.portalN);
         }
         
         
@@ -288,11 +391,102 @@ Player.prototype.shoot = function(){
 }
 //Exportamos Player
 module.exports = Player;
-},{"./Character.js":1,"./portal.js":6,"./portalLogica.js":7}],4:[function(require,module,exports){
+},{"./Character.js":1,"./disparo.js":5,"./portalLogica.js":8}],5:[function(require,module,exports){
+'use strict';
+var Character = require ('./Character.js');
+var PortalLogica = require ('./portalLogica.js');
+
+function Disparo(game,x,y,name, l1, l2, disparo){
+    // this.game = game;
+    this.stillBullet = true;
+    this.name = name;
+    Character.call(this, game, x, y, name);//Hace lo mismo que apply
+    this.anchor.setTo(0.5, 0.5);
+    this.scale.set(-0.3);
+    this.disparo = disparo;
+    //bullets
+    this.bullets = game.add.group();
+    this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
+    this.game.add.existing(this);//!
+    this.game.physics.enable(this,Phaser.Physics.ARCADE);
+    this.bullets.enableBody = true;
+
+    this.body.collideWorldBounds = true;
+
+    this.bullets.createMultiple(50, 'bulletBlue');
+    this.bullets.setAll('checkWorldBounds', true);
+    this.bullets.setAll('outOfBoundsKill', true);
+
+    //disparoes
+    this.blancos = l2;
+    this.negros = l1;
+    this.fire();
+    // this.bullets.animations.add ('shootBlue',[0],1,false);
+    // this.bullets.animations.add ('shootOrange',[1],1,false);
+}
+
+Disparo.prototype = Object.create (Character.prototype);
+Disparo.prototype.constructor = Disparo;
+
+Disparo.prototype.update = function (){
+    this.collisionControl();
+    //this.bullets.body.onWorldBounds.add(collisionControl, this);
+}
+
+Disparo.prototype.fire = function () {
+    if ( this.bullets.countDead() > 0){     
+       // var bullet = this.bullets.getFirstDead();
+        //bullet.reset(x - 8, y - 8);
+        this.rotation = this.game.physics.arcade.angleToPointer(this);
+        this.game.physics.arcade.moveToPointer(this, 400);
+    }    
+}
+
+Disparo.prototype.deploy = function(x,y){
+
+}
+
+Disparo.prototype.collisionControl = function (){
+
+    if(this.game.physics.arcade.collide(this, this.negros)){
+        this.kill();
+    }
+    if(this.game.physics.arcade.collide(this, this.blancos)){
+        //segun el lado con el que se de el disparo saldra de un forma u  otra
+        if(this.body.blocked.up){
+            //this.disparo = new disparoLogica(this.game, this.x, this.y-4, this.name, 'abajo');
+            this.disparo.moverportal(this.x, this.y - 4);
+            this.disparo.orientacion('abajo');
+        }
+        else if(this.body.blocked.left){ 
+            //this.disparo = new disparoLogica(this.game, this.x + 25, this.y, this.name, 'derecha');
+            this.disparo.moverportal(this.x -25, this.y);
+            this.disparo.orientacion('derecha');
+        }
+        else if(this.body.blocked.down){
+            //this.disparo = new disparoLogica(this.game, this.x, this.y-4, this.name, 'arriba');
+            this.disparo.moverportal(this.x, this.y+4);
+            this.disparo.orientacion('arriba');
+        }
+        else if(this.body.blocked.right){
+            //this.disparo = new disparoLogica(this.game, this.x +25, this.y, this.name, 'izquierda');
+            this.disparo.moverportal(this.x + 25, this.y);
+            this.disparo.orientacion('izquierda');
+        }
+        //this.disparo.kill();
+        this.kill();
+    }
+}
+
+
+//exportamos disparo
+module.exports = Disparo;
+},{"./Character.js":1,"./portalLogica.js":8}],6:[function(require,module,exports){
 'use strict';
 
 var PlayScene = require('./play_scene.js');
 
+var MenuScene = require('./MainMenu.js')
 
 var BootScene = {
   preload: function () {
@@ -327,6 +521,9 @@ var PreloaderScene = {
     this.game.load.image('PortalBlue', 'images/Sprites_y_apartado_grafico/portalSpriteAzul.png');
     this.game.load.image('PortalOrange', 'images/Sprites_y_apartado_grafico/portalSpriteNaranja.png');
     this.game.load.image('Bloques', 'tiles/BloquesPeque.png');
+    this.game.load.image('menu', 'images/Sprites_y_apartado_grafico/Menu.png');
+    this.game.load.spritesheet('Button', 'images/Sprites_y_apartado_grafico/botones.png', 160, 74);
+    //this.game.load.image('Button1', 'images/Sprites_y_apartado_grafico/BOTON2.png');
 
     //cargo el tilemap
     this.game.load.tilemap('mapaBN', 'tiles/nivel1_BloquesNegros.csv', null, Phaser.Tilemap.CSV);
@@ -343,9 +540,10 @@ var PreloaderScene = {
     // this.layer = this.map.createLayer('BloquesNegros');
     // this.layer.resizeWorld();
 
-    this.game.state.start('play');
+    this.game.state.start('menu');
   }
 };
+
 
 
 window.onload = function () {
@@ -353,12 +551,13 @@ window.onload = function () {
 
   game.state.add('boot', BootScene);
   game.state.add('preloader', PreloaderScene);
+  game.state.add('menu', MenuScene);
   game.state.add('play', PlayScene);
 
   game.state.start('boot');
 };
 
-},{"./play_scene.js":5}],5:[function(require,module,exports){
+},{"./MainMenu.js":3,"./play_scene.js":7}],7:[function(require,module,exports){
 'use strict';
 //var luisa;
 var plat;
@@ -425,7 +624,7 @@ var NUMLEVELS = 1;
     
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     
-    this.luisa = new Player(this.game,200, 200,'Luisa', this.layer, this.layer1, this.portalN, this.portalB);
+    this.luisa = new Player(this.game, 0, 527,'Luisa', this.layer, this.layer1, this.portalN, this.portalB);
     //this.game.add.existing(luisa);
     this.luisa.create();
     
@@ -440,10 +639,11 @@ var NUMLEVELS = 1;
     //creamos el HUD
 
     //cubos
-    cuboAzul = new Cubo (this.game, 100 , 100, 'cuboAzul');
-    cuboAzul.scale.set(0.16);
-    cuboCompania = new Cubo (this.game, 200 , 100, 'cuboCompania');
+    cuboCompania = new Cubo (this.game, 200 , 100, 'cuboCompania',this.portalN, this.portalB);
     cuboCompania.scale.set(0.2);
+
+    cuboAzul = new Cubo (this.game, 100 , 100, 'cuboAzul', this.portalN, this.portalB);
+    cuboAzul.scale.set(0.16);
   },
   createLayer: function(){
     // var layer = this.map.createLayer(name);
@@ -480,24 +680,25 @@ var NUMLEVELS = 1;
     this.game.physics.arcade.collide(this.layer1, cuboAzul);
     this.game.physics.arcade.collide(this.layer, cuboCompania);
     this.game.physics.arcade.collide(this.layer1, cuboCompania);
-    this.luisa.pickup(cuboAzul);
-    this.luisa.pickup(cuboCompania);
-    if(!this.game.physics.arcade.overlap(this.luisa, this.portalN)){
-      this.overlapControlN = false;
-    }
-    if(!this.game.physics.arcade.overlap(this.luisa, this.portalB)){
-      this.overlapControlB = false;
-    }
-    if(this.game.physics.arcade.overlap(this.luisa, this.portalN) && !this.overlapControlN){
-      this.portalN.movetoportal(this.portalB, this.luisa);
-      //this.luisa.sehatepeado();
-      this.overlapControlB = true;
-    }
-    if(this.game.physics.arcade.overlap(this.luisa, this.portalB) && !this.overlapControlB){
-      this.portalB.movetoportal(this.portalN, this.luisa);
-      //this.luisa.sehatepeado();
-      this.overlapControlN = true;
-    }
+    // this.luisa.pickup(cuboCompania);
+    // this.luisa.pickup(cuboAzul);
+    cuboCompania.coger(this.luisa);
+    // if(!this.game.physics.arcade.overlap(this.luisa, this.portalN)){
+    //   this.overlapControlN = false;
+    // }
+    // if(!this.game.physics.arcade.overlap(this.luisa, this.portalB)){
+    //   this.overlapControlB = false;
+    // }
+    // if(this.game.physics.arcade.overlap(this.luisa, this.portalN) && !this.overlapControlN){
+    //   this.portalN.movetoportal(this.portalB, this.luisa);
+    //   //this.luisa.sehatepeado();
+    //   this.overlapControlB = true;
+    // }
+    // if(this.game.physics.arcade.overlap(this.luisa, this.portalB) && !this.overlapControlB){
+    //   this.portalB.movetoportal(this.portalN, this.luisa);
+    //   //this.luisa.sehatepeado();
+    //   this.overlapControlN = true;
+    //}
     // if(!this.game.physics.arcade.overlap(this.cuboCompania, this.portalN)){
     //   this.overlapControlN = false;
     // }
@@ -523,96 +724,7 @@ var NUMLEVELS = 1;
 
 module.exports = PlayScene;
 
-},{"./Cubo.js":2,"./Player.js":3,"./portalLogica.js":7}],6:[function(require,module,exports){
-'use strict';
-var Character = require ('./Character.js');
-var PortalLogica = require ('./portalLogica.js');
-
-function Portal(game,x,y,name, l1, l2, portal){
-    // this.game = game;
-    this.stillBullet = true;
-    this.name = name;
-    Character.call(this, game, x, y, name);//Hace lo mismo que apply
-    this.anchor.setTo(0.5, 0.5);
-    this.scale.set(-0.3);
-    this.portal = portal;
-    //bullets
-    this.bullets = game.add.group();
-    this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
-    this.game.add.existing(this);//!
-    this.game.physics.enable(this,Phaser.Physics.ARCADE);
-    this.bullets.enableBody = true;
-
-    this.body.collideWorldBounds = true;
-
-    this.bullets.createMultiple(50, 'bulletBlue');
-    this.bullets.setAll('checkWorldBounds', true);
-    this.bullets.setAll('outOfBoundsKill', true);
-
-    //portales
-    this.blancos = l2;
-    this.negros = l1;
-    this.fire();
-    // this.bullets.animations.add ('shootBlue',[0],1,false);
-    // this.bullets.animations.add ('shootOrange',[1],1,false);
-}
-
-Portal.prototype = Object.create (Character.prototype);
-Portal.prototype.constructor = Portal;
-
-Portal.prototype.update = function (){
-    this.collisionControl();
-    //this.bullets.body.onWorldBounds.add(collisionControl, this);
-}
-
-Portal.prototype.fire = function () {
-    if ( this.bullets.countDead() > 0){     
-       // var bullet = this.bullets.getFirstDead();
-        //bullet.reset(x - 8, y - 8);
-        this.rotation = this.game.physics.arcade.angleToPointer(this);
-        this.game.physics.arcade.moveToPointer(this, 400);
-    }    
-}
-
-Portal.prototype.deploy = function(x,y){
-
-}
-
-Portal.prototype.collisionControl = function (){
-    if(this.game.physics.arcade.collide(this, this.negros)){
-        this.kill();
-    }
-    if(this.game.physics.arcade.collide(this, this.blancos)){
-        //segun el lado con el que se de el portal saldra de un forma u  otra
-        if(this.body.blocked.up){
-            //this.portal = new PortalLogica(this.game, this.x, this.y-4, this.name, 'abajo');
-            this.portal.moverportal(this.x, this.y - 4);
-            this.portal.orientacion('abajo');
-        }
-        else if(this.body.blocked.left){ 
-            //this.portal = new PortalLogica(this.game, this.x + 25, this.y, this.name, 'derecha');
-            this.portal.moverportal(this.x -25, this.y);
-            this.portal.orientacion('derecha');
-        }
-        else if(this.body.blocked.down){
-            //this.portal = new PortalLogica(this.game, this.x, this.y-4, this.name, 'arriba');
-            this.portal.moverportal(this.x, this.y+4);
-            this.portal.orientacion('arriba');
-        }
-        else if(this.body.blocked.right){
-            //this.portal = new PortalLogica(this.game, this.x +25, this.y, this.name, 'izquierda');
-            this.portal.moverportal(this.x + 25, this.y);
-            this.portal.orientacion('izquierda');
-        }
-        //this.portal.kill();
-        this.kill();
-    }
-}
-
-
-//exportamos Portal
-module.exports = Portal;
-},{"./Character.js":1,"./portalLogica.js":7}],7:[function(require,module,exports){
+},{"./Cubo.js":2,"./Player.js":4,"./portalLogica.js":8}],8:[function(require,module,exports){
 'use strict';
 var Character = require ('./Character.js');
 
@@ -702,4 +814,4 @@ PortalLogica.prototype.update = function(){
 
 
 module.exports = PortalLogica;
-},{"./Character.js":1}]},{},[4]);
+},{"./Character.js":1}]},{},[6]);

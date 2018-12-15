@@ -28,19 +28,19 @@ Cubo.prototype = Object.create (Character.prototype);
 Cubo.prototype.constructor = Cubo;
 
 Cubo.prototype.coger = function(player){
-    // if(this.game.physics.arcade.overlap(this, player)){
-    //     //cubo.coger(this.x, this.y, this.game.physics.arcade.overlap(this, cubo));
-    //     this.cogido = !this.cogido;
-    //     console.log("eyyy");
-    // }
+    if(this.e.justDown && this.game.physics.arcade.overlap(this, player)){
+        //cubo.coger(this.x, this.y, this.game.physics.arcade.overlap(this, cubo));
+        this.cogido = !this.cogido;
+        console.log("eyyy");
+    }
 
-    // if(this.cogido){
-    //     this.body.gravity.y = 0;
-    // }
-    // else{this.body.gravity.y = 300;}
+    if(this.cogido){
+        this.x = player.x  + Math.cos(this.game.physics.arcade.angleToPointer(this)) * 20;
+        this.y = player.y + Math.sin(this.game.physics.arcade.angleToPointer(this)) * 20;
+        this.body.gravity.y = 0;
+    }
+    else{this.body.gravity.y = 300;}
     
-    this.x = player.x +20;
-    this.y = player.y;
 }
 
 Cubo.prototype.update = function(){

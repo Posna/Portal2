@@ -64,7 +64,7 @@ var NUMLEVELS = 1;
     
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     
-    this.luisa = new Player(this.game,200, 200,'Luisa', this.layer, this.layer1, this.portalN, this.portalB);
+    this.luisa = new Player(this.game, 0, 527,'Luisa', this.layer, this.layer1, this.portalN, this.portalB);
     //this.game.add.existing(luisa);
     this.luisa.create();
     
@@ -120,8 +120,9 @@ var NUMLEVELS = 1;
     this.game.physics.arcade.collide(this.layer1, cuboAzul);
     this.game.physics.arcade.collide(this.layer, cuboCompania);
     this.game.physics.arcade.collide(this.layer1, cuboCompania);
-    this.luisa.pickup(cuboCompania);
-    this.luisa.pickup(cuboAzul);
+    // this.luisa.pickup(cuboCompania);
+    // this.luisa.pickup(cuboAzul);
+    cuboCompania.coger(this.luisa);
     // if(!this.game.physics.arcade.overlap(this.luisa, this.portalN)){
     //   this.overlapControlN = false;
     // }

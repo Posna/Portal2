@@ -91,7 +91,7 @@ Player.prototype.update = function (){
     if(this.body.velocity.x > this.MAX_VELOCITY)
         this.body.velocity.x = this.MAX_VELOCITY;
     
-    this.game.debug.bodyInfo(this, 32, 32);
+    //this.game.debug.bodyInfo(this, 32, 32);
     
 }
 
