@@ -34,6 +34,7 @@ function Player(game,x,y,name, l1, l2, portalN, portalB){
     this.layer1 = l1;
     this.layer2 = l2;
     this.cogido = false;
+    this.sujetando = false;
     this.tp = false;
     this.MAX_VELOCITY = 700;
     
@@ -84,6 +85,7 @@ Player.prototype.update = function (){
     this.gunAngle();
     this.flipwithmouse();
     this.shoot();
+    this.portalCol();
     if(this.body.velocity.y > this.MAX_VELOCITY)
         this.body.velocity.y = this.MAX_VELOCITY;
     if(this.body.velocity.x > this.MAX_VELOCITY)
@@ -91,6 +93,23 @@ Player.prototype.update = function (){
     
     this.game.debug.bodyInfo(this, 32, 32);
     
+}
+
+Player.prototype.portalCol = function(){
+    if(!this.game.physics.arcade.overlap(this, this.portalN)){
+        this.overlapControlN = false;
+    }
+    if(!this.game.physics.arcade.overlap(this, this.portalB)){
+        this.overlapControlB = false;
+    }
+    if(this.game.physics.arcade.overlap(this, this.portalN) && !this.overlapControlN){
+        this.portalN.movetoportal(this.portalB, this);
+        this.overlapControlB = true;
+    }
+    if(this.game.physics.arcade.overlap(this, this.portalB) && !this.overlapControlB){
+        this.portalB.movetoportal(this.portalN, this);
+        this.overlapControlN = true;
+    }
 }
 
 
@@ -105,22 +124,26 @@ Player.prototype.flipwithmouse = function(){
 }
 
 Player.prototype.pickup = function(cubo){
-    if(this.e.justDown){
-        this.cogido = !this.cogido;
-        console.log("eyyy");
+    var cogido = true;
+    if(this.game.physics.arcade.overlap(this, cubo)){
+        if(this.e.justDown){
+            //cubo.coger(this.x, this.y, this.game.physics.arcade.overlap(this, cubo));
+            this.cogido = !this.cogido;
+            console.log("eyyy");
+        }
     }
 
-    if(this.cogido){
-        cubo.coger(this.x, this.y, this.cogido);
+    if(this.cogido && this.game.physics.arcade.overlap(this, cubo)){
+        cubo.coger(this);
+        this.sujetando = true;
         cubo.body.gravity.y = 0;
     }
-    // if(cubo != undefined){
-    //     cubo.body.gravity.y = 300;
-    // }
     else{cubo.body.gravity.y = 300;}
-    // if(this.game.input.keyboard.isUp(Phaser.Keyboard.E)){
-    //     this.cogido = false;
+    // if(this.e.justDown){
+    //     this.cogido = !this.cogido;
     // }
+    // if(this.cogido && !this.sujetando)
+    //     cubo.coger(this);
 }
 
 Player.prototype.move = function (){

@@ -53,6 +53,7 @@ Disparo.prototype.deploy = function(x,y){
 }
 
 Disparo.prototype.collisionControl = function (){
+
     if(this.game.physics.arcade.collide(this, this.negros)){
         this.kill();
     }

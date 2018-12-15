@@ -79,10 +79,11 @@ var NUMLEVELS = 1;
     //creamos el HUD
 
     //cubos
-    cuboAzul = new Cubo (this.game, 100 , 100, 'cuboAzul');
-    cuboAzul.scale.set(0.16);
-    cuboCompania = new Cubo (this.game, 200 , 100, 'cuboCompania');
+    cuboCompania = new Cubo (this.game, 200 , 100, 'cuboCompania',this.portalN, this.portalB);
     cuboCompania.scale.set(0.2);
+
+    cuboAzul = new Cubo (this.game, 100 , 100, 'cuboAzul', this.portalN, this.portalB);
+    cuboAzul.scale.set(0.16);
   },
   createLayer: function(){
     // var layer = this.map.createLayer(name);
@@ -119,24 +120,24 @@ var NUMLEVELS = 1;
     this.game.physics.arcade.collide(this.layer1, cuboAzul);
     this.game.physics.arcade.collide(this.layer, cuboCompania);
     this.game.physics.arcade.collide(this.layer1, cuboCompania);
-    this.luisa.pickup(cuboAzul);
     this.luisa.pickup(cuboCompania);
-    if(!this.game.physics.arcade.overlap(this.luisa, this.portalN)){
-      this.overlapControlN = false;
-    }
-    if(!this.game.physics.arcade.overlap(this.luisa, this.portalB)){
-      this.overlapControlB = false;
-    }
-    if(this.game.physics.arcade.overlap(this.luisa, this.portalN) && !this.overlapControlN){
-      this.portalN.movetoportal(this.portalB, this.luisa);
-      //this.luisa.sehatepeado();
-      this.overlapControlB = true;
-    }
-    if(this.game.physics.arcade.overlap(this.luisa, this.portalB) && !this.overlapControlB){
-      this.portalB.movetoportal(this.portalN, this.luisa);
-      //this.luisa.sehatepeado();
-      this.overlapControlN = true;
-    }
+    this.luisa.pickup(cuboAzul);
+    // if(!this.game.physics.arcade.overlap(this.luisa, this.portalN)){
+    //   this.overlapControlN = false;
+    // }
+    // if(!this.game.physics.arcade.overlap(this.luisa, this.portalB)){
+    //   this.overlapControlB = false;
+    // }
+    // if(this.game.physics.arcade.overlap(this.luisa, this.portalN) && !this.overlapControlN){
+    //   this.portalN.movetoportal(this.portalB, this.luisa);
+    //   //this.luisa.sehatepeado();
+    //   this.overlapControlB = true;
+    // }
+    // if(this.game.physics.arcade.overlap(this.luisa, this.portalB) && !this.overlapControlB){
+    //   this.portalB.movetoportal(this.portalN, this.luisa);
+    //   //this.luisa.sehatepeado();
+    //   this.overlapControlN = true;
+    //}
     // if(!this.game.physics.arcade.overlap(this.cuboCompania, this.portalN)){
     //   this.overlapControlN = false;
     // }

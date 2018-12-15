@@ -2,6 +2,7 @@
 
 var PlayScene = require('./play_scene.js');
 
+var MenuScene = require('./MainMenu.js')
 
 var BootScene = {
   preload: function () {
@@ -36,6 +37,9 @@ var PreloaderScene = {
     this.game.load.image('PortalBlue', 'images/Sprites_y_apartado_grafico/portalSpriteAzul.png');
     this.game.load.image('PortalOrange', 'images/Sprites_y_apartado_grafico/portalSpriteNaranja.png');
     this.game.load.image('Bloques', 'tiles/BloquesPeque.png');
+    this.game.load.image('menu', 'images/Sprites_y_apartado_grafico/Menu.png');
+    this.game.load.spritesheet('Button', 'images/Sprites_y_apartado_grafico/botones.png', 160, 74);
+    //this.game.load.image('Button1', 'images/Sprites_y_apartado_grafico/BOTON2.png');
 
     //cargo el tilemap
     this.game.load.tilemap('mapaBN', 'tiles/nivel1_BloquesNegros.csv', null, Phaser.Tilemap.CSV);
@@ -52,9 +56,10 @@ var PreloaderScene = {
     // this.layer = this.map.createLayer('BloquesNegros');
     // this.layer.resizeWorld();
 
-    this.game.state.start('play');
+    this.game.state.start('menu');
   }
 };
+
 
 
 window.onload = function () {
@@ -62,6 +67,7 @@ window.onload = function () {
 
   game.state.add('boot', BootScene);
   game.state.add('preloader', PreloaderScene);
+  game.state.add('menu', MenuScene);
   game.state.add('play', PlayScene);
 
   game.state.start('boot');
