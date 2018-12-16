@@ -1,5 +1,5 @@
 'use strict';
-var Character = require ('./Character.js');
+var CanTP = require ('./canTP.js');
 var Disparo = require ('./disparo.js');
 var PortalLogica = require('./portalLogica.js');
 //var bullets;
@@ -9,12 +9,12 @@ var fireRate = 200;
 var nextFire = 0;
 
 
-function Player(game,x,y,name, l1, l2, portalN, portalB){
+function Player(game,x,y,name, l1, l2, portalN, portalB, useBluePortal, useOrangePortal){
     //this.playScene = playScene;
-    this.name = name;
-    this.game = game;
+    // this.name = name;
+    // this.game = game;
+    CanTP.call(this, game, x, y, name);//Hace lo mismo que apply
     this.cursors = this.game.input.keyboard.createCursorKeys();
-    Character.call(this, game, x, y, name);//Hace lo mismo que apply
     this.jumping = true;
     this.jumpTimer = 0;
     this.speed = 100;
@@ -23,14 +23,18 @@ function Player(game,x,y,name, l1, l2, portalN, portalB){
     this.faceRight = true;
     this.x = x;
     this.y = y;
+    this.canPN = useOrangePortal;
+    this.canPB = useBluePortal;
     this.portalB;
     this.portalN;
     this.anchor.setTo(0.5, 0.5);//aqui no?
     //Portal gun
-    this.gun = this.game.make.sprite(0,0, 'gun');
-    this.gun.scale.set(0.3);
-    //this.gun.anchor.setTo(0.5,0.5);//si comento esto rota con un efecto un poco distinto
-    this.portalGun = this.addChild(this.gun);
+    if(this.canPN || this.canPB){
+        this.gun = this.game.make.sprite(0,0, 'gun');
+        this.gun.scale.set(0.3);
+        this.gun.anchor.setTo(0,0.5);//si comento esto rota con un efecto un poco distinto
+        this.portalGun = this.addChild(this.gun);
+    }
     this.layer1 = l1;
     this.layer2 = l2;
     this.cogido = false;
@@ -54,7 +58,7 @@ function Player(game,x,y,name, l1, l2, portalN, portalB){
 }
 
 //Encadenamos el prototype
-Player.prototype = Object.create (Character.prototype);
+Player.prototype = Object.create (CanTP.prototype);
 Player.prototype.constructor = Player;
 
 //funcion para inicializacion: crea sprite y sus variables
@@ -82,36 +86,15 @@ Player.prototype.create = function(){
 
 Player.prototype.update = function (){
     this.move();
-    this.gunAngle();
+    if(this.canPN || this.canPB)
+        this.gunAngle();
     this.flipwithmouse();
     this.shoot();
-    this.portalCol();
-    if(this.body.velocity.y > this.MAX_VELOCITY)
-        this.body.velocity.y = this.MAX_VELOCITY;
-    if(this.body.velocity.x > this.MAX_VELOCITY)
-        this.body.velocity.x = this.MAX_VELOCITY;
-    
+    CanTP.prototype.maxvel.call(this);
+    CanTP.prototype.portalcol.call(this);    
     //this.game.debug.bodyInfo(this, 32, 32);
     
 }
-
-Player.prototype.portalCol = function(){
-    if(!this.game.physics.arcade.overlap(this, this.portalN)){
-        this.overlapControlN = false;
-    }
-    if(!this.game.physics.arcade.overlap(this, this.portalB)){
-        this.overlapControlB = false;
-    }
-    if(this.game.physics.arcade.overlap(this, this.portalN) && !this.overlapControlN){
-        this.portalN.movetoportal(this.portalB, this);
-        this.overlapControlB = true;
-    }
-    if(this.game.physics.arcade.overlap(this, this.portalB) && !this.overlapControlB){
-        this.portalB.movetoportal(this.portalN, this);
-        this.overlapControlN = true;
-    }
-}
-
 
 Player.prototype.flipwithmouse = function(){
     var angStop = Math.PI /2;
@@ -210,16 +193,7 @@ Player.prototype.sehatepeado = function(){
 Player.prototype.gunAngle = function (){
     
     if(this.faceRight){
-        // var angStop = 1.5708;
-        // var ang = this.game.physics.arcade.angleToPointer(this);
-        // if(ang > -angStop && ang < angStop){
-            //console.log(ang);
-            this.portalGun.rotation = this.game.physics.arcade.angleToPointer(this);                
-        // }else if (ang > angStop){
-        //     this.portalGun.rotation = angStop;
-        // }else
-        //     this.portalGun.rotation = -angStop;
-        
+        this.portalGun.rotation = this.game.physics.arcade.angleToPointer(this);                
     }
     else{
         this.portalGun.rotation = -this.game.physics.arcade.angleToPointer(this) - Math.PI;
@@ -239,24 +213,16 @@ Player.prototype.flip = function (){
 
 //Aqui funciones propias del player
 Player.prototype.shoot = function(){
-    // if(this.portalN == undefined && this.portalB == undefined){
-        
-    // }else{
-    //     console.log(this.portalB.x);
-    // }
     if(this.game.time.now > nextFire){
-        if(this.game.input.activePointer.leftButton.isDown){
+        if(this.game.input.activePointer.leftButton.isDown && this.canPB){
             nextFire = this.game.time.now + fireRate;
             this.disparo = new Disparo(this.game, this.x , this.y, 'bulletBlue', this.layer1, this.layer2, this.portalB);
         }
-        else if(this.game.input.activePointer.rightButton.isDown){
+        else if(this.game.input.activePointer.rightButton.isDown && this.canPN){
             nextFire = this.game.time.now + fireRate;
             this.disparo = new Disparo(this.game, this.x , this.y, 'bulletOrange', this.layer1, this.layer2, this.portalN);
         }
-        
-        
     }
-
 }
 //Exportamos Player
 module.exports = Player;

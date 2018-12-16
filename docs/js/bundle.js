@@ -20,10 +20,10 @@ Character.prototype.constructor = Character;
 module.exports = Character;
 },{}],2:[function(require,module,exports){
 
-var Character = require ('./Character.js');
+var CanTP = require ('./canTP.js');
 
 function Cubo (game,x,y,name, portalO, portalB){
-    Character.call(this, game, x, y, name);//Hace lo mismo que apply
+    CanTP.call(this, game, x, y, name, portalO, portalB);//Hace lo mismo que apply
 
     this.name = name;
     //this.game = game;
@@ -33,19 +33,13 @@ function Cubo (game,x,y,name, portalO, portalB){
     this.cogido = false;
 
     this.game.add.existing(this);//!
-    this.game.physics.enable(this,Phaser.Physics.ARCADE);
-    this.body.enable = true;
-    this.body.gravity.y = 300;
-    this.body.collideWorldBounds = true;
-    this.portalB = portalB;
-    this.portalN = portalO;
-    this.MAX_VELOCITY = 700;
+    
 
     this.e = this.game.input.keyboard.addKey(Phaser.KeyCode.E);
 }
 
 //Encadenamos el prototype
-Cubo.prototype = Object.create (Character.prototype);
+Cubo.prototype = Object.create (CanTP.prototype);
 Cubo.prototype.constructor = Cubo;
 
 Cubo.prototype.coger = function(player){
@@ -65,31 +59,11 @@ Cubo.prototype.coger = function(player){
 }
 
 Cubo.prototype.update = function(){
-    if(this.body.velocity.y > this.MAX_VELOCITY)
-        this.body.velocity.y = this.MAX_VELOCITY;
-    if(this.body.velocity.x > this.MAX_VELOCITY)
-        this.body.velocity.x = this.MAX_VELOCITY;
+    CanTP.prototype.maxvel.call(this);
     if(this.body.onFloor()){
         this.body.velocity.x = 0;
     }
-    this.portalcol();
-}
-
-Cubo.prototype.portalcol = function(){
-    if(!this.game.physics.arcade.overlap(this, this.portalN)){
-        this.overlapControlN = false;
-    }
-    if(!this.game.physics.arcade.overlap(this, this.portalB)){
-        this.overlapControlB = false;
-    }
-    if(this.game.physics.arcade.overlap(this, this.portalN) && !this.overlapControlN){
-        this.portalN.movetoportal(this.portalB, this);
-        this.overlapControlB = true;
-    }
-    if(this.game.physics.arcade.overlap(this, this.portalB) && !this.overlapControlB){
-        this.portalB.movetoportal(this.portalN, this);
-        this.overlapControlN = true;
-    }
+    CanTP.prototype.portalcol.call(this);
 }
 
 Cubo.prototype.sehatepeado = function(){
@@ -99,15 +73,27 @@ Cubo.prototype.sehatepeado = function(){
 module.exports = Cubo;
 
 
-},{"./Character.js":1}],3:[function(require,module,exports){
-var MainMenu = {
+},{"./canTP.js":6}],3:[function(require,module,exports){
+var Levels = {
     create: function(){
         var titlescreen = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'menu');
         titlescreen.anchor.setTo(0.5, 0.5);
 
-        this.createButton(this.game.world.centerX/2, this.game.world.centerY, 200, 67, function(){
-            this.state.start('play');
-        })
+        this.createButton('level 1', this.game.world.centerX/2 - 60, this.game.world.centerY, 200, 67, function(){
+            this.state.start('level1');
+        });
+
+        this.createButton('level 2', this.game.world.centerX/2 - 60, this.game.world.centerY + 75, 200, 67, function(){
+            this.state.start('levels');
+        });
+
+        this.createButton('level 3', this.game.world.centerX/2 - 60, this.game.world.centerY + 150, 200, 67, function(){
+            this.state.start('levels');
+        });
+
+        this.createButton('level 4', this.game.world.centerX/2 - 60, this.game.world.centerY + 225, 200, 67, function(){
+            this.state.start('level4');
+        });
     },
 
   
@@ -115,22 +101,64 @@ var MainMenu = {
   
     },
   
-    createButton: function(x, y, w, h, callback){
-      var button1 = this.game.add.button(x, y, 'Button', callback, this, 2,1,0);
-      //button1.onInputOver.add(function(){}, this);
+    createButton: function(string, x, y, w, h, callback){
+      var button1 = this.game.add.button(x, y, 'ButtonNoLetter', callback, this, 2,1,0);
         
       button1.anchor.setTo(0.5, 0.5);
       button1.width = w;
       button1.height = h;
+
+      var txt = this.game.add.text(button1.x, button1.y, string, {
+          font: "30px Constantia",
+          fill: "#000",
+          align: "cente"
+      });
+      txt.anchor.setTo(0.5, 0.5);
     }
+
+};
+
+module.exports = Levels;
+
+},{}],4:[function(require,module,exports){
+var MainMenu = {
+    create: function(){
+        var titlescreen = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'menu');
+        titlescreen.anchor.setTo(0.5, 0.5);
+        
+        this.createButton('Play', this.game.world.centerX/2, this.game.world.centerY, 200, 67, function(){
+            this.state.start('levels');
+        });
+        
+    },
+
+  
+    update: function(){
+  
+    },
+  
+    createButton: function(string, x, y, w, h, callback){
+        var button1 = this.game.add.button(x, y, 'ButtonNoLetter', callback, this, 2,1,0);
+          
+        button1.anchor.setTo(0.5, 0.5);
+        button1.width = w;
+        button1.height = h;
+  
+        var txt = this.game.add.text(button1.x, button1.y, string, {
+            font: "30px Constantia",
+            fill: "#000",
+            align: "cente"
+        });
+        txt.anchor.setTo(0.5, 0.5);
+      }
 
 };
 
 module.exports = MainMenu;
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
-var Character = require ('./Character.js');
+var CanTP = require ('./canTP.js');
 var Disparo = require ('./disparo.js');
 var PortalLogica = require('./portalLogica.js');
 //var bullets;
@@ -140,12 +168,12 @@ var fireRate = 200;
 var nextFire = 0;
 
 
-function Player(game,x,y,name, l1, l2, portalN, portalB){
+function Player(game,x,y,name, l1, l2, portalN, portalB, useBluePortal, useOrangePortal){
     //this.playScene = playScene;
-    this.name = name;
-    this.game = game;
+    // this.name = name;
+    // this.game = game;
+    CanTP.call(this, game, x, y, name);//Hace lo mismo que apply
     this.cursors = this.game.input.keyboard.createCursorKeys();
-    Character.call(this, game, x, y, name);//Hace lo mismo que apply
     this.jumping = true;
     this.jumpTimer = 0;
     this.speed = 100;
@@ -154,14 +182,18 @@ function Player(game,x,y,name, l1, l2, portalN, portalB){
     this.faceRight = true;
     this.x = x;
     this.y = y;
+    this.canPN = useOrangePortal;
+    this.canPB = useBluePortal;
     this.portalB;
     this.portalN;
     this.anchor.setTo(0.5, 0.5);//aqui no?
     //Portal gun
-    this.gun = this.game.make.sprite(0,0, 'gun');
-    this.gun.scale.set(0.3);
-    //this.gun.anchor.setTo(0.5,0.5);//si comento esto rota con un efecto un poco distinto
-    this.portalGun = this.addChild(this.gun);
+    if(this.canPN || this.canPB){
+        this.gun = this.game.make.sprite(0,0, 'gun');
+        this.gun.scale.set(0.3);
+        this.gun.anchor.setTo(0,0.5);//si comento esto rota con un efecto un poco distinto
+        this.portalGun = this.addChild(this.gun);
+    }
     this.layer1 = l1;
     this.layer2 = l2;
     this.cogido = false;
@@ -185,7 +217,7 @@ function Player(game,x,y,name, l1, l2, portalN, portalB){
 }
 
 //Encadenamos el prototype
-Player.prototype = Object.create (Character.prototype);
+Player.prototype = Object.create (CanTP.prototype);
 Player.prototype.constructor = Player;
 
 //funcion para inicializacion: crea sprite y sus variables
@@ -213,36 +245,15 @@ Player.prototype.create = function(){
 
 Player.prototype.update = function (){
     this.move();
-    this.gunAngle();
+    if(this.canPN || this.canPB)
+        this.gunAngle();
     this.flipwithmouse();
     this.shoot();
-    this.portalCol();
-    if(this.body.velocity.y > this.MAX_VELOCITY)
-        this.body.velocity.y = this.MAX_VELOCITY;
-    if(this.body.velocity.x > this.MAX_VELOCITY)
-        this.body.velocity.x = this.MAX_VELOCITY;
-    
+    CanTP.prototype.maxvel.call(this);
+    CanTP.prototype.portalcol.call(this);    
     //this.game.debug.bodyInfo(this, 32, 32);
     
 }
-
-Player.prototype.portalCol = function(){
-    if(!this.game.physics.arcade.overlap(this, this.portalN)){
-        this.overlapControlN = false;
-    }
-    if(!this.game.physics.arcade.overlap(this, this.portalB)){
-        this.overlapControlB = false;
-    }
-    if(this.game.physics.arcade.overlap(this, this.portalN) && !this.overlapControlN){
-        this.portalN.movetoportal(this.portalB, this);
-        this.overlapControlB = true;
-    }
-    if(this.game.physics.arcade.overlap(this, this.portalB) && !this.overlapControlB){
-        this.portalB.movetoportal(this.portalN, this);
-        this.overlapControlN = true;
-    }
-}
-
 
 Player.prototype.flipwithmouse = function(){
     var angStop = Math.PI /2;
@@ -341,16 +352,7 @@ Player.prototype.sehatepeado = function(){
 Player.prototype.gunAngle = function (){
     
     if(this.faceRight){
-        // var angStop = 1.5708;
-        // var ang = this.game.physics.arcade.angleToPointer(this);
-        // if(ang > -angStop && ang < angStop){
-            //console.log(ang);
-            this.portalGun.rotation = this.game.physics.arcade.angleToPointer(this);                
-        // }else if (ang > angStop){
-        //     this.portalGun.rotation = angStop;
-        // }else
-        //     this.portalGun.rotation = -angStop;
-        
+        this.portalGun.rotation = this.game.physics.arcade.angleToPointer(this);                
     }
     else{
         this.portalGun.rotation = -this.game.physics.arcade.angleToPointer(this) - Math.PI;
@@ -370,28 +372,65 @@ Player.prototype.flip = function (){
 
 //Aqui funciones propias del player
 Player.prototype.shoot = function(){
-    // if(this.portalN == undefined && this.portalB == undefined){
-        
-    // }else{
-    //     console.log(this.portalB.x);
-    // }
     if(this.game.time.now > nextFire){
-        if(this.game.input.activePointer.leftButton.isDown){
+        if(this.game.input.activePointer.leftButton.isDown && this.canPB){
             nextFire = this.game.time.now + fireRate;
             this.disparo = new Disparo(this.game, this.x , this.y, 'bulletBlue', this.layer1, this.layer2, this.portalB);
         }
-        else if(this.game.input.activePointer.rightButton.isDown){
+        else if(this.game.input.activePointer.rightButton.isDown && this.canPN){
             nextFire = this.game.time.now + fireRate;
             this.disparo = new Disparo(this.game, this.x , this.y, 'bulletOrange', this.layer1, this.layer2, this.portalN);
         }
-        
-        
     }
-
 }
 //Exportamos Player
 module.exports = Player;
-},{"./Character.js":1,"./disparo.js":5,"./portalLogica.js":8}],5:[function(require,module,exports){
+},{"./canTP.js":6,"./disparo.js":7,"./portalLogica.js":11}],6:[function(require,module,exports){
+var Character = require ('./Character.js');
+
+function CanTP(game,x,y,name, portalO, portalB){
+    Character.call(this, game, x, y, name);//Hace lo mismo que apply
+
+    //this.game.add.existing(this);//!
+    this.game.physics.enable(this,Phaser.Physics.ARCADE);
+    this.body.enable = true;
+    this.body.gravity.y = 300;
+    this.body.collideWorldBounds = true;
+    this.portalB = portalB;
+    this.portalN = portalO;
+    this.MAX_VELOCITY = 700;
+}
+
+CanTP.prototype = Object.create (Character.prototype);
+CanTP.prototype.constructor = CanTP;
+
+CanTP.prototype.portalcol = function(){
+    if(!this.game.physics.arcade.overlap(this, this.portalN)){
+        this.overlapControlN = false;
+    }
+    if(!this.game.physics.arcade.overlap(this, this.portalB)){
+        this.overlapControlB = false;
+    }
+    if(this.game.physics.arcade.overlap(this, this.portalN) && !this.overlapControlN){
+        this.portalN.movetoportal(this.portalB, this);
+        this.overlapControlB = true;
+    }
+    if(this.game.physics.arcade.overlap(this, this.portalB) && !this.overlapControlB){
+        this.portalB.movetoportal(this.portalN, this);
+        this.overlapControlN = true;
+    }
+}
+
+CanTP.prototype.maxvel = function(){
+    if(this.body.velocity.y > this.MAX_VELOCITY)
+        this.body.velocity.y = this.MAX_VELOCITY;
+    if(this.body.velocity.x > this.MAX_VELOCITY)
+        this.body.velocity.x = this.MAX_VELOCITY;
+}
+
+
+module.exports = CanTP;
+},{"./Character.js":1}],7:[function(require,module,exports){
 'use strict';
 var Character = require ('./Character.js');
 var PortalLogica = require ('./portalLogica.js');
@@ -481,83 +520,7 @@ Disparo.prototype.collisionControl = function (){
 
 //exportamos disparo
 module.exports = Disparo;
-},{"./Character.js":1,"./portalLogica.js":8}],6:[function(require,module,exports){
-'use strict';
-
-var PlayScene = require('./play_scene.js');
-
-var MenuScene = require('./MainMenu.js')
-
-var BootScene = {
-  preload: function () {
-    // load here assets required for the loading screen
-    this.game.load.image('preloader_bar', 'images/preloader_bar.png');
-  },
-
-  create: function () {
-    //elimina las opciones que salen cuando le das al click derecho
-    this.game.canvas.oncontextmenu = function (e) { e.preventDefault(); }
-    //this.camera = new Camera();
-    this.game.state.start('preloader');
-  }
-};
-
-
-var PreloaderScene = {
-  preload: function () {
-    this.loadingBar = this.game.add.sprite(0, 240, 'preloader_bar');
-    this.loadingBar.anchor.setTo(0, 0.5);
-    this.load.setPreloadSprite(this.loadingBar);
-
-    // TODO: load here the assets for the game
-    this.game.load.image('backgr', 'images/Sprites_y_apartado_grafico/bridge_portal_2.jpg');
-    this.game.load.spritesheet('Luisa', 'images/Sprites_y_apartado_grafico/playerSprite.png',49 ,49,-1,1,1);
-    this.game.load.image('platAzul','images/Sprites_y_apartado_grafico/plataformaAzul.png');
-    this.game.load.image('cuboAzul','images/Sprites_y_apartado_grafico/cube1.png');
-    this.game.load.image('cuboCompania','images/Sprites_y_apartado_grafico/cubo_de_compania.png');
-    this.game.load.image('gun','images/Sprites_y_apartado_grafico/portal gun.png');
-    this.game.load.image('bulletBlue', 'images/Sprites_y_apartado_grafico/shootBlue.png');
-    this.game.load.image('bulletOrange', 'images/Sprites_y_apartado_grafico/shootOrange.png');
-    this.game.load.image('PortalBlue', 'images/Sprites_y_apartado_grafico/portalSpriteAzul.png');
-    this.game.load.image('PortalOrange', 'images/Sprites_y_apartado_grafico/portalSpriteNaranja.png');
-    this.game.load.image('Bloques', 'tiles/BloquesPeque.png');
-    this.game.load.image('menu', 'images/Sprites_y_apartado_grafico/Menu.png');
-    this.game.load.spritesheet('Button', 'images/Sprites_y_apartado_grafico/botones.png', 160, 74);
-    //this.game.load.image('Button1', 'images/Sprites_y_apartado_grafico/BOTON2.png');
-
-    //cargo el tilemap
-    this.game.load.tilemap('mapaBN', 'tiles/nivel1_BloquesNegros.csv', null, Phaser.Tilemap.CSV);
-    this.game.load.tilemap('mapaBB', 'tiles/nivel1_BloquesBlancos.csv', null, Phaser.Tilemap.CSV);
-    //this.game.load.tilemap('map', 'tiles/pruebaTilePortal_BloquesNegros.csv');
-    //this.game.load.tilemap('map', 'tiles/pruebaTilePortal_BloquesBlancos.csv');
-    //this.game.load.tilemap('mapa', 'tiles/level1.json', null, Phaser.Tilemap.TILED_JSON);
-    //this.game.load.tilemap('mimapa', '/mapas/EastPalace1.json',null, Phaser.Tilemap.TILED_JSON);
-  },
-
-  create: function () {
-    // this.map = this.game.add.tilemap('map');
-    // this.map.addTilesetImage('Bloques');
-    // this.layer = this.map.createLayer('BloquesNegros');
-    // this.layer.resizeWorld();
-
-    this.game.state.start('menu');
-  }
-};
-
-
-
-window.onload = function () {
-  var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game');
-
-  game.state.add('boot', BootScene);
-  game.state.add('preloader', PreloaderScene);
-  game.state.add('menu', MenuScene);
-  game.state.add('play', PlayScene);
-
-  game.state.start('boot');
-};
-
-},{"./MainMenu.js":3,"./play_scene.js":7}],7:[function(require,module,exports){
+},{"./Character.js":1,"./portalLogica.js":11}],8:[function(require,module,exports){
 'use strict';
 //var luisa;
 var plat;
@@ -566,20 +529,14 @@ var cuboCompania;
 var Player = require ('./Player.js');
 var Cubo = require ('./Cubo.js');
 var PortalLogica = require ('./portalLogica.js');
+var Puertas = require('./puertas.js');
 
-var MAPSCALE = 1;
-var NUMLEVELS = 1;
-
-
-  var PlayScene = {
+var Level1 = {
   create: function () {
     
     // var bckg = this.game.add.image(0,0,'backgr');
     // //bckg.scale.set(0.5);
     // bckg.smoothed = false;
-    this.overlapControlB = false;
-    this.overlapControlN = false;
-
     this.game.stage.backgroundColor = 'rgb(128,128,128)';
   
     //añadir los grupos
@@ -612,21 +569,23 @@ var NUMLEVELS = 1;
   },
   update: function(){
     //reviso colisiones
-    this.collisionControl();   
+    this.collisionControl();
     //funcion pause
   },
 
   //aqui los preparativos para el nivel
   allReadyGO: function(){
     //portales
-    this.portalN = new PortalLogica(this.game, -50, -50, 'bulletOrange', 'arriba');
-    this.portalB = new PortalLogica(this.game, -50, -50, 'bulletBlue', 'arriba');
+    this.portalN = new PortalLogica(this.game, 70, 375, 'bulletOrange', 'derecha');
+    this.portalB = new PortalLogica(this.game, 730, 520, 'bulletBlue', 'izquierda');
     
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     
-    this.luisa = new Player(this.game, 0, 527,'Luisa', this.layer, this.layer1, this.portalN, this.portalB);
+    this.luisa = new Player(this.game, 0, 527,'Luisa', this.layerN, this.layerB, this.portalN, this.portalB, false, false);
     //this.game.add.existing(luisa);
     this.luisa.create();
+
+    this.puerta = new Puertas(this.game, 683, 160, 'puerta', true, 'level4', this.luisa);
     
     this.game.camera.follow(this.luisa);
     
@@ -639,11 +598,11 @@ var NUMLEVELS = 1;
     //creamos el HUD
 
     //cubos
-    cuboCompania = new Cubo (this.game, 200 , 100, 'cuboCompania',this.portalN, this.portalB);
-    cuboCompania.scale.set(0.2);
+    // cuboCompania = new Cubo (this.game, 200 , 100, 'cuboCompania',this.portalN, this.portalB);
+    // cuboCompania.scale.set(0.2);
 
-    cuboAzul = new Cubo (this.game, 100 , 100, 'cuboAzul', this.portalN, this.portalB);
-    cuboAzul.scale.set(0.16);
+    // cuboAzul = new Cubo (this.game, 100 , 100, 'cuboAzul', this.portalN, this.portalB);
+    // cuboAzul.scale.set(0.16);
   },
   createLayer: function(){
     // var layer = this.map.createLayer(name);
@@ -659,60 +618,28 @@ var NUMLEVELS = 1;
 
     //to get the tileset ID (number):
     //this.tilesetID = this.map.getTilesetIndex("Objects");
-    this.map = this.game.add.tilemap('mapaBN', 32, 32);
-    this.map1 = this.game.add.tilemap('mapaBB', 32, 32);
-    this.map.addTilesetImage('tiles', 'Bloques');
-    this.map1.addTilesetImage('tiles', 'Bloques');
-    this.map.setCollisionBetween(0, 1000);
-    this.map1.setCollisionBetween(0, 1000);
-    this.layer = this.map.createLayer(0);
-    this.layer1 = this.map1.createLayer(0);
-    this.layer.resizeWorld();
-    this.layer1.resizeWorld();
+    this.mapN = this.game.add.tilemap('level1N', 32, 32);
+    this.mapB = this.game.add.tilemap('level1B', 32, 32);
+    this.mapN.addTilesetImage('tiles', 'Bloques');
+    this.mapB.addTilesetImage('tiles', 'Bloques');
+    this.mapN.setCollisionBetween(0, 1000);
+    this.mapB.setCollisionBetween(0, 1000);
+    this.layerN = this.mapN.createLayer(0);
+    this.layerB = this.mapB.createLayer(0);
+    this.layerN.resizeWorld();
+    this.layerB.resizeWorld();
     console.log("CreadoTile");
     
   },
   collisionControl:function(){
-    this.game.physics.arcade.collide(this.luisa, plat);
-    this.game.physics.arcade.collide(this.luisa, this.layer);
-    this.game.physics.arcade.collide(this.luisa, this.layer1);
-    this.game.physics.arcade.collide(this.layer, cuboAzul);
-    this.game.physics.arcade.collide(this.layer1, cuboAzul);
-    this.game.physics.arcade.collide(this.layer, cuboCompania);
-    this.game.physics.arcade.collide(this.layer1, cuboCompania);
-    // this.luisa.pickup(cuboCompania);
-    // this.luisa.pickup(cuboAzul);
-    cuboCompania.coger(this.luisa);
-    // if(!this.game.physics.arcade.overlap(this.luisa, this.portalN)){
-    //   this.overlapControlN = false;
-    // }
-    // if(!this.game.physics.arcade.overlap(this.luisa, this.portalB)){
-    //   this.overlapControlB = false;
-    // }
-    // if(this.game.physics.arcade.overlap(this.luisa, this.portalN) && !this.overlapControlN){
-    //   this.portalN.movetoportal(this.portalB, this.luisa);
-    //   //this.luisa.sehatepeado();
-    //   this.overlapControlB = true;
-    // }
-    // if(this.game.physics.arcade.overlap(this.luisa, this.portalB) && !this.overlapControlB){
-    //   this.portalB.movetoportal(this.portalN, this.luisa);
-    //   //this.luisa.sehatepeado();
-    //   this.overlapControlN = true;
-    //}
-    // if(!this.game.physics.arcade.overlap(this.cuboCompania, this.portalN)){
-    //   this.overlapControlN = false;
-    // }
-    // if(!this.game.physics.arcade.overlap(this.cuboCompania, this.portalB)){
-    //   this.overlapControlB = false;
-    // }
-    // if(this.game.physics.arcade.overlap(this.cuboCompania, this.portalN) && !this.overlapControlN){
-    //   this.portalN.movetoportal(this.portalB, this.cuboCompania);
-    //   this.overlapControlB = true;
-    // }
-    // if(this.game.physics.arcade.overlap(this.cuboCompania, this.portalB) && !this.overlapControlB){
-    //   this.portalB.movetoportal(this.portalN, this.cuboCompania);
-    //   this.overlapControlN = true;
-    // }
+    //this.game.physics.arcade.collide(this.luisa, plat);
+    this.game.physics.arcade.collide(this.luisa, this.layerN);
+    this.game.physics.arcade.collide(this.luisa, this.layerB);
+    // this.game.physics.arcade.collide(this.layerN, cuboAzul);
+    // this.game.physics.arcade.collide(this.layerB, cuboAzul);
+    // this.game.physics.arcade.collide(this.layerN, cuboCompania);
+    // this.game.physics.arcade.collide(this.layerB, cuboCompania);
+    //cuboCompania.coger(this.luisa);
     
 
     
@@ -722,9 +649,222 @@ var NUMLEVELS = 1;
 
 };
 
-module.exports = PlayScene;
+module.exports = Level1;
 
-},{"./Cubo.js":2,"./Player.js":4,"./portalLogica.js":8}],8:[function(require,module,exports){
+},{"./Cubo.js":2,"./Player.js":5,"./portalLogica.js":11,"./puertas.js":12}],9:[function(require,module,exports){
+'use strict';
+//var luisa;
+var plat;
+var cuboAzul;
+var cuboCompania;
+var Player = require ('./Player.js');
+var Cubo = require ('./Cubo.js');
+var PortalLogica = require ('./portalLogica.js');
+
+var Level4 = {
+  create: function () {
+    
+    // var bckg = this.game.add.image(0,0,'backgr');
+    // //bckg.scale.set(0.5);
+    // bckg.smoothed = false;
+    this.game.stage.backgroundColor = 'rgb(128,128,128)';
+  
+    //añadir los grupos
+    //this.game.activeEnemies = this.game.add.group();
+   
+    //ejecutar aqui funciones de inicio juego
+    //this.loadMap
+
+   
+    this.loadMap();
+    this.allReadyGO();
+
+     /////
+    
+    //  this.plataformas = this.game.add.group();
+    //  plat = this.game.add.sprite(50,400,'platAzul');
+    //  plat.scale.set(0.5);
+    //  this.game.add.existing(plat);
+    //  this.game.physics.enable(plat,Phaser.Physics.ARCADE);
+    //  plat.body.enable = true;
+    //  plat.body.immovable = true;
+
+    //  this.plataformas.add(plat);     
+     
+     /////
+    
+    //funcion pause
+    
+    //crear una instancia del HUD
+  },
+  update: function(){
+    //reviso colisiones
+    this.collisionControl();
+    //funcion pause
+  },
+
+  //aqui los preparativos para el nivel
+  allReadyGO: function(){
+    //portales
+    this.portalN = new PortalLogica(this.game, -50, -50, 'bulletOrange', 'derecha');
+    this.portalB = new PortalLogica(this.game, -50, -50, 'bulletBlue', 'izquierda');
+    
+    this.game.physics.startSystem(Phaser.Physics.ARCADE);
+    
+    this.luisa = new Player(this.game, 0, 527,'Luisa', this.layerN, this.layerB, this.portalN, this.portalB, true, true);
+    //this.game.add.existing(luisa);
+    this.luisa.create();
+    
+    this.game.camera.follow(this.luisa);
+    
+    this.game.input.keyboard.addKey(Phaser.Keyboard.E);
+    //crear los layers
+
+    //activar colisiones
+
+
+    //creamos el HUD
+
+    //cubos
+    // cuboCompania = new Cubo (this.game, 200 , 100, 'cuboCompania',this.portalN, this.portalB);
+    // cuboCompania.scale.set(0.2);
+
+    // cuboAzul = new Cubo (this.game, 100 , 100, 'cuboAzul', this.portalN, this.portalB);
+    // cuboAzul.scale.set(0.16);
+  },
+  createLayer: function(){
+    // var layer = this.map.createLayer(name);
+    // layer.smoothed = false;
+    // layer.setScale(MAPSCALE);
+    // return layer;
+  },
+  loadMap: function(){
+    //añado el tilemap
+    //this.map = this.game.add.tilemap('mimapa');
+
+    //this.map.addTilesetImage();
+
+    //to get the tileset ID (number):
+    //this.tilesetID = this.map.getTilesetIndex("Objects");
+    this.mapN = this.game.add.tilemap('level4N', 32, 32);
+    this.mapB = this.game.add.tilemap('level4B', 32, 32);
+    this.mapN.addTilesetImage('tiles', 'Bloques');
+    this.mapB.addTilesetImage('tiles', 'Bloques');
+    this.mapN.setCollisionBetween(0, 1000);
+    this.mapB.setCollisionBetween(0, 1000);
+    this.layerN = this.mapN.createLayer(0);
+    this.layerB = this.mapB.createLayer(0);
+    this.layerN.resizeWorld();
+    this.layerB.resizeWorld();
+    console.log("CreadoTile");
+    
+  },
+  collisionControl:function(){
+    //this.game.physics.arcade.collide(this.luisa, plat);
+    this.game.physics.arcade.collide(this.luisa, this.layerN);
+    this.game.physics.arcade.collide(this.luisa, this.layerB);
+    // this.game.physics.arcade.collide(this.layerN, cuboAzul);
+    // this.game.physics.arcade.collide(this.layerB, cuboAzul);
+    // this.game.physics.arcade.collide(this.layerN, cuboCompania);
+    // this.game.physics.arcade.collide(this.layerB, cuboCompania);
+    //cuboCompania.coger(this.luisa);
+    
+
+    
+    //this.game.physics.arcade.collide(this.game.activeEnemies,this.Colisiones);
+    //this.game.physics.arcade.overlap(,,,,);
+  }
+
+};
+
+module.exports = Level4;
+
+},{"./Cubo.js":2,"./Player.js":5,"./portalLogica.js":11}],10:[function(require,module,exports){
+'use strict';
+
+var Level1 = require('./level1.js');
+
+var Level4 = require('./level4.js');
+
+var MenuScene = require('./MainMenu.js')
+
+var Levels = require('./Levels.js');
+
+var BootScene = {
+  preload: function () {
+    // load here assets required for the loading screen
+    this.game.load.image('preloader_bar', 'images/preloader_bar.png');
+  },
+
+  create: function () {
+    //elimina las opciones que salen cuando le das al click derecho
+    this.game.canvas.oncontextmenu = function (e) { e.preventDefault(); }
+    //this.camera = new Camera();
+    this.game.state.start('preloader');
+  }
+};
+
+
+var PreloaderScene = {
+  preload: function () {
+    this.loadingBar = this.game.add.sprite(0, 240, 'preloader_bar');
+    this.loadingBar.anchor.setTo(0, 0.5);
+    this.load.setPreloadSprite(this.loadingBar);
+
+    // TODO: load here the assets for the game
+    this.game.load.image('backgr', 'images/Sprites_y_apartado_grafico/bridge_portal_2.jpg');
+    this.game.load.spritesheet('Luisa', 'images/Sprites_y_apartado_grafico/playerSprite.png',49 ,49, -1,1,1);
+    this.game.load.spritesheet('puerta', 'images/Sprites_y_apartado_grafico/puerta.png', 344/8, 32);
+    this.game.load.image('platAzul','images/Sprites_y_apartado_grafico/plataformaAzul.png');
+    this.game.load.image('cuboAzul','images/Sprites_y_apartado_grafico/cube1.png');
+    this.game.load.image('cuboCompania','images/Sprites_y_apartado_grafico/cubo_de_compania.png');
+    this.game.load.image('gun','images/Sprites_y_apartado_grafico/portal gun.png');
+    this.game.load.image('bulletBlue', 'images/Sprites_y_apartado_grafico/shootBlue.png');
+    this.game.load.image('bulletOrange', 'images/Sprites_y_apartado_grafico/shootOrange.png');
+    this.game.load.image('PortalBlue', 'images/Sprites_y_apartado_grafico/portalSpriteAzul.png');
+    this.game.load.image('PortalOrange', 'images/Sprites_y_apartado_grafico/portalSpriteNaranja.png');
+    this.game.load.image('Bloques', 'tiles/BloquesPeque.png');
+
+    //cosas del menu
+    this.game.load.image('menu', 'images/Sprites_y_apartado_grafico/Menu.png');
+    this.game.load.spritesheet('Button', 'images/Sprites_y_apartado_grafico/botones.png', 160, 74);
+    this.game.load.spritesheet('ButtonNoLetter', 'images/Sprites_y_apartado_grafico/botonesSinLetra.png', 160, 74);
+
+    //Nivel 1
+    this.game.load.tilemap('level1N', 'tiles/nivel1_BloquesNegros.csv', null, Phaser.Tilemap.CSV);
+    this.game.load.tilemap('level1B', 'tiles/nivel1_BloquesBlancos.csv', null, Phaser.Tilemap.CSV);
+
+    //Nivel 4
+    this.game.load.tilemap('level4N', 'tiles/nivel4_BloquesNegros.csv', null, Phaser.Tilemap.CSV);
+    this.game.load.tilemap('level4B', 'tiles/nivel4_BloquesBlancos.csv', null, Phaser.Tilemap.CSV);
+  },
+
+  create: function () {
+    // this.map = this.game.add.tilemap('map');
+    // this.map.addTilesetImage('Bloques');
+    // this.layer = this.map.createLayer('BloquesNegros');
+    // this.layer.resizeWorld();
+
+    this.game.state.start('menu');
+  }
+};
+
+
+
+window.onload = function () {
+  var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game');
+
+  game.state.add('boot', BootScene);
+  game.state.add('preloader', PreloaderScene);
+  game.state.add('menu', MenuScene);
+  game.state.add('levels', Levels);
+  game.state.add('level1', Level1);
+  game.state.add('level4', Level4);
+
+  game.state.start('boot');
+};
+
+},{"./Levels.js":3,"./MainMenu.js":4,"./level1.js":8,"./level4.js":9}],11:[function(require,module,exports){
 'use strict';
 var Character = require ('./Character.js');
 
@@ -814,4 +954,45 @@ PortalLogica.prototype.update = function(){
 
 
 module.exports = PortalLogica;
-},{"./Character.js":1}]},{},[6]);
+},{"./Character.js":1}],12:[function(require,module,exports){
+var Character = require ('./Character.js');
+
+function Puerta(game, x, y, name, state, nextLevel, player){
+    Character.call(this, game, x, y, name);
+    this.state = state;
+    this.player = player;
+    this.nextLevel = nextLevel;
+    this.alredydone = false;
+    this.create();
+}
+
+Puerta.prototype = Object.create (Character.prototype);
+Puerta.prototype.constructor = Puerta;
+
+Puerta.prototype.create = function(){
+    this.game.add.existing(this);
+    this.scale.set(2);
+    this.animations.add('open',[1,2,3,4,5,6,7,8],5,false);
+    this.game.physics.enable(this,Phaser.Physics.ARCADE);
+}
+
+
+Puerta.prototype.update = function(){
+    if(this.state){
+        if(!this.alredydone){
+            this.animations.play('open');
+            this.alredydone = true;
+        }
+        if(this.game.physics.arcade.overlap(this.player, this)){
+            this.game.state.start(this.nextLevel);
+            console.log('abretesesamo');
+        }
+    }
+}
+
+Puerta.prototype.opendoor = function(){
+    this.state = true;
+}
+
+module.exports = Puerta;
+},{"./Character.js":1}]},{},[10]);
