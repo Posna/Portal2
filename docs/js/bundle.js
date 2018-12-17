@@ -84,7 +84,7 @@ var Levels = {
         });
 
         this.createButton('level 2', this.game.world.centerX/2 - 60, this.game.world.centerY + 75, 200, 67, function(){
-            this.state.start('levels');
+            this.state.start('level2');
         });
 
         this.createButton('level 3', this.game.world.centerX/2 - 60, this.game.world.centerY + 150, 200, 67, function(){
@@ -385,7 +385,7 @@ Player.prototype.shoot = function(){
 }
 //Exportamos Player
 module.exports = Player;
-},{"./canTP.js":6,"./disparo.js":7,"./portalLogica.js":11}],6:[function(require,module,exports){
+},{"./canTP.js":6,"./disparo.js":7,"./portalLogica.js":12}],6:[function(require,module,exports){
 var Character = require ('./Character.js');
 
 function CanTP(game,x,y,name, portalO, portalB){
@@ -520,7 +520,7 @@ Disparo.prototype.collisionControl = function (){
 
 //exportamos disparo
 module.exports = Disparo;
-},{"./Character.js":1,"./portalLogica.js":11}],8:[function(require,module,exports){
+},{"./Character.js":1,"./portalLogica.js":12}],8:[function(require,module,exports){
 'use strict';
 //var luisa;
 var plat;
@@ -585,7 +585,7 @@ var Level1 = {
     //this.game.add.existing(luisa);
     this.luisa.create();
 
-    this.puerta = new Puertas(this.game, 683, 160, 'puerta', true, 'level4', this.luisa);
+    this.puerta = new Puertas(this.game, 683, 160, 'puerta', true, 'level2', this.luisa);
     
     this.game.camera.follow(this.luisa);
     
@@ -651,7 +651,7 @@ var Level1 = {
 
 module.exports = Level1;
 
-},{"./Cubo.js":2,"./Player.js":5,"./portalLogica.js":11,"./puertas.js":12}],9:[function(require,module,exports){
+},{"./Cubo.js":2,"./Player.js":5,"./portalLogica.js":12,"./puertas.js":13}],9:[function(require,module,exports){
 'use strict';
 //var luisa;
 var plat;
@@ -660,6 +660,138 @@ var cuboCompania;
 var Player = require ('./Player.js');
 var Cubo = require ('./Cubo.js');
 var PortalLogica = require ('./portalLogica.js');
+var Puertas = require('./puertas.js');
+
+var Level2 = {
+  create: function () {
+    
+    // var bckg = this.game.add.image(0,0,'backgr');
+    // //bckg.scale.set(0.5);
+    // bckg.smoothed = false;
+    this.game.stage.backgroundColor = 'rgb(128,128,128)';
+  
+    //añadir los grupos
+    //this.game.activeEnemies = this.game.add.group();
+   
+    //ejecutar aqui funciones de inicio juego
+    //this.loadMap
+
+   
+    this.loadMap();
+    this.allReadyGO();
+
+     /////
+    
+    //  this.plataformas = this.game.add.group();
+    //  plat = this.game.add.sprite(50,400,'platAzul');
+    //  plat.scale.set(0.5);
+    //  this.game.add.existing(plat);
+    //  this.game.physics.enable(plat,Phaser.Physics.ARCADE);
+    //  plat.body.enable = true;
+    //  plat.body.immovable = true;
+
+    //  this.plataformas.add(plat);     
+     
+     /////
+    
+    //funcion pause
+    
+    //crear una instancia del HUD
+  },
+  update: function(){
+    //reviso colisiones
+    this.collisionControl();
+    //funcion pause
+  },
+
+  //aqui los preparativos para el nivel
+  allReadyGO: function(){
+    //portales
+    this.portalN = new PortalLogica(this.game, 730, 520, 'bulletOrange', 'izquierda');
+    this.portalB = new PortalLogica(this.game, -50, -50, 'bulletBlue', 'izquierda');
+    
+    this.game.physics.startSystem(Phaser.Physics.ARCADE);
+    
+    this.luisa = new Player(this.game, 0, 527,'Luisa', this.layerN, this.layerB, this.portalN, this.portalB, true, false);
+    //this.game.add.existing(luisa);
+    this.luisa.create();
+
+    this.puerta = new Puertas(this.game, 200, 350, 'puerta', true, 'level4', this.luisa);
+    
+    this.game.camera.follow(this.luisa);
+    
+    this.game.input.keyboard.addKey(Phaser.Keyboard.E);
+    //crear los layers
+
+    //activar colisiones
+
+
+    //creamos el HUD
+
+    //cubos
+    // cuboCompania = new Cubo (this.game, 200 , 100, 'cuboCompania',this.portalN, this.portalB);
+    // cuboCompania.scale.set(0.2);
+
+    // cuboAzul = new Cubo (this.game, 100 , 100, 'cuboAzul', this.portalN, this.portalB);
+    // cuboAzul.scale.set(0.16);
+  },
+  createLayer: function(){
+    // var layer = this.map.createLayer(name);
+    // layer.smoothed = false;
+    // layer.setScale(MAPSCALE);
+    // return layer;
+  },
+  loadMap: function(){
+    //añado el tilemap
+    //this.map = this.game.add.tilemap('mimapa');
+
+    //this.map.addTilesetImage();
+
+    //to get the tileset ID (number):
+    //this.tilesetID = this.map.getTilesetIndex("Objects");
+    this.mapN = this.game.add.tilemap('level2N', 32, 32);
+    this.mapB = this.game.add.tilemap('level2B', 32, 32);
+    this.mapN.addTilesetImage('tiles', 'Bloques');
+    this.mapB.addTilesetImage('tiles', 'Bloques');
+    this.mapN.setCollisionBetween(0, 1000);
+    this.mapB.setCollisionBetween(0, 1000);
+    this.layerN = this.mapN.createLayer(0);
+    this.layerB = this.mapB.createLayer(0);
+    this.layerN.resizeWorld();
+    this.layerB.resizeWorld();
+    console.log("CreadoTile");
+    
+  },
+  collisionControl:function(){
+    //this.game.physics.arcade.collide(this.luisa, plat);
+    this.game.physics.arcade.collide(this.luisa, this.layerN);
+    this.game.physics.arcade.collide(this.luisa, this.layerB);
+    // this.game.physics.arcade.collide(this.layerN, cuboAzul);
+    // this.game.physics.arcade.collide(this.layerB, cuboAzul);
+    // this.game.physics.arcade.collide(this.layerN, cuboCompania);
+    // this.game.physics.arcade.collide(this.layerB, cuboCompania);
+    //cuboCompania.coger(this.luisa);
+    
+
+    
+    //this.game.physics.arcade.collide(this.game.activeEnemies,this.Colisiones);
+    //this.game.physics.arcade.overlap(,,,,);
+  }
+
+};
+
+module.exports = Level2;
+
+},{"./Cubo.js":2,"./Player.js":5,"./portalLogica.js":12,"./puertas.js":13}],10:[function(require,module,exports){
+'use strict';
+//var luisa;
+var plat;
+var cuboAzul;
+var cuboCompania;
+var Player = require ('./Player.js');
+var Cubo = require ('./Cubo.js');
+var PortalLogica = require ('./portalLogica.js');
+var Puerta = require('./puertas.js');
 
 var Level4 = {
   create: function () {
@@ -715,6 +847,8 @@ var Level4 = {
     //this.game.add.existing(luisa);
     this.luisa.create();
     
+    //poner puerta aqui
+
     this.game.camera.follow(this.luisa);
     
     this.game.input.keyboard.addKey(Phaser.Keyboard.E);
@@ -779,10 +913,12 @@ var Level4 = {
 
 module.exports = Level4;
 
-},{"./Cubo.js":2,"./Player.js":5,"./portalLogica.js":11}],10:[function(require,module,exports){
+},{"./Cubo.js":2,"./Player.js":5,"./portalLogica.js":12,"./puertas.js":13}],11:[function(require,module,exports){
 'use strict';
 
 var Level1 = require('./level1.js');
+
+var Level2 = require('./level2.js');
 
 var Level4 = require('./level4.js');
 
@@ -834,6 +970,10 @@ var PreloaderScene = {
     this.game.load.tilemap('level1N', 'tiles/nivel1_BloquesNegros.csv', null, Phaser.Tilemap.CSV);
     this.game.load.tilemap('level1B', 'tiles/nivel1_BloquesBlancos.csv', null, Phaser.Tilemap.CSV);
 
+    //Nivel 2
+    this.game.load.tilemap('level2N', 'tiles/nivel2_BloquesNegros.csv', null, Phaser.Tilemap.CSV);
+    this.game.load.tilemap('level2B', 'tiles/nivel2_BloquesBlancos.csv', null, Phaser.Tilemap.CSV);
+
     //Nivel 4
     this.game.load.tilemap('level4N', 'tiles/nivel4_BloquesNegros.csv', null, Phaser.Tilemap.CSV);
     this.game.load.tilemap('level4B', 'tiles/nivel4_BloquesBlancos.csv', null, Phaser.Tilemap.CSV);
@@ -859,12 +999,13 @@ window.onload = function () {
   game.state.add('menu', MenuScene);
   game.state.add('levels', Levels);
   game.state.add('level1', Level1);
+  game.state.add('level2', Level2);
   game.state.add('level4', Level4);
 
   game.state.start('boot');
 };
 
-},{"./Levels.js":3,"./MainMenu.js":4,"./level1.js":8,"./level4.js":9}],11:[function(require,module,exports){
+},{"./Levels.js":3,"./MainMenu.js":4,"./level1.js":8,"./level2.js":9,"./level4.js":10}],12:[function(require,module,exports){
 'use strict';
 var Character = require ('./Character.js');
 
@@ -954,7 +1095,7 @@ PortalLogica.prototype.update = function(){
 
 
 module.exports = PortalLogica;
-},{"./Character.js":1}],12:[function(require,module,exports){
+},{"./Character.js":1}],13:[function(require,module,exports){
 var Character = require ('./Character.js');
 
 function Puerta(game, x, y, name, state, nextLevel, player){
@@ -973,6 +1114,7 @@ Puerta.prototype.create = function(){
     this.game.add.existing(this);
     this.scale.set(2);
     this.animations.add('open',[1,2,3,4,5,6,7,8],5,false);
+    this.animations.add('close',[8,7,6,5,4,3,2,1],5,false);
     this.game.physics.enable(this,Phaser.Physics.ARCADE);
 }
 
@@ -987,6 +1129,11 @@ Puerta.prototype.update = function(){
             this.game.state.start(this.nextLevel);
             console.log('abretesesamo');
         }
+    }else{
+        if(this.alredydone){
+            this.animations.play('close');
+            this.alredydone = false;
+        }
     }
 }
 
@@ -995,4 +1142,4 @@ Puerta.prototype.opendoor = function(){
 }
 
 module.exports = Puerta;
-},{"./Character.js":1}]},{},[10]);
+},{"./Character.js":1}]},{},[11]);

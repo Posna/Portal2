@@ -6,6 +6,7 @@ var cuboCompania;
 var Player = require ('./Player.js');
 var Cubo = require ('./Cubo.js');
 var PortalLogica = require ('./portalLogica.js');
+var Puerta = require('./puertas.js');
 
 var Level4 = {
   create: function () {
@@ -61,6 +62,8 @@ var Level4 = {
     //this.game.add.existing(luisa);
     this.luisa.create();
     
+    //poner puerta aqui
+
     this.game.camera.follow(this.luisa);
     
     this.game.input.keyboard.addKey(Phaser.Keyboard.E);

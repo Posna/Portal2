@@ -8,7 +8,7 @@ var Cubo = require ('./Cubo.js');
 var PortalLogica = require ('./portalLogica.js');
 var Puertas = require('./puertas.js');
 
-var Level1 = {
+var Level2 = {
   create: function () {
     
     // var bckg = this.game.add.image(0,0,'backgr');
@@ -53,16 +53,16 @@ var Level1 = {
   //aqui los preparativos para el nivel
   allReadyGO: function(){
     //portales
-    this.portalN = new PortalLogica(this.game, 70, 375, 'bulletOrange', 'derecha');
-    this.portalB = new PortalLogica(this.game, 730, 520, 'bulletBlue', 'izquierda');
+    this.portalN = new PortalLogica(this.game, 730, 520, 'bulletOrange', 'izquierda');
+    this.portalB = new PortalLogica(this.game, -50, -50, 'bulletBlue', 'izquierda');
     
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     
-    this.luisa = new Player(this.game, 0, 527,'Luisa', this.layerN, this.layerB, this.portalN, this.portalB, false, false);
+    this.luisa = new Player(this.game, 0, 527,'Luisa', this.layerN, this.layerB, this.portalN, this.portalB, true, false);
     //this.game.add.existing(luisa);
     this.luisa.create();
 
-    this.puerta = new Puertas(this.game, 683, 160, 'puerta', true, 'level2', this.luisa);
+    this.puerta = new Puertas(this.game, 200, 350, 'puerta', true, 'level4', this.luisa);
     
     this.game.camera.follow(this.luisa);
     
@@ -95,8 +95,8 @@ var Level1 = {
 
     //to get the tileset ID (number):
     //this.tilesetID = this.map.getTilesetIndex("Objects");
-    this.mapN = this.game.add.tilemap('level1N', 32, 32);
-    this.mapB = this.game.add.tilemap('level1B', 32, 32);
+    this.mapN = this.game.add.tilemap('level2N', 32, 32);
+    this.mapB = this.game.add.tilemap('level2B', 32, 32);
     this.mapN.addTilesetImage('tiles', 'Bloques');
     this.mapB.addTilesetImage('tiles', 'Bloques');
     this.mapN.setCollisionBetween(0, 1000);
@@ -126,4 +126,4 @@ var Level1 = {
 
 };
 
-module.exports = Level1;
+module.exports = Level2;

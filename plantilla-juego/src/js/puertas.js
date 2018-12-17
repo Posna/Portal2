@@ -16,6 +16,7 @@ Puerta.prototype.create = function(){
     this.game.add.existing(this);
     this.scale.set(2);
     this.animations.add('open',[1,2,3,4,5,6,7,8],5,false);
+    this.animations.add('close',[8,7,6,5,4,3,2,1],5,false);
     this.game.physics.enable(this,Phaser.Physics.ARCADE);
 }
 
@@ -29,6 +30,11 @@ Puerta.prototype.update = function(){
         if(this.game.physics.arcade.overlap(this.player, this)){
             this.game.state.start(this.nextLevel);
             console.log('abretesesamo');
+        }
+    }else{
+        if(this.alredydone){
+            this.animations.play('close');
+            this.alredydone = false;
         }
     }
 }

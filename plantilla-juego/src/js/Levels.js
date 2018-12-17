@@ -8,7 +8,7 @@ var Levels = {
         });
 
         this.createButton('level 2', this.game.world.centerX/2 - 60, this.game.world.centerY + 75, 200, 67, function(){
-            this.state.start('levels');
+            this.state.start('level2');
         });
 
         this.createButton('level 3', this.game.world.centerX/2 - 60, this.game.world.centerY + 150, 200, 67, function(){
