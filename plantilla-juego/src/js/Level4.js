@@ -1,12 +1,9 @@
 'use strict';
 //var luisa;
-var plat;
-var cuboAzul;
-var cuboCompania;
 var Player = require ('./Player.js');
-var Cubo = require ('./Cubo.js');
+//var Cubo = require ('./Cubo.js');
 var PortalLogica = require ('./portalLogica.js');
-var Puerta = require('./puertas.js');
+//var Puerta = require('./puertas.js');
 
 var Level4 = {
   create: function () {

@@ -62,7 +62,7 @@ var Level2 = {
     //this.game.add.existing(luisa);
     this.luisa.create();
 
-    this.puerta = new Puertas(this.game, 200, 350, 'puerta', true, 'level4', this.luisa);
+    this.puerta = new Puertas(this.game, 200, 350, 'puerta', true, 'level3', this.luisa);
     
     this.game.camera.follow(this.luisa);
     

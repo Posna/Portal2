@@ -12,7 +12,7 @@ var Levels = {
         });
 
         this.createButton('level 3', this.game.world.centerX/2 - 60, this.game.world.centerY + 150, 200, 67, function(){
-            this.state.start('levels');
+            this.state.start('level3');
         });
 
         this.createButton('level 4', this.game.world.centerX/2 - 60, this.game.world.centerY + 225, 200, 67, function(){

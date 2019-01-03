@@ -1,25 +1,17 @@
 'use strict';
 //var luisa;
-var plat;
-var cuboAzul;
-var cuboCompania;
 var Player = require ('./Player.js');
-var Cubo = require ('./Cubo.js');
+//var Cubo = require ('./Cubo.js');
 var PortalLogica = require ('./portalLogica.js');
 var Puertas = require('./puertas.js');
 
-var Level1 = {
+var Level3 = {
   create: function () {
     
     // var bckg = this.game.add.image(0,0,'backgr');
     // //bckg.scale.set(0.5);
     // bckg.smoothed = false;
-
-    this.pause = false;
     this.game.stage.backgroundColor = 'rgb(128,128,128)';
-
-    
-    this.e = this.game.input.keyboard.addKey(Phaser.KeyCode.ESC);
   
     //añadir los grupos
     //this.game.activeEnemies = this.game.add.group();
@@ -52,23 +44,22 @@ var Level1 = {
   update: function(){
     //reviso colisiones
     this.collisionControl();
-    //this.pauseEvent();
     //funcion pause
   },
 
   //aqui los preparativos para el nivel
   allReadyGO: function(){
     //portales
-    this.portalN = new PortalLogica(this.game, 70, 375, 'bulletOrange', 'derecha');
-    this.portalB = new PortalLogica(this.game, 730, 520, 'bulletBlue', 'izquierda');
+    this.portalN = new PortalLogica(this.game, 430, 569, 'bulletOrange', 'arriba');
+    this.portalB = new PortalLogica(this.game, -50, -50, 'bulletBlue', 'izquierda');
     
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     
-    this.luisa = new Player(this.game, 0, 527,'Luisa', this.layerN, this.layerB, this.portalN, this.portalB, false, false);
+    this.luisa = new Player(this.game, 0, 527,'Luisa', this.layerN, this.layerB, this.portalN, this.portalB, true, false);
     //this.game.add.existing(luisa);
     this.luisa.create();
 
-    this.puerta = new Puertas(this.game, 683, 160, 'puerta', true, 'level2', this.luisa);
+    this.puerta = new Puertas(this.game, 590, 128, 'puerta', true, 'level4', this.luisa);
     
     this.game.camera.follow(this.luisa);
     
@@ -101,8 +92,8 @@ var Level1 = {
 
     //to get the tileset ID (number):
     //this.tilesetID = this.map.getTilesetIndex("Objects");
-    this.mapN = this.game.add.tilemap('level1N', 32, 32);
-    this.mapB = this.game.add.tilemap('level1B', 32, 32);
+    this.mapN = this.game.add.tilemap('level3N', 32, 32);
+    this.mapB = this.game.add.tilemap('level3B', 32, 32);
     this.mapN.addTilesetImage('tiles', 'Bloques');
     this.mapB.addTilesetImage('tiles', 'Bloques');
     this.mapN.setCollisionBetween(0, 1000);
@@ -123,6 +114,8 @@ var Level1 = {
     // this.game.physics.arcade.collide(this.layerN, cuboCompania);
     // this.game.physics.arcade.collide(this.layerB, cuboCompania);
     //cuboCompania.coger(this.luisa);
+    this.game.debug.bodyInfo(this.portalB, 32, 32);
+    
     
 
     
@@ -130,25 +123,6 @@ var Level1 = {
     //this.game.physics.arcade.overlap(,,,,);
   }
 
-  //*********************** INTENTO DE PAUSA **********************//
-  // pauseEvent: function(){
-  //   if(this.e.justDown/* && !this.pause*/){
-  //     this.game.paused = true;
-  //     console.log("ioi");
-  //     this.pause = true;
-  //   }
-  //   else{
-  //     console.log("iei");
-  //     this.game.paused = false;
-  //     this.pause = false;
-  //   }
-  //   console.log("iai");
-  //   function unpaused(event){
-  //     if(this.game.paused)
-  //       this.game.paused = false;
-  //   };
-  // }
-
 };
 
-module.exports = Level1;
+module.exports = Level3;

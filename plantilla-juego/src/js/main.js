@@ -4,6 +4,8 @@ var Level1 = require('./level1.js');
 
 var Level2 = require('./level2.js');
 
+var Level3 = require('./level3.js');
+
 var Level4 = require('./level4.js');
 
 var MenuScene = require('./MainMenu.js')
@@ -58,6 +60,10 @@ var PreloaderScene = {
     this.game.load.tilemap('level2N', 'tiles/nivel2_BloquesNegros.csv', null, Phaser.Tilemap.CSV);
     this.game.load.tilemap('level2B', 'tiles/nivel2_BloquesBlancos.csv', null, Phaser.Tilemap.CSV);
 
+    //Nivel 3
+    this.game.load.tilemap('level3N', 'tiles/nivel3_BloquesNegros.csv', null, Phaser.Tilemap.CSV);
+    this.game.load.tilemap('level3B', 'tiles/nivel3_BloquesBlancos.csv', null, Phaser.Tilemap.CSV);
+
     //Nivel 4
     this.game.load.tilemap('level4N', 'tiles/nivel4_BloquesNegros.csv', null, Phaser.Tilemap.CSV);
     this.game.load.tilemap('level4B', 'tiles/nivel4_BloquesBlancos.csv', null, Phaser.Tilemap.CSV);
@@ -84,6 +90,7 @@ window.onload = function () {
   game.state.add('levels', Levels);
   game.state.add('level1', Level1);
   game.state.add('level2', Level2);
+  game.state.add('level3', Level3);
   game.state.add('level4', Level4);
 
   game.state.start('boot');
