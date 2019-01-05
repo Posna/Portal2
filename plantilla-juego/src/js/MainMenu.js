@@ -27,7 +27,7 @@ var MainMenu = {
             align: "cente"
         });
         txt.anchor.setTo(0.5, 0.5);
-      }
+    }
 
 };
 

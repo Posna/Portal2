@@ -52,7 +52,7 @@ var Level1 = {
   update: function(){
     //reviso colisiones
     this.collisionControl();
-    //this.pauseEvent();
+    this.pauseEvent();
     //funcion pause
   },
 
@@ -128,27 +128,76 @@ var Level1 = {
     
     //this.game.physics.arcade.collide(this.game.activeEnemies,this.Colisiones);
     //this.game.physics.arcade.overlap(,,,,);
-  }
+  },
 
   //*********************** INTENTO DE PAUSA **********************//
-  // pauseEvent: function(){
-  //   if(this.e.justDown/* && !this.pause*/){
-  //     this.game.paused = true;
-  //     console.log("ioi");
-  //     this.pause = true;
-  //   }
-  //   else{
-  //     console.log("iei");
-  //     this.game.paused = false;
-  //     this.pause = false;
-  //   }
-  //   console.log("iai");
-  //   function unpaused(event){
-  //     if(this.game.paused)
-  //       this.game.paused = false;
-  //   };
-  // }
+  pauseEvent: function(){
+    if(this.e.justDown){
+      this.game.paused = true;
+      // Then add the menu
+      var w = 200;
+      var h = 100;
+      this.menu1 = this.game.add.sprite(800/2 - w/2, 600/2 - h/2, 'platAzul');
+      this.menu1.anchor.setTo(0.5, 0.5);
+      this.menu1.height = h;
+      this.menu1.width = w;
+      this.menu1.x = 800/2;
+      this.menu1.y = 600/2 + 100;
 
+      this.menu2 = this.game.add.sprite(800/2 - w/2, 600/2 - h/2, 'platAzul');
+      this.menu2.anchor.setTo(0.5, 0.5);
+      this.menu2.height = h;
+      this.menu2.width = w;
+      this.menu2.x = 800/2;
+      this.menu2.y = 600/2 - 100;
+
+      // And a label to illustrate which menu item was chosen. (This is not necessary)
+      //console.log("ioi");
+      //this.pause = true;
+    }
+    this.game.input.onDown.add(function(event){
+      if(this.game.paused){
+        // Calculate the corners of the menu
+        var x11 = 800/2 - this.menu1.width/2, x12 = 800/2 + this.menu1.width/2,
+            y11 = 600/2 - this.menu1.height/2, y12 = 600/2 + this.menu1.height/2;
+
+        var x21 = 800/2 - this.menu2.width/2, x22 = 800/2 + this.menu2.width/2,
+            y21 = 600/2 - this.menu2.height/2, y22 = 600/2 + this.menu2.height/2;
+        console.log(event.x);
+        console.log(this.menu1.height);
+        // Check if the click was inside the menu
+        if(event.x > x11 && event.x < x12 && event.y > y11 && event.y < y12 ){
+          // The choicemap is an array that will help us see which item was clicked
+          console.log("menu");
+        }
+        else if (event.x > x21 && event.x < x22 && event.y > y21 && event.y < y22 ){
+          // The choicemap is an array that will help us see which item was clicked
+          console.log("niveles");
+        }else{
+          // Remove the menu and the label
+          this.menu1.destroy();
+          this.menu2.destroy();
+
+          // Unpause the game
+          this.game.paused = false;
+        }
+      }
+    }, this);
+    // this.menu.destroy();
+    // this.choiseLabel.destroy();
+    this.e.onDown.add(function () {
+      if (this.game.paused) {
+        if(this.e.justDown){
+            // Remove the menu and the label
+            this.menu1.destroy();
+            this.menu2.destroy();
+            this.game.paused = false;
+            //text.destroy();
+        }
+
+      }       
+    }, this);
+  }
 };
 
 module.exports = Level1;
