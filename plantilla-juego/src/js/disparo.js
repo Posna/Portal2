@@ -53,7 +53,7 @@ Disparo.prototype.deploy = function(x,y){
 }
 
 Disparo.prototype.collisionControl = function (){
-
+    var sound = this.game.add.sound("landshoot");
     if(this.game.physics.arcade.collide(this, this.negros)){
         this.kill();
     }
@@ -79,7 +79,9 @@ Disparo.prototype.collisionControl = function (){
             this.disparo.moverportal(this.x + 25, this.y);
             this.disparo.orientacion('izquierda');
         }
+        sound.play();
         //this.disparo.kill();
+
         this.kill();
     }
 }

@@ -4,18 +4,26 @@ var Levels = {
         titlescreen.anchor.setTo(0.5, 0.5);
 
         this.createButton('level 1', this.game.world.centerX/2 - 60, this.game.world.centerY, 200, 67, function(){
+            var click = this.game.add.audio("buttonsound"); 
+            click.play();
             this.state.start('level1');
         });
 
         this.createButton('level 2', this.game.world.centerX/2 - 60, this.game.world.centerY + 75, 200, 67, function(){
+            var click = this.game.add.audio("buttonsound"); 
+            click.play();
             this.state.start('level2');
         });
 
         this.createButton('level 3', this.game.world.centerX/2 - 60, this.game.world.centerY + 150, 200, 67, function(){
+            var click = this.game.add.audio("buttonsound"); 
+            click.play();
             this.state.start('level3');
         });
 
         this.createButton('level 4', this.game.world.centerX/2 - 60, this.game.world.centerY + 225, 200, 67, function(){
+            var click = this.game.add.audio("buttonsound"); 
+            click.play();
             this.state.start('level4');
         });
     },

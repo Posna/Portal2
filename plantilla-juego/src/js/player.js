@@ -213,12 +213,15 @@ Player.prototype.flip = function (){
 
 //Aqui funciones propias del player
 Player.prototype.shoot = function(){
+    var sound = this.game.add.audio("shoot"); 
     if(this.game.time.now > nextFire){
         if(this.game.input.activePointer.leftButton.isDown && this.canPB){
+            sound.play();
             nextFire = this.game.time.now + fireRate;
             this.disparo = new Disparo(this.game, this.x , this.y, 'bulletBlue', this.layer1, this.layer2, this.portalB);
         }
         else if(this.game.input.activePointer.rightButton.isDown && this.canPN){
+            sound.play();
             nextFire = this.game.time.now + fireRate;
             this.disparo = new Disparo(this.game, this.x , this.y, 'bulletOrange', this.layer1, this.layer2, this.portalN);
         }

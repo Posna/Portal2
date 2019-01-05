@@ -4,6 +4,8 @@ var MainMenu = {
         titlescreen.anchor.setTo(0.5, 0.5);
         
         this.createButton('Play', this.game.world.centerX/2, this.game.world.centerY, 200, 67, function(){
+            var click = this.game.add.audio("buttonsound"); 
+            click.play();
             this.state.start('levels');
         });
         
