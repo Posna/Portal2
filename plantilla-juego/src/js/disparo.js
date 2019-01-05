@@ -10,6 +10,9 @@ function Disparo(game,x,y,name, l1, l2, disparo){
     this.anchor.setTo(0.5, 0.5);
     this.scale.set(-0.3);
     this.disparo = disparo;
+    this.soundLand = this.game.add.sound("landshoot");
+    var sound = this.game.add.audio("shoot"); 
+    sound.play();
     //bullets
     this.bullets = game.add.group();
     this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
@@ -53,9 +56,10 @@ Disparo.prototype.deploy = function(x,y){
 }
 
 Disparo.prototype.collisionControl = function (){
-    var sound = this.game.add.sound("landshoot");
+    //var sound = this.game.add.sound("landshoot");
+    var choque = false;
     if(this.game.physics.arcade.collide(this, this.negros)){
-        this.kill();
+        choque = true;
     }
     if(this.game.physics.arcade.collide(this, this.blancos)){
         //segun el lado con el que se de el disparo saldra de un forma u  otra
@@ -79,10 +83,13 @@ Disparo.prototype.collisionControl = function (){
             this.disparo.moverportal(this.x + 25, this.y);
             this.disparo.orientacion('izquierda');
         }
-        sound.play();
+        this.soundLand.play();
         //this.disparo.kill();
-
-        this.kill();
+        //sound.destroy();
+        choque = true;
+    }
+    if(choque){
+        this.destroy();
     }
 }
 

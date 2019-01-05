@@ -77,28 +77,29 @@ module.exports = Cubo;
 var Levels = {
     create: function(){
         var titlescreen = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'menu');
+        var click = this.game.add.audio("buttonsound"); 
         titlescreen.anchor.setTo(0.5, 0.5);
 
         this.createButton('level 1', this.game.world.centerX/2 - 60, this.game.world.centerY, 200, 67, function(){
-            var click = this.game.add.audio("buttonsound"); 
+            //var click = this.game.add.audio("buttonsound"); 
             click.play();
             this.state.start('level1');
         });
 
         this.createButton('level 2', this.game.world.centerX/2 - 60, this.game.world.centerY + 75, 200, 67, function(){
-            var click = this.game.add.audio("buttonsound"); 
+            //var click = this.game.add.audio("buttonsound"); 
             click.play();
             this.state.start('level2');
         });
 
         this.createButton('level 3', this.game.world.centerX/2 - 60, this.game.world.centerY + 150, 200, 67, function(){
-            var click = this.game.add.audio("buttonsound"); 
+            //var click = this.game.add.audio("buttonsound"); 
             click.play();
             this.state.start('level3');
         });
 
         this.createButton('level 4', this.game.world.centerX/2 - 60, this.game.world.centerY + 225, 200, 67, function(){
-            var click = this.game.add.audio("buttonsound"); 
+            //var click = this.game.add.audio("buttonsound"); 
             click.play();
             this.state.start('level4');
         });
@@ -240,6 +241,7 @@ Player.prototype.create = function(){
     this.animations.add('walk',[7,8,9,10],10,true);
     this.animations.add('walkBack',[10,9,8,7],10,true);
     this.animations.add('jump',[19,20,21,22],10,false);
+    
 
     //this.game.camera.follow(this);
 
@@ -382,19 +384,22 @@ Player.prototype.flip = function (){
 
 //Aqui funciones propias del player
 Player.prototype.shoot = function(){
-    var sound = this.game.add.audio("shoot"); 
+    
     if(this.game.time.now > nextFire){
         if(this.game.input.activePointer.leftButton.isDown && this.canPB){
-            sound.play();
+            //this.sound.play();
+            //sound.onStop.add(function(){sound.destroy();}, this);
             nextFire = this.game.time.now + fireRate;
             this.disparo = new Disparo(this.game, this.x , this.y, 'bulletBlue', this.layer1, this.layer2, this.portalB);
         }
         else if(this.game.input.activePointer.rightButton.isDown && this.canPN){
-            sound.play();
+            //this.sound.play();
+            //sound.onStop.add(function(){sound.destroy();}, this);
             nextFire = this.game.time.now + fireRate;
             this.disparo = new Disparo(this.game, this.x , this.y, 'bulletOrange', this.layer1, this.layer2, this.portalN);
         }
     }
+    //sound.destroy();
 }
 //Exportamos Player
 module.exports = Player;
@@ -456,6 +461,9 @@ function Disparo(game,x,y,name, l1, l2, disparo){
     this.anchor.setTo(0.5, 0.5);
     this.scale.set(-0.3);
     this.disparo = disparo;
+    this.soundLand = this.game.add.sound("landshoot");
+    var sound = this.game.add.audio("shoot"); 
+    sound.play();
     //bullets
     this.bullets = game.add.group();
     this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
@@ -499,9 +507,10 @@ Disparo.prototype.deploy = function(x,y){
 }
 
 Disparo.prototype.collisionControl = function (){
-    var sound = this.game.add.sound("landshoot");
+    //var sound = this.game.add.sound("landshoot");
+    var choque = false;
     if(this.game.physics.arcade.collide(this, this.negros)){
-        this.kill();
+        choque = true;
     }
     if(this.game.physics.arcade.collide(this, this.blancos)){
         //segun el lado con el que se de el disparo saldra de un forma u  otra
@@ -525,10 +534,13 @@ Disparo.prototype.collisionControl = function (){
             this.disparo.moverportal(this.x + 25, this.y);
             this.disparo.orientacion('izquierda');
         }
-        sound.play();
+        this.soundLand.play();
         //this.disparo.kill();
-
-        this.kill();
+        //sound.destroy();
+        choque = true;
+    }
+    if(choque){
+        this.destroy();
     }
 }
 

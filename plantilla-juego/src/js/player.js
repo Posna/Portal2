@@ -71,6 +71,7 @@ Player.prototype.create = function(){
     this.animations.add('walk',[7,8,9,10],10,true);
     this.animations.add('walkBack',[10,9,8,7],10,true);
     this.animations.add('jump',[19,20,21,22],10,false);
+    
 
     //this.game.camera.follow(this);
 
@@ -213,19 +214,22 @@ Player.prototype.flip = function (){
 
 //Aqui funciones propias del player
 Player.prototype.shoot = function(){
-    var sound = this.game.add.audio("shoot"); 
+    
     if(this.game.time.now > nextFire){
         if(this.game.input.activePointer.leftButton.isDown && this.canPB){
-            sound.play();
+            //this.sound.play();
+            //sound.onStop.add(function(){sound.destroy();}, this);
             nextFire = this.game.time.now + fireRate;
             this.disparo = new Disparo(this.game, this.x , this.y, 'bulletBlue', this.layer1, this.layer2, this.portalB);
         }
         else if(this.game.input.activePointer.rightButton.isDown && this.canPN){
-            sound.play();
+            //this.sound.play();
+            //sound.onStop.add(function(){sound.destroy();}, this);
             nextFire = this.game.time.now + fireRate;
             this.disparo = new Disparo(this.game, this.x , this.y, 'bulletOrange', this.layer1, this.layer2, this.portalN);
         }
     }
+    //sound.destroy();
 }
 //Exportamos Player
 module.exports = Player;
