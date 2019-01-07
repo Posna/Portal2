@@ -12,6 +12,12 @@ var Level3 = {
     // bckg.smoothed = false;
     this.game.stage.backgroundColor = 'rgb(128,128,128)';
 
+    this.game.add.text(350, 250, "The portals preserve \n        the inertia", {
+      font: "20px Constantia",
+      fill: "#000",
+      align: "cente"
+    });
+
     this.e = this.game.input.keyboard.addKey(Phaser.KeyCode.ESC);
   
   

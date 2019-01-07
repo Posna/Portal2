@@ -14,6 +14,9 @@ function Player(game,x,y,name, l1, l2, portalN, portalB, useBluePortal, useOrang
     // this.name = name;
     // this.game = game;
     CanTP.call(this, game, x, y, name);//Hace lo mismo que apply
+    this.sound = this.game.add.audio("shoot"); 
+    this.body.setSize(20, 33, 15, 15);
+    
     this.cursors = this.game.input.keyboard.createCursorKeys();
     this.jumping = true;
     this.jumpTimer = 0;
@@ -86,6 +89,7 @@ Player.prototype.create = function(){
 }
 
 Player.prototype.update = function (){
+    //this.game.debug.body(this);
     this.move();
     if(this.canPN || this.canPB)
         this.gunAngle();
@@ -219,12 +223,14 @@ Player.prototype.shoot = function(){
         if(this.game.input.activePointer.leftButton.isDown && this.canPB){
             //this.sound.play();
             //sound.onStop.add(function(){sound.destroy();}, this);
+            this.sound.play();
             nextFire = this.game.time.now + fireRate;
             this.disparo = new Disparo(this.game, this.x , this.y, 'bulletBlue', this.layer1, this.layer2, this.portalB);
         }
         else if(this.game.input.activePointer.rightButton.isDown && this.canPN){
             //this.sound.play();
             //sound.onStop.add(function(){sound.destroy();}, this);
+            this.sound.play();
             nextFire = this.game.time.now + fireRate;
             this.disparo = new Disparo(this.game, this.x , this.y, 'bulletOrange', this.layer1, this.layer2, this.portalN);
         }
