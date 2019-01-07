@@ -1,5 +1,4 @@
 'use strict';
-//var luisa;
 var Player = require ('./Player.js');
 //var Cubo = require ('./Cubo.js');
 var PortalLogica = require ('./portalLogica.js');
@@ -118,7 +117,6 @@ var Level3 = {
     // this.game.physics.arcade.collide(this.layerN, cuboCompania);
     // this.game.physics.arcade.collide(this.layerB, cuboCompania);
     //cuboCompania.coger(this.luisa);
-    this.game.debug.bodyInfo(this.portalB, 32, 32);
     
     
 

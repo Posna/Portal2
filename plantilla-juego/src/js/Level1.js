@@ -18,7 +18,29 @@ var Level1 = {
     this.pause = false;
     this.game.stage.backgroundColor = 'rgb(128,128,128)';
 
-    
+    // var tuto = this.game.add.sprite(100, 500, "Tuto");
+    // tuto.width = 75;
+    // tuto.height = 50;
+    this.game.add.text(100, 475, "     W   \n A      D", {
+      font: "30px Constantia",
+      fill: "#000",
+      align: "cente"
+    });
+    this.game.add.text(550, 500, "One portal teleport you \n          to the other", {
+      font: "15px Constantia",
+      fill: "#000",
+      align: "cente"
+    });
+    this.game.add.text(320, 225, "Press ESC for pause", {
+      font: "20px Constantia",
+      fill: "#000",
+      align: "cente"
+    });
+    this.game.add.text(630, 80, "Next Level", {
+      font: "20px Constantia",
+      fill: "#000",
+      align: "cente"
+    });
     this.e = this.game.input.keyboard.addKey(Phaser.KeyCode.ESC);
   
     //añadir los grupos

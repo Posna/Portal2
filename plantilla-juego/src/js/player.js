@@ -32,7 +32,7 @@ function Player(game,x,y,name, l1, l2, portalN, portalB, useBluePortal, useOrang
     if(this.canPN || this.canPB){
         this.gun = this.game.make.sprite(0,0, 'gun');
         this.gun.scale.set(0.3);
-        this.gun.anchor.setTo(0,0.5);//si comento esto rota con un efecto un poco distinto
+        this.gun.anchor.setTo(0,0.2);//si comento esto rota con un efecto un poco distinto
         this.portalGun = this.addChild(this.gun);
     }
     this.layer1 = l1;

@@ -47,6 +47,9 @@ var PreloaderScene = {
     this.game.load.image('PortalOrange', 'images/Sprites_y_apartado_grafico/portalSpriteNaranja.png');
     this.game.load.image('Bloques', 'tiles/BloquesPeque.png');
 
+    //Tutos
+    this.game.load.image('Tuto', 'images/Sprites_y_apartado_grafico/mouseTuto.png');
+
     //sounds
     this.game.load.audio('buttonsound', 'sounds/sonido_click_buttons.mp3');
     this.game.load.audio('shoot', 'sounds/portal_shoot.mp3');

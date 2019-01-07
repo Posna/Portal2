@@ -16,6 +16,20 @@ var Level2 = {
     // bckg.smoothed = false;
     this.game.stage.backgroundColor = 'rgb(128,128,128)';
 
+    this.game.add.sprite(35, 450, "Tuto");
+
+    this.game.add.text(150, 500, "Shoot \nportals", {
+      font: "20px Constantia",
+      fill: "#000",
+      align: "cente"
+    });
+
+    this.game.add.text(300, 300, "    Portals can only \nappear in white blocks", {
+      font: "15px Constantia",
+      fill: "#000",
+      align: "cente"
+    });
+
     this.e = this.game.input.keyboard.addKey(Phaser.KeyCode.ESC);
   
   
@@ -66,7 +80,7 @@ var Level2 = {
     //this.game.add.existing(luisa);
     this.luisa.create();
 
-    this.puerta = new Puertas(this.game, 200, 350, 'puerta', true, 'level3', this.luisa);
+    this.puerta = new Puertas(this.game, 90, 350, 'puerta', true, 'level3', this.luisa);
     
     this.game.camera.follow(this.luisa);
     
