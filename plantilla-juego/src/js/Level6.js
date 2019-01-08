@@ -68,8 +68,8 @@ var Level6 = {
     
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     
-    this.puerta = new Puertas(this.game, 100, 160, 'puerta', false, 'level7', this.luisa);
     this.luisa = new Player(this.game, 150, 527,'Luisa', this.layerN, this.layerB, this.portalN, this.portalB, true, true);
+    this.puerta = new Puertas(this.game, 100, 160, 'puerta', false, 'level7', this.luisa);
     //this.game.add.existing(luisa);
     this.luisa.create();
 
