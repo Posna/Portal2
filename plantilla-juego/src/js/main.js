@@ -53,6 +53,8 @@ var PreloaderScene = {
     this.game.load.image('num2', 'images/Sprites_y_apartado_grafico/num2.png');
     this.game.load.image('num3', 'images/Sprites_y_apartado_grafico/num3.png');
     this.game.load.image('num4', 'images/Sprites_y_apartado_grafico/num4.png');
+    this.game.load.image('num5', 'images/Sprites_y_apartado_grafico/num5.png');
+   
 
     //Tutos
     this.game.load.image('Tuto', 'images/Sprites_y_apartado_grafico/mouseTuto.png');

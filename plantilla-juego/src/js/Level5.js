@@ -15,7 +15,9 @@ var Level5 = {
 
     this.pause = false;
     this.game.stage.backgroundColor = 'rgb(128,128,128)';
-
+    var sprite = this.game.add.sprite(35, 450, 'num5');
+    sprite.scale.set(0.2);
+    
     // var tuto = this.game.add.sprite(100, 500, "Tuto");
     // tuto.width = 75;
     // tuto.height = 50;
