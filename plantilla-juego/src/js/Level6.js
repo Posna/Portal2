@@ -1,12 +1,10 @@
-'use strict';
-
 var Player = require ('./Player.js');
 var Cubo = require ('./Cubo.js');
 var PortalLogica = require ('./portalLogica.js');
 var Puertas = require('./puertas.js');
 var Boton = require('./boton.js');
 
-var Level5 = {
+var Level6 = {
   create: function () {
     
     // var bckg = this.game.add.image(0,0,'backgr');
@@ -15,9 +13,12 @@ var Level5 = {
 
     this.pause = false;
     this.game.stage.backgroundColor = 'rgb(128,128,128)';
-    var sprite = this.game.add.sprite(35, 450, 'num5');
-    sprite.scale.set(0.2);
+    var sprite = this.game.add.sprite(35, 350, 'num6');
+    sprite.scale.set(0.3);
     
+
+    var sprite2 = this.game.add.sprite(389, 300, 'cake2');
+    sprite2.scale.set(1);
     // var tuto = this.game.add.sprite(100, 500, "Tuto");
     // tuto.width = 75;
     // tuto.height = 50;
@@ -67,13 +68,14 @@ var Level5 = {
     
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     
-    this.puerta = new Puertas(this.game, 100, 130, 'puerta', false, 'level6', this.luisa);
-    this.luisa = new Player(this.game, 100, 527,'Luisa', this.layerN, this.layerB, this.portalN, this.portalB, true, true);
+    this.puerta = new Puertas(this.game, 100, 160, 'puerta', false, 'level7', this.luisa);
+    this.luisa = new Player(this.game, 150, 527,'Luisa', this.layerN, this.layerB, this.portalN, this.portalB, true, true);
     //this.game.add.existing(luisa);
     this.luisa.create();
 
-    this.boton = new Boton (this.game, 600, 190, 'boton', false, this.puerta);
-    this.cuboAzul = new Cubo (this.game,100, 300,'cuboAzul', this.portalN,this.portalB);
+    this.boton = new Boton (this.game, 752, 253, 'boton', false, this.puerta);
+    this.boton.scale.set(0.75);
+    this.cuboAzul = new Cubo (this.game, 65, 550,'cuboAzul', this.portalN,this.portalB);
     
     //this.game.camera.follow(this.luisa);
     
@@ -106,8 +108,8 @@ var Level5 = {
 
     //to get the tileset ID (number):
     //this.tilesetID = this.map.getTilesetIndex("Objects");
-    this.mapN = this.game.add.tilemap('level5N', 32, 32);
-    this.mapB = this.game.add.tilemap('level5B', 32, 32);
+    this.mapN = this.game.add.tilemap('level6N', 32, 32);
+    this.mapB = this.game.add.tilemap('level6B', 32, 32);
     this.mapN.addTilesetImage('tiles', 'Bloques');
     this.mapB.addTilesetImage('tiles', 'Bloques');
     this.mapN.setCollisionBetween(0, 1000);
@@ -221,4 +223,4 @@ var Level5 = {
   }
 };
 
-module.exports = Level5;
+module.exports = Level6;

@@ -40,11 +40,9 @@ Puerta.prototype.update = function(){
 
 Puerta.prototype.opendoor = function(){
     this.state = true;
-    //this.animations.play('open');
 }
 Puerta.prototype.closedoor = function(){
     this.state = false;
-    //this.animations.play('open');
 }
 
 
