@@ -6,7 +6,7 @@ function Cubo (game,x,y,name, portalO, portalB){
     this.name = name;
     //this.game = game;
     this.anchor.setTo(0.5, 0.5);
-    //this.scale.set(0.20);
+    this.scale.set(0.20);
 
     this.cogido = false;
 
