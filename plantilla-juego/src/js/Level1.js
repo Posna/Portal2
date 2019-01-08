@@ -1,8 +1,4 @@
 'use strict';
-//var luisa;
-var plat;
-var cuboAzul;
-var cuboCompania;
 var Player = require ('./Player.js');
 var Cubo = require ('./Cubo.js');
 var PortalLogica = require ('./portalLogica.js');
@@ -22,8 +18,15 @@ var Level1 = {
     // var tuto = this.game.add.sprite(100, 500, "Tuto");
     // tuto.width = 75;
     // tuto.height = 50;
-    this.game.add.text(100, 475, "     W   \n A      D", {
+    var sprite = this.game.add.sprite(35, 450, 'num1');
+    sprite.scale.set(0.2);
+    this.game.add.text(75, 475, "     W   \n A      D", {
       font: "30px Constantia",
+      fill: "#000",
+      align: "cente"
+    });
+    this.game.add.text(225, 475, "               Pick up \n          the cube with e \n and use it to open the door", {
+      font: "20px Constantia",
       fill: "#000",
       align: "cente"
     });

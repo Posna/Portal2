@@ -1,8 +1,5 @@
 'use strict';
 //var luisa;
-var plat;
-var cuboAzul;
-var cuboCompania;
 var Player = require ('./Player.js');
 var Cubo = require ('./Cubo.js');
 var PortalLogica = require ('./portalLogica.js');
@@ -15,6 +12,8 @@ var Level2 = {
     // //bckg.scale.set(0.5);
     // bckg.smoothed = false;
     this.game.stage.backgroundColor = 'rgb(128,128,128)';
+    var sprite = this.game.add.sprite(35, 450, 'num2');
+    sprite.scale.set(0.2);
 
     this.game.add.sprite(35, 450, "Tuto");
 
