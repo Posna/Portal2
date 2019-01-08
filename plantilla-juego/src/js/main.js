@@ -12,6 +12,8 @@ var MenuScene = require('./MainMenu.js')
 
 var Levels = require('./Levels.js');
 
+var Final = require('./Final.js');
+
 var BootScene = {
   preload: function () {
     // load here assets required for the loading screen
@@ -51,6 +53,7 @@ var PreloaderScene = {
     this.game.load.image('num2', 'images/Sprites_y_apartado_grafico/num2.png');
     this.game.load.image('num3', 'images/Sprites_y_apartado_grafico/num3.png');
     this.game.load.image('num4', 'images/Sprites_y_apartado_grafico/num4.png');
+    this.game.load.image('cake', 'images/Sprites_y_apartado_grafico/cake1.png');
 
     //Tutos
     this.game.load.image('Tuto', 'images/Sprites_y_apartado_grafico/mouseTuto.png');
@@ -100,6 +103,7 @@ window.onload = function () {
   game.state.add('boot', BootScene);
   game.state.add('preloader', PreloaderScene);
   game.state.add('menu', MenuScene);
+  game.state.add('final', Final);
   game.state.add('levels', Levels);
   game.state.add('level1', Level1);
   game.state.add('level2', Level2);

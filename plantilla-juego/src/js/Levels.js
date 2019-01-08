@@ -1,8 +1,8 @@
 var Levels = {
     create: function(){
         var titlescreen = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'menu');
-        var click = this.game.add.audio("buttonsound"); 
         titlescreen.anchor.setTo(0.5, 0.5);
+        var click = this.game.add.audio("buttonsound"); 
 
         this.createButton('level 1', this.game.world.centerX/2 - 60, this.game.world.centerY, 200, 67, function(){
             //var click = this.game.add.audio("buttonsound"); 

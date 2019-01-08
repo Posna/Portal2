@@ -3,7 +3,7 @@
 var Player = require ('./Player.js');
 //var Cubo = require ('./Cubo.js');
 var PortalLogica = require ('./portalLogica.js');
-//var Puerta = require('./puertas.js');
+var Puerta = require('./puertas.js');
 
 var Level4 = {
   create: function () {
@@ -64,6 +64,8 @@ var Level4 = {
     this.luisa = new Player(this.game, 0, 527,'Luisa', this.layerN, this.layerB, this.portalN, this.portalB, true, true);
     //this.game.add.existing(luisa);
     this.luisa.create();
+
+    this.puerta = new Puerta(this.game, 690, 255, 'puerta', true, 'final', this.luisa);
     
     //poner puerta aqui
 
