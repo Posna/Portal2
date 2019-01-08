@@ -7,6 +7,7 @@ var Player = require ('./Player.js');
 var Cubo = require ('./Cubo.js');
 var PortalLogica = require ('./portalLogica.js');
 var Puertas = require('./puertas.js');
+var Boton = require('./boton.js');
 
 var Level1 = {
   create: function () {
@@ -90,7 +91,8 @@ var Level1 = {
     //this.game.add.existing(luisa);
     this.luisa.create();
 
-    this.puerta = new Puertas(this.game, 683, 160, 'puerta', true, 'level2', this.luisa);
+    this.puerta = new Puertas(this.game, 683, 160, 'puerta', false, 'level2', this.luisa);
+    this.boton = new Boton (this.game, 400, 573, 'boton', false, this.luisa, this.puerta);
     
     this.game.camera.follow(this.luisa);
     
@@ -140,6 +142,7 @@ var Level1 = {
     //this.game.physics.arcade.collide(this.luisa, plat);
     this.game.physics.arcade.collide(this.luisa, this.layerN);
     this.game.physics.arcade.collide(this.luisa, this.layerB);
+    this.game.physics.arcade.collide(this.luisa, this.boton, this.boton.pulsarBoton, null,this.boton);
     // this.game.physics.arcade.collide(this.layerN, cuboAzul);
     // this.game.physics.arcade.collide(this.layerB, cuboAzul);
     // this.game.physics.arcade.collide(this.layerN, cuboCompania);
@@ -151,6 +154,7 @@ var Level1 = {
     //this.game.physics.arcade.collide(this.game.activeEnemies,this.Colisiones);
     //this.game.physics.arcade.overlap(,,,,);
   },
+
 
   //*********************** INTENTO DE PAUSA **********************//
   pauseEvent: function(){

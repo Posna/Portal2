@@ -138,15 +138,15 @@ Player.prototype.move = function (){
     var angStop = Math.PI / 2;
     var ang = this.game.physics.arcade.angleToPointer(this);
     var mousedrch = ang > -angStop && ang < angStop;
-    if((this.body.onFloor()) && this.jumping){
+    if((this.body.blocked.down|| this.body.touching.down) && this.jumping){
         this.jumping = false;
     }
     if(this.body.onFloor()){
         this.tp = false;
     }
     //salto
-    
-    if(this.game.input.keyboard.isDown(Phaser.Keyboard.W) && (this.body.onFloor()) ){
+    console.log(this.jumping);
+    if(this.game.input.keyboard.isDown(Phaser.Keyboard.W) && (this.body.blocked.down || this.body.touching.down)){
         this.jumping = true;
         this.animations.play('jump');
         this.body.velocity.y = -200;

@@ -1,4 +1,3 @@
-
 var CanTP = require ('./canTP.js');
 
 function Cubo (game,x,y,name, portalO, portalB){

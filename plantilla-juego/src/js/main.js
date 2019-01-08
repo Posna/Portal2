@@ -37,6 +37,7 @@ var PreloaderScene = {
     this.game.load.image('backgr', 'images/Sprites_y_apartado_grafico/bridge_portal_2.jpg');
     this.game.load.spritesheet('Luisa', 'images/Sprites_y_apartado_grafico/playerSprite.png',49 ,49, -1,1,1);
     this.game.load.spritesheet('puerta', 'images/Sprites_y_apartado_grafico/puerta.png', 344/8, 32);
+    this.game.load.spritesheet('boton', 'images/Sprites_y_apartado_grafico/AllBotones.png', 111/3, 8);
     this.game.load.image('platAzul','images/Sprites_y_apartado_grafico/plataformaAzul.png');
     this.game.load.image('cuboAzul','images/Sprites_y_apartado_grafico/cube1.png');
     this.game.load.image('cuboCompania','images/Sprites_y_apartado_grafico/cubo_de_compania.png');

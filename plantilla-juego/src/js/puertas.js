@@ -15,11 +15,10 @@ Puerta.prototype.constructor = Puerta;
 Puerta.prototype.create = function(){
     this.game.add.existing(this);
     this.scale.set(2);
-    this.animations.add('open',[1,2,3,4,5,6,7,8],5,false);
-    this.animations.add('close',[8,7,6,5,4,3,2,1],5,false);
+    this.animations.add('open',[0,1,2,3,4,5,6,7,8],5,false);
+    this.animations.add('close',[8,7,6,5,4,3,2,1,0],5,false);
     this.game.physics.enable(this,Phaser.Physics.ARCADE);
 }
-
 
 Puerta.prototype.update = function(){
     if(this.state){
@@ -41,6 +40,12 @@ Puerta.prototype.update = function(){
 
 Puerta.prototype.opendoor = function(){
     this.state = true;
+    //this.animations.play('open');
 }
+Puerta.prototype.closedoor = function(){
+    this.state = false;
+    //this.animations.play('open');
+}
+
 
 module.exports = Puerta;
