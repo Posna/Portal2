@@ -1,9 +1,8 @@
 var Character = require ('./Character.js');
 
-function Boton(game, x, y, name, state, player, puerta){
+function Boton(game, x, y, name, state, puerta){
     Character.call(this, game, x, y, name);
     this.state = state;//true-> activado(presionado), false -> desactivado(sin presionar)
-    this.player = player;
     this.puerta = puerta;
     this.create();
 }
@@ -21,8 +20,7 @@ Boton.prototype.create = function(){
 }
 Boton.prototype.update = function(){
     if(!this.body.touching.up && this.state){
-        this.desactivar();
-        
+        this.desactivar();        
     }
 }
 Boton.prototype.pulsarBoton = function (){

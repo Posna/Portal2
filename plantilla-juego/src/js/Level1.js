@@ -1,8 +1,5 @@
 'use strict';
-//var luisa;
-var plat;
-var cuboAzul;
-var cuboCompania;
+
 var Player = require ('./Player.js');
 var Cubo = require ('./Cubo.js');
 var PortalLogica = require ('./portalLogica.js');
@@ -92,7 +89,8 @@ var Level1 = {
     this.luisa.create();
 
     this.puerta = new Puertas(this.game, 683, 160, 'puerta', false, 'level2', this.luisa);
-    this.boton = new Boton (this.game, 400, 573, 'boton', false, this.luisa, this.puerta);
+    this.boton = new Boton (this.game, 400, 573, 'boton', false, this.puerta);
+    this.cuboAzul = new Cubo (this.game,300, 573,'cuboAzul', this.portalN,this.portalB);
     
     this.game.camera.follow(this.luisa);
     
@@ -143,11 +141,13 @@ var Level1 = {
     this.game.physics.arcade.collide(this.luisa, this.layerN);
     this.game.physics.arcade.collide(this.luisa, this.layerB);
     this.game.physics.arcade.collide(this.luisa, this.boton, this.boton.pulsarBoton, null,this.boton);
-    // this.game.physics.arcade.collide(this.layerN, cuboAzul);
-    // this.game.physics.arcade.collide(this.layerB, cuboAzul);
+    this.game.physics.arcade.collide(this.cuboAzul, this.boton, this.boton.pulsarBoton, null,this.boton);
+    this.game.physics.arcade.collide(this.layerN, this.cuboAzul);
+    this.game.physics.arcade.collide(this.layerB, this.cuboAzul);
+
     // this.game.physics.arcade.collide(this.layerN, cuboCompania);
     // this.game.physics.arcade.collide(this.layerB, cuboCompania);
-    //cuboCompania.coger(this.luisa);
+    this.cuboAzul.coger(this.luisa);
     
 
     
