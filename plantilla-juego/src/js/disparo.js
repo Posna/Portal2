@@ -54,7 +54,7 @@ Disparo.prototype.fire = function () {
         // console.log(-(Math.cos(2*Math.PI - this.rotation))*100);
         // console.log(Math.sin(2*Math.PI - this.rotation));
         // console.log(this.rotation);
-        this.game.physics.arcade.moveToPointer(this, 400);
+        this.game.physics.arcade.moveToPointer(this, 500);
     }    
 }
 
