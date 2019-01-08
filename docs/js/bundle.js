@@ -2306,7 +2306,7 @@ var PreloaderScene = {
     this.game.load.image('cake2', 'images/Sprites_y_apartado_grafico/cake.png');
 
     //Tutos
-    this.game.load.image('Tuto', 'images/Sprites_y_apartado_grafico/mouseTuto.png');
+    this.game.load.image('Tuto', 'images/Sprites_y_apartado_grafico/mousetuto.png');
 
     //sounds
     this.game.load.audio('buttonsound', 'sounds/sonido_click_buttons.mp3');
