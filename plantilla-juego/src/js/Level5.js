@@ -1,22 +1,28 @@
 'use strict';
-//var luisa;
-var Player = require ('./Player.js');
-//var Cubo = require ('./Cubo.js');
-var PortalLogica = require ('./portalLogica.js');
-var Puerta = require('./puertas.js');
 
-var Level4 = {
+var Player = require ('./Player.js');
+var Cubo = require ('./Cubo.js');
+var PortalLogica = require ('./portalLogica.js');
+var Puertas = require('./puertas.js');
+var Boton = require('./boton.js');
+
+var Level5 = {
   create: function () {
     
     // var bckg = this.game.add.image(0,0,'backgr');
     // //bckg.scale.set(0.5);
     // bckg.smoothed = false;
+
+    this.pause = false;
     this.game.stage.backgroundColor = 'rgb(128,128,128)';
-    var sprite = this.game.add.sprite(35, 450, 'num4');
+    var sprite = this.game.add.sprite(35, 450, 'num5');
     sprite.scale.set(0.2);
     
+    // var tuto = this.game.add.sprite(100, 500, "Tuto");
+    // tuto.width = 75;
+    // tuto.height = 50;
+    
     this.e = this.game.input.keyboard.addKey(Phaser.KeyCode.ESC);
-  
   
     //añadir los grupos
     //this.game.activeEnemies = this.game.add.group();
@@ -57,19 +63,19 @@ var Level4 = {
   allReadyGO: function(){
     //portales
     this.portalN = new PortalLogica(this.game, -50, -50, 'bulletOrange', 'derecha');
-    this.portalB = new PortalLogica(this.game, -50, -50, 'bulletBlue', 'izquierda');
+    this.portalB = new PortalLogica(this.game, -50,-50, 'bulletBlue', 'izquierda');
     
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     
-    this.luisa = new Player(this.game, 0, 527,'Luisa', this.layerN, this.layerB, this.portalN, this.portalB, true, true);
+    this.puerta = new Puertas(this.game, 100, 130, 'puerta', false, 'level2', this.luisa);
+    this.luisa = new Player(this.game, 100, 527,'Luisa', this.layerN, this.layerB, this.portalN, this.portalB, true, true);
     //this.game.add.existing(luisa);
     this.luisa.create();
 
-    this.puerta = new Puerta(this.game, 690, 255, 'puerta', true, 'level5', this.luisa);
+    this.boton = new Boton (this.game, 600, 190, 'boton', false, this.puerta);
+    this.cuboAzul = new Cubo (this.game,100, 300,'cuboAzul', this.portalN,this.portalB);
     
-    //poner puerta aqui
-
-    this.game.camera.follow(this.luisa);
+    //this.game.camera.follow(this.luisa);
     
     this.game.input.keyboard.addKey(Phaser.Keyboard.E);
     //crear los layers
@@ -100,8 +106,8 @@ var Level4 = {
 
     //to get the tileset ID (number):
     //this.tilesetID = this.map.getTilesetIndex("Objects");
-    this.mapN = this.game.add.tilemap('level4N', 32, 32);
-    this.mapB = this.game.add.tilemap('level4B', 32, 32);
+    this.mapN = this.game.add.tilemap('level5N', 32, 32);
+    this.mapB = this.game.add.tilemap('level5B', 32, 32);
     this.mapN.addTilesetImage('tiles', 'Bloques');
     this.mapB.addTilesetImage('tiles', 'Bloques');
     this.mapN.setCollisionBetween(0, 1000);
@@ -117,17 +123,23 @@ var Level4 = {
     //this.game.physics.arcade.collide(this.luisa, plat);
     this.game.physics.arcade.collide(this.luisa, this.layerN);
     this.game.physics.arcade.collide(this.luisa, this.layerB);
-    // this.game.physics.arcade.collide(this.layerN, cuboAzul);
-    // this.game.physics.arcade.collide(this.layerB, cuboAzul);
+    this.game.physics.arcade.collide(this.luisa, this.boton, this.boton.pulsarBoton, null,this.boton);
+    this.game.physics.arcade.collide(this.cuboAzul, this.boton, this.boton.pulsarBoton, null,this.boton);
+    this.game.physics.arcade.collide(this.layerN, this.cuboAzul);
+    this.game.physics.arcade.collide(this.layerB, this.cuboAzul);
+
     // this.game.physics.arcade.collide(this.layerN, cuboCompania);
     // this.game.physics.arcade.collide(this.layerB, cuboCompania);
-    //cuboCompania.coger(this.luisa);
+    this.cuboAzul.coger(this.luisa);
     
 
     
     //this.game.physics.arcade.collide(this.game.activeEnemies,this.Colisiones);
     //this.game.physics.arcade.overlap(,,,,);
   },
+
+
+  //*********************** INTENTO DE PAUSA **********************//
   pauseEvent: function(){
     var click = this.game.add.audio("buttonsound"); 
     if(this.e.justDown){
@@ -207,7 +219,6 @@ var Level4 = {
       }       
     }, this);
   }
-
 };
 
-module.exports = Level4;
+module.exports = Level5;
