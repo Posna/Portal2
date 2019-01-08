@@ -11,6 +11,8 @@ var Level3 = {
     // //bckg.scale.set(0.5);
     // bckg.smoothed = false;
     this.game.stage.backgroundColor = 'rgb(128,128,128)';
+    var sprite = this.game.add.sprite(35, 450, 'num3');
+    sprite.scale.set(0.2);
 
     this.game.add.text(350, 250, "The portals preserve \n        the inertia", {
       font: "20px Constantia",
