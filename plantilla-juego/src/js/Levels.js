@@ -33,6 +33,12 @@ var Levels = {
             click.play();
             this.state.start('level5');
         });
+
+        this.createButton('level 6', this.game.world.centerX/2 +200, this.game.world.centerY + 75, 200, 67, function(){
+            //var click = this.game.add.audio("buttonsound"); 
+            click.play();
+            this.state.start('level6');
+        });
     },
 
   
