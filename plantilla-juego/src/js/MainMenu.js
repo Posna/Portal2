@@ -25,7 +25,7 @@ var MainMenu = {
   
         var txt = this.game.add.text(button1.x, button1.y, string, {
             font: "30px Constantia",
-            fill: "#000",
+            fill: "#0d7300",
             align: "cente"
         });
         txt.anchor.setTo(0.5, 0.5);

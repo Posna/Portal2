@@ -33,6 +33,12 @@ var Levels = {
             click.play();
             this.state.start('level5');
         });
+
+        this.createButton('level 7', this.game.world.centerX/2 +200, this.game.world.centerY + 150, 200, 67, function(){
+            //var click = this.game.add.audio("buttonsound"); 
+            click.play();
+            this.state.start('level7');
+        });
     },
 
   
@@ -49,7 +55,7 @@ var Levels = {
 
       var txt = this.game.add.text(button1.x, button1.y, string, {
           font: "30px Constantia",
-          fill: "#000",
+          fill: "#0d7300",
           align: "cente"
       });
       txt.anchor.setTo(0.5, 0.5);

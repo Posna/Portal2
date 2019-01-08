@@ -10,6 +10,9 @@ var Level4 = require('./level4.js');
 
 var Level5 = require ('./Level5.js');
 
+
+var Level7 = require('./Level7.js');
+
 var MenuScene = require('./MainMenu.js')
 
 var Levels = require('./Levels.js');
@@ -56,6 +59,8 @@ var PreloaderScene = {
     this.game.load.image('num3', 'images/Sprites_y_apartado_grafico/num3.png');
     this.game.load.image('num4', 'images/Sprites_y_apartado_grafico/num4.png');
     this.game.load.image('num5', 'images/Sprites_y_apartado_grafico/num5.png');
+
+    this.game.load.image('num7', 'images/Sprites_y_apartado_grafico/num7.png');
     this.game.load.image('cake', 'images/Sprites_y_apartado_grafico/cake1.png');
 
     //Tutos
@@ -90,6 +95,14 @@ var PreloaderScene = {
     //Nivel 5
     this.game.load.tilemap('level5N', 'tiles/nivel5_BloquesNegros.csv', null, Phaser.Tilemap.CSV);
     this.game.load.tilemap('level5B', 'tiles/nivel5_BloquesBlancos.csv', null, Phaser.Tilemap.CSV);
+
+    
+
+
+
+    //Nivel 7
+    this.game.load.tilemap('level7N', 'tiles/nivel7_BloquesNegros.csv', null, Phaser.Tilemap.CSV);
+    this.game.load.tilemap('level7B', 'tiles/nivel7_BloquesBlancos.csv', null, Phaser.Tilemap.CSV);
   },
 
   create: function () {
@@ -117,6 +130,8 @@ window.onload = function () {
   game.state.add('level3', Level3);
   game.state.add('level4', Level4);
   game.state.add('level5', Level5);
+
+  game.state.add('level7', Level7);
 
   game.state.start('boot');
 };
