@@ -1,3 +1,7 @@
+### Play the game
+
+https://posna.github.io/Portal2/
+
 ### About us?
 
 We are Yellow Point, a small indie developer studio formed by Jose Martín Serrano and Marcos Llinares Montes.
